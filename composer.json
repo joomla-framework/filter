@@ -16,9 +16,13 @@
         "joomla/language": "Required only if you want to use `OutputFilter::stringURLSafe`."
     },
     "autoload": {
-    	"psr-4": {
-    		"Joomla\\Filter\\": "src/",
+        "psr-4": {
+            "Joomla\\Filter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Filter\\Tests\\": "Tests/"
-    	}
+        }
     }
 }
