@@ -3,12 +3,12 @@
 
 ## Installation via Composer
 
-Add `"joomla/filter": "~1.0"` to the require block in your composer.json and then run `composer install`.
+Add `"joomla/filter": "2.0.*@dev"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/filter": "~1.0"
+		"joomla/filter": "2.0.*@dev"
 	}
 }
 ```
@@ -16,7 +16,7 @@ Add `"joomla/filter": "~1.0"` to the require block in your composer.json and the
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer require joomla/filter "~1.0"
+composer require joomla/filter "2.0.*@dev"
 ```
 
 Note that the `Joomla\Language` package is an optional dependency and is only required if the application requires the use of `OutputFilter::stringURLSafe`.
