@@ -19,14 +19,6 @@ namespace Joomla\Filter;
 class InputFilter
 {
 	/**
-	 * A container for JFilterInput instances.
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	protected static $instances = array();
-
-	/**
 	 * The array of permitted tags (white list).
 	 *
 	 * @var    array
