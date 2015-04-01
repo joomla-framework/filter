@@ -9,7 +9,7 @@
         "php": ">=5.3.10"
     },
     "require-dev": {
-        "joomla/language": "~1.0",
+        "joomla/language": "2.0.*@dev",
         "joomla/string": "~1.3",
         "phpunit/phpunit": "4.*",
         "squizlabs/php_codesniffer": "1.*"
