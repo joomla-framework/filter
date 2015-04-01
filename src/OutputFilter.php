@@ -8,7 +8,7 @@
 
 namespace Joomla\Filter;
 
-use Joomla\Language\Language;
+use Joomla\Language\LanguageFactory;
 use Joomla\String\StringHelper;
 
 /**
