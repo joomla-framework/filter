@@ -168,26 +168,36 @@ class InputFilter
 	 */
 	public function clean($source, $type = 'string')
 	{
+		// Are we dealing with an array? We need a string for some $type switch cases.
+		if (is_array($source))
+		{
+			$stringSource = (string) array_shift($source);
+		}
+		else
+		{
+			$stringSource = $source;
+		}
+		
 		// Handle the type constraint
 		switch (strtoupper($type))
 		{
 			case 'INT':
 			case 'INTEGER':
 				// Only use the first integer value
-				$matches = preg_grep('/-?[0-9]+/', $source);
+				preg_match('/-?[0-9]+/', $stringSource, $matches);
 				$result = isset($matches[0]) ? (int) $matches[0] : 0;
 				break;
 
 			case 'UINT':
 				// Only use the first integer value
-				$matches = preg_grep('/-?[0-9]+/', $source);
+				preg_match('/-?[0-9]+/', $stringSource, $matches);
 				$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
 				break;
 
 			case 'FLOAT':
 			case 'DOUBLE':
 				// Only use the first floating point value
-				$matches = preg_grep('/-?[0-9]+(\.[0-9]+)?/', $source);
+				preg_match('/-?[0-9]+(\.[0-9]+)?/', $stringSource, $matches);
 				$result = isset($matches[0]) ? (float) $matches[0] : 0;
 				break;
 
@@ -227,7 +237,7 @@ class InputFilter
 
 			case 'PATH':
 				$pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-				$matches = preg_grep($pattern, $source);
+				preg_match($pattern, $stringSource, $matches);
 				$result = isset($matches[0]) ? (string) $matches[0] : '';
 				break;
 
@@ -296,8 +306,8 @@ class InputFilter
 		$attrSubSet[1] = strtolower($attrSubSet[1]);
 
 		return (((strpos($attrSubSet[1], 'expression') !== false) && ($attrSubSet[0]) == 'style') || (strpos($attrSubSet[1], 'javascript:') !== false) ||
-			(strpos($attrSubSet[1], 'behaviour:') !== false) || (strpos($attrSubSet[1], 'vbscript:') !== false) ||
-			(strpos($attrSubSet[1], 'mocha:') !== false) || (strpos($attrSubSet[1], 'livescript:') !== false));
+				(strpos($attrSubSet[1], 'behaviour:') !== false) || (strpos($attrSubSet[1], 'vbscript:') !== false) ||
+				(strpos($attrSubSet[1], 'mocha:') !== false) || (strpos($attrSubSet[1], 'livescript:') !== false));
 	}
 
 	/**
@@ -483,7 +493,7 @@ class InputFilter
 					}
 				}
 				else
-				// No more equal signs so add any extra text in the tag into the attribute array [eg. checked]
+					// No more equal signs so add any extra text in the tag into the attribute array [eg. checked]
 				{
 					if ($fromSpace != '/')
 					{
@@ -534,7 +544,7 @@ class InputFilter
 					}
 				}
 				else
-				// Closing tag
+					// Closing tag
 				{
 					$preTag .= '</' . $tagName . '>';
 				}
@@ -589,7 +599,7 @@ class InputFilter
 			// AND blacklisted attributes
 			if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
 				|| (($this->xssAuto) && ((in_array(strtolower($attrSubSet[0]), $this->attrBlacklist))
-				|| (substr($attrSubSet[0], 0, 2) == 'on'))))
+										 || (substr($attrSubSet[0], 0, 2) == 'on'))))
 			{
 				continue;
 			}
