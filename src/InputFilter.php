@@ -179,7 +179,7 @@ class InputFilter
 				}
 				else
 				{
-					preg_match('/-?[0-9]+/', $source, $matches);
+					preg_match('/-?[0-9]+/', (string) $source, $matches);
 				}
 
 				$result = isset($matches[0]) ? (int) $matches[0] : 0;
@@ -192,7 +192,7 @@ class InputFilter
 				}
 				else
 				{
-					preg_match('/-?[0-9]+/', $source, $matches);
+					preg_match('/-?[0-9]+/', (string) $source, $matches);
 				}
 
 				$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
@@ -206,7 +206,7 @@ class InputFilter
 				}
 				else
 				{
-					preg_match('/-?[0-9]+(\.[0-9]+)?/', $source, $matches);
+					preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $source, $matches);
 				}
 
 				$result = isset($matches[0]) ? (float) $matches[0] : 0;
@@ -214,23 +214,7 @@ class InputFilter
 
 			case 'BOOL':
 			case 'BOOLEAN':
-				if (is_string($source))
-				{
 					$result = (bool) $source;
-				}
-				else
-				{
-					$result = array();
-
-					foreach ($source as $key => $value)
-					{
-						if (is_string($value))
-						{
-							$result[$key] = (bool) $value;
-						}
-					}
-				}
-
 				break;
 
 			case 'WORD':
@@ -652,7 +636,7 @@ class InputFilter
 			// AND blacklisted attributes
 			if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
 				|| (($this->xssAuto) && ((in_array(strtolower($attrSubSet[0]), $this->attrBlacklist))
-										 || (substr($attrSubSet[0], 0, 2) == 'on'))))
+				|| (substr($attrSubSet[0], 0, 2) == 'on'))))
 			{
 				continue;
 			}
