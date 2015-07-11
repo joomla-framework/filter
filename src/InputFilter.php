@@ -168,36 +168,44 @@ class InputFilter
 	 */
 	public function clean($source, $type = 'string')
 	{
-		// Are we dealing with an array? We need a string for some $type switch cases.
-		if (is_array($source))
-		{
-			$stringSource = (string) array_shift($source);
-		}
-		else
-		{
-			$stringSource = $source;
-		}
-		
-		// Handle the type constraint
+		// Handle the type constraint cases and when $source is an array
 		switch (strtoupper($type))
 		{
 			case 'INT':
 			case 'INTEGER':
-				// Only use the first integer value
-				preg_match('/-?[0-9]+/', $stringSource, $matches);
+				if (is_array($source))
+				{
+					$matches = preg_grep('/-?[0-9]+/', $source);
+				}
+				else
+				{
+					preg_match('/-?[0-9]+/', $source, $matches);
+				}
 				$result = isset($matches[0]) ? (int) $matches[0] : 0;
 				break;
 
 			case 'UINT':
-				// Only use the first integer value
-				preg_match('/-?[0-9]+/', $stringSource, $matches);
+				if (is_array($source))
+				{
+					$matches = preg_grep('/-?[0-9]+/', $source);
+				}
+				else
+				{
+					preg_match('/-?[0-9]+/', $source, $matches);
+				}
 				$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
 				break;
 
 			case 'FLOAT':
 			case 'DOUBLE':
-				// Only use the first floating point value
-				preg_match('/-?[0-9]+(\.[0-9]+)?/', $stringSource, $matches);
+				if (is_array($source))
+				{
+					$matches = preg_grep('/-?[0-9]+(\.[0-9]+)?/', $source);
+				}
+				else
+				{
+					preg_match('/-?[0-9]+(\.[0-9]+)?/', $source, $matches);
+				}
 				$result = isset($matches[0]) ? (float) $matches[0] : 0;
 				break;
 
@@ -237,7 +245,15 @@ class InputFilter
 
 			case 'PATH':
 				$pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-				preg_match($pattern, $stringSource, $matches);
+
+				if (is_array($source))
+				{
+					$matches = preg_grep($pattern, $source);
+				}
+				else
+				{
+					preg_match($pattern, $source, $matches);
+				}
 				$result = isset($matches[0]) ? (string) $matches[0] : '';
 				break;
 
