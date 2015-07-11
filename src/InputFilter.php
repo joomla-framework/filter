@@ -174,20 +174,20 @@ class InputFilter
 			case 'INT':
 			case 'INTEGER':
 				// Only use the first integer value
-				preg_match('/-?[0-9]+/', (string) $source[0], $matches);
+				preg_grep('/-?[0-9]+/', $source, $matches);
 				$result = isset($matches[0]) ? (int) $matches[0] : 0;
 				break;
 
 			case 'UINT':
 				// Only use the first integer value
-				preg_match('/-?[0-9]+/', (string) $source[0], $matches);
+				preg_grep('/-?[0-9]+/', $source, $matches);
 				$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
 				break;
 
 			case 'FLOAT':
 			case 'DOUBLE':
 				// Only use the first floating point value
-				preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $source[0], $matches);
+				preg_grep('/-?[0-9]+(\.[0-9]+)?/', $source, $matches);
 				$result = isset($matches[0]) ? (float) $matches[0] : 0;
 				break;
 
@@ -227,7 +227,7 @@ class InputFilter
 
 			case 'PATH':
 				$pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-				preg_match($pattern, (string) $source[0], $matches);
+				preg_grep($pattern, $source, $matches);
 				$result = isset($matches[0]) ? (string) $matches[0] : '';
 				break;
 
