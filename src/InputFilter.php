@@ -181,6 +181,7 @@ class InputFilter
 				{
 					preg_match('/-?[0-9]+/', $source, $matches);
 				}
+
 				$result = isset($matches[0]) ? (int) $matches[0] : 0;
 				break;
 
@@ -193,6 +194,7 @@ class InputFilter
 				{
 					preg_match('/-?[0-9]+/', $source, $matches);
 				}
+
 				$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
 				break;
 
@@ -206,12 +208,29 @@ class InputFilter
 				{
 					preg_match('/-?[0-9]+(\.[0-9]+)?/', $source, $matches);
 				}
+
 				$result = isset($matches[0]) ? (float) $matches[0] : 0;
 				break;
 
 			case 'BOOL':
 			case 'BOOLEAN':
-				$result = (bool) $source;
+				if (is_string($source))
+				{
+					$result = (bool) $source;
+				}
+				else
+				{
+					$result = array();
+
+					foreach ($source as $key => $value)
+					{
+						if (is_string($value))
+						{
+							$result[$key] = (bool) $value;
+						}
+					}
+				}
+
 				break;
 
 			case 'WORD':
@@ -232,7 +251,24 @@ class InputFilter
 				break;
 
 			case 'STRING':
-				$result = (string) $this->remove($this->decode((string) $source));
+				if (is_string($source))
+				{
+					$result = (string) $this->remove(html_entity_decode($source, ENT_QUOTES, 'UTF-8'));
+				}
+				else
+				{
+					$result = array();
+
+					foreach ($source as $key => $value)
+					{
+						// Filter element for XSS and other 'bad' code etc.
+						if (is_string($value))
+						{
+							$result[$key] = $this->remove(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
+						}
+					}
+				}
+
 				break;
 
 			case 'HTML':
@@ -254,6 +290,7 @@ class InputFilter
 				{
 					preg_match($pattern, $source, $matches);
 				}
+
 				$result = isset($matches[0]) ? (string) $matches[0] : '';
 				break;
 
@@ -275,16 +312,16 @@ class InputFilter
 				// Are we dealing with an array?
 				if (is_array($source))
 				{
+					$result = array();
+
 					foreach ($source as $key => $value)
 					{
 						// Filter element for XSS and other 'bad' code etc.
 						if (is_string($value))
 						{
-							$source[$key] = $this->remove($this->decode($value));
+							$result[$key] = $this->remove(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
 						}
 					}
-
-					$result = $source;
 				}
 				else
 				{
@@ -292,7 +329,7 @@ class InputFilter
 					if (is_string($source) && !empty($source))
 					{
 						// Filter source for XSS and other 'bad' code etc.
-						$result = $this->remove($this->decode($source));
+						$result = $this->remove(html_entity_decode($source, ENT_QUOTES, 'UTF-8'));
 					}
 					else
 					{
