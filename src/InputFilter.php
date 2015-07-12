@@ -235,7 +235,7 @@ class InputFilter
 				break;
 
 			case 'STRING':
-					$result = (string) $this->remove(html_entity_decode($source, ENT_QUOTES, 'UTF-8'));
+					$result = (string) $this->remove(html_entity_decode((string) $source, ENT_QUOTES, 'UTF-8'));
 				break;
 
 			case 'HTML':
