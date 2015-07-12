@@ -235,7 +235,7 @@ class InputFilter
 				break;
 
 			case 'STRING':
-				$result = (string) $this->remove($this->decode((string) $source));
+					$result = (string) $this->remove(html_entity_decode($source, ENT_QUOTES, 'UTF-8'));
 				break;
 
 			case 'HTML':
@@ -286,7 +286,7 @@ class InputFilter
 						// Filter element for XSS and other 'bad' code etc.
 						if (is_string($value))
 						{
-							$result[$key] = $this->remove($this->decode((string) $source));
+							$result[$key] = $this->remove(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
 						}
 					}
 				}
@@ -296,7 +296,7 @@ class InputFilter
 					if (is_string($source) && !empty($source))
 					{
 						// Filter source for XSS and other 'bad' code etc.
-						$result = $this->remove($this->decode((string) $source));
+						$result = $this->remove(html_entity_decode($source, ENT_QUOTES, 'UTF-8'));
 					}
 					else
 					{
