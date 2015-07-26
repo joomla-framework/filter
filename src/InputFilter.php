@@ -182,7 +182,19 @@ class InputFilter
 					preg_match('/-?[0-9]+/', (string) $source, $matches);
 				}
 
-				$result = isset($matches[0]) ? (int) $matches[0] : 0;
+				if (isset($matches[0]) && !is_array($matches))
+				{
+					$result = (int) $matches[0];
+				}
+				elseif(is_array($matches))
+				{
+					$result = $matches;
+				}
+				else
+				{
+					$result = 0;
+				}
+
 				break;
 
 			case 'UINT':
