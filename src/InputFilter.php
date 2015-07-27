@@ -173,6 +173,7 @@ class InputFilter
 		{
 			case 'INT':
 			case 'INTEGER':
+
 				if (is_array($source))
 				{
 					$matches = preg_grep('/-?[0-9]+/', $source);
@@ -188,6 +189,11 @@ class InputFilter
 				}
 				elseif(is_array($matches))
 				{
+					foreach ($matches as $key => $value)
+					{
+						$matches[$key] = (int) $value;
+					}
+
 					$result = $matches;
 				}
 				else
