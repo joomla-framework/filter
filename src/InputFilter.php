@@ -347,6 +347,23 @@ class InputFilter
 
 		// Is there a tag? If so it will certainly start with a '<'.
 		$tagOpen_start = strpos($source, '<');
+		
+		// The source contains a "<"
+		if ($tagOpen_start !== false)
+		{
+			// Split the string into 2 sections. The second split starts after "<"
+			list($less_than, $split) = explode('<', $source);
+
+			// Get the first word of the second split
+			$next_word = str_word_count($split, 1);
+
+			// Make sure the first word of the second split doesn't contain any values from the $tagBlacklist array
+			if (!in_array($next_word[0], $this->tagBlacklist))
+			{
+				// Return the original source
+				return $source;
+			}
+		}
 
 		while ($tagOpen_start !== false)
 		{
