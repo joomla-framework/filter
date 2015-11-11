@@ -1377,7 +1377,7 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
-	public function georgesCustomTest()
+	public function testCustomExtensionOddity()
 	{
 		$filter = new InputFilter;
 		$this->assertEquals(
