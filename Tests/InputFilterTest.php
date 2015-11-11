@@ -1376,4 +1376,14 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 			$message
 		);
 	}
+
+	public function georgesCustomTest()
+	{
+		$filter = new InputFilter;
+		$this->assertEquals(
+			$filter->clean('1<4', 'string'),
+			'1<4',
+			'This sucks hard'
+		);
+	}
 }
