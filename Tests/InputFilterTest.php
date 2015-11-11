@@ -1377,7 +1377,12 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
-	public function testCustomExtensionOddity()
+	/**
+	 * Test that a less than symbol isn't removed.
+	 *
+	 * @return  void
+	 */
+	public function testLessThanSymbolsAreNotStripped()
 	{
 		$filter = new InputFilter;
 		$this->assertEquals(
