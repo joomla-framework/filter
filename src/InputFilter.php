@@ -96,7 +96,7 @@ class InputFilter
 		'script',
 		'style',
 		'title',
-		'xml'
+		'xml',
 	);
 
 	/**
@@ -110,7 +110,7 @@ class InputFilter
 		'background',
 		'codebase',
 		'dynsrc',
-		'lowsrc'
+		'lowsrc',
 	);
 
 	/**
