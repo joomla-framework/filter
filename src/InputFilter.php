@@ -319,7 +319,7 @@ class InputFilter
 							$source[$key] = $this->remove(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
 						}
 					}
-	
+
 					$result = $source;
 				}
 				else
