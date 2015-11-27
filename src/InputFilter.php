@@ -176,45 +176,36 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$matches = preg_grep('/-?[0-9]+/', $source);
+					$pattern = '/-?[0-9]+/';
+					$matches = array_filter(
+								$source, 
+								function($inlineFunction) use($pattern)
+								{
+									// This return is to the closure (i.e. inline-function)
+									return preg_grep($pattern, $inlineFunction);
+								}
+								);
 				}
 				else
 				{
 					preg_match('/-?[0-9]+/', (string) $source, $matches);
 				}
 
-				if (is_array($matches) && isset($matches[0]) && !isset($matches[1]))
-				{
-					$result = (int) $matches[0];
-				}
-				elseif(is_array($matches))
-				{
-					foreach ($matches as $key => $value)
-					{
-						$matches[$key] = (int) $value;
-					}
-
-					$result = $matches;
-				}
-				else
-				{
-					$result = 0;
-				}
-
+				$result = isset($matches[0]) ? (int) $matches[0] : 0;
 				break;
 
 			case 'UINT':
 				if (is_array($source))
 				{
 					$pattern = '/-?[0-9]+/';
-					//$matches = preg_grep('/-?[0-9]+/', $source);
 					$matches = array_filter(
 								$source, 
 								function($inlineFunction) use($pattern)
 								{
 									// This return is to the closure (i.e. inline-function)
-	    								return preg_grep($pattern, $inlineFunction);
-								});
+									return preg_grep($pattern, $inlineFunction);
+								}
+								);
 				}
 				else
 				{
