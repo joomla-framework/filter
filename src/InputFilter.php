@@ -206,7 +206,15 @@ class InputFilter
 			case 'UINT':
 				if (is_array($source))
 				{
-					$matches = preg_grep('/-?[0-9]+/', $source);
+					$pattern = '/-?[0-9]+/';
+					//$matches = preg_grep('/-?[0-9]+/', $source);
+					$matches = array_filter(
+								$source, 
+								function($inlineFunction) use($pattern)
+								{
+									// This return is to the closure (i.e. inline-function)
+	    								return preg_grep($pattern, $inlineFunction);
+								});
 				}
 				else
 				{
