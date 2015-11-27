@@ -183,7 +183,7 @@ class InputFilter
 					preg_match('/-?[0-9]+/', (string) $source, $matches);
 				}
 
-				if (is_array($matches) && empty($matches[1]))
+				if (is_array($matches) && empty($matches[1]) && isset($matches[0]))
 				{
 					$result = (int) $matches[0];
 				}
