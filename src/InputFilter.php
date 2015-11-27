@@ -311,16 +311,16 @@ class InputFilter
 				// Are we dealing with an array?
 				if (is_array($source))
 				{
-					$result = array();
-
 					foreach ($source as $key => $value)
 					{
 						// Filter element for XSS and other 'bad' code etc.
 						if (is_string($value))
 						{
-							$result[$key] = $this->remove(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
+							$source[$key] = $this->remove(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
 						}
 					}
+	
+					$result = $source;
 				}
 				else
 				{
@@ -332,7 +332,7 @@ class InputFilter
 					}
 					else
 					{
-						// Not an array or string.. return the passed parameter
+						// Not an array or string... return the passed parameter
 						$result = $source;
 					}
 				}
