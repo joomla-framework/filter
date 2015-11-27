@@ -178,7 +178,7 @@ class InputFilter
 				{
 					$pattern = '/-?[0-9]+/';
 					$matches = array_filter(
-								$source, 
+								$source,
 								function($inlineFunction) use($pattern)
 								{
 									// This return is to the closure (i.e. inline-function)
@@ -199,7 +199,7 @@ class InputFilter
 				{
 					$pattern = '/-?[0-9]+/';
 					$matches = array_filter(
-								$source, 
+								$source,
 								function($inlineFunction) use($pattern)
 								{
 									// This return is to the closure (i.e. inline-function)
@@ -219,7 +219,15 @@ class InputFilter
 			case 'DOUBLE':
 				if (is_array($source))
 				{
-					$matches = preg_grep('/-?[0-9]+(\.[0-9]+)?/', $source);
+					$pattern = '/-?[0-9]+(\.[0-9]+)?/';
+					$matches = array_filter(
+								$source,
+								function($inlineFunction) use($pattern)
+								{
+									// This return is to the closure (i.e. inline-function)
+									return preg_grep($pattern, $inlineFunction);
+								}
+								);
 				}
 				else
 				{
@@ -268,7 +276,14 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$matches = preg_grep($pattern, $source);
+					$matches = array_filter(
+						$source,
+						function($inlineFunction) use($pattern)
+						{
+							// This return is to the closure (i.e. inline-function)
+							return preg_grep($pattern, $inlineFunction);
+						}
+						);
 				}
 				else
 				{
