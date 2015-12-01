@@ -108,6 +108,12 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				0,
 				'From generic cases'
 			),
+			'int_12' => array(
+				'int',
+				array(1, 3, 9),
+				array(1, 3, 9),
+				'From generic cases'
+			),
 			'uint_1' => array(
 				'uint',
 				-789,
@@ -118,6 +124,12 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				'uint',
 				'',
 				0,
+				'From generic cases'
+			),
+			'uint_3' => array(
+				'int',
+				array(-1, -3, -9),
+				array(1, 3, 9),
 				'From generic cases'
 			),
 			'float_01' => array(
@@ -178,6 +190,12 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				'float',
 				'',
 				0,
+				'From generic cases'
+			),
+			'float_10' => array(
+				'float',
+				array(1.0, 3.1, 6.2),
+				array(1.0, 3.1, 6.2),
 				'From generic cases'
 			),
 			'bool_0' => array(
