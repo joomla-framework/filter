@@ -177,14 +177,7 @@ class InputFilter
 				if (is_array($source))
 				{
 					$pattern = '/-?[0-9]+/';
-					$matches = array_filter(
-								$source,
-								function($inlineFunction) use($pattern)
-								{
-									// This return is to the closure (i.e. inline-function)
-									return preg_grep($pattern, $inlineFunction);
-								}
-								);
+					$matches = preg_grep($pattern, $source);
 				}
 				else
 				{
@@ -198,14 +191,7 @@ class InputFilter
 				if (is_array($source))
 				{
 					$pattern = '/-?[0-9]+/';
-					$matches = array_filter(
-								$source,
-								function($inlineFunction) use($pattern)
-								{
-									// This return is to the closure (i.e. inline-function)
-									return preg_grep($pattern, $inlineFunction);
-								}
-								);
+					$matches = preg_grep($pattern, $source);
 				}
 				else
 				{
@@ -220,14 +206,7 @@ class InputFilter
 				if (is_array($source))
 				{
 					$pattern = '/-?[0-9]+(\.[0-9]+)?/';
-					$matches = array_filter(
-								$source,
-								function($inlineFunction) use($pattern)
-								{
-									// This return is to the closure (i.e. inline-function)
-									return preg_grep($pattern, $inlineFunction);
-								}
-								);
+					$matches = preg_grep($pattern, $source);
 				}
 				else
 				{
@@ -276,14 +255,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$matches = array_filter(
-						$source,
-						function($inlineFunction) use($pattern)
-						{
-							// This return is to the closure (i.e. inline-function)
-							return preg_grep($pattern, $inlineFunction);
-						}
-						);
+					$matches = preg_grep($pattern, $source);
 				}
 				else
 				{
