@@ -182,7 +182,7 @@ class InputFilter
 					// Insure each value is an int
 					foreach ($matches as $each_number)
 					{
-					      $result[] = (int) $each_number;
+						$result[] = (int) $each_number;
 					}
 				}
 				else
@@ -203,7 +203,7 @@ class InputFilter
 					// Insure each value is a uint
 					foreach ($matches as $each_number)
 					{
-					      $result[] = abs((int) $each_number);
+						$result[] = abs((int) $each_number);
 					}
 				}
 				else
@@ -225,7 +225,7 @@ class InputFilter
 					// Insure each value is an float
 					foreach ($matches as $each_number)
 					{
-					      $result[] = (float) $each_number;
+						$result[] = (float) $each_number;
 					}
 				}
 				else
@@ -280,7 +280,7 @@ class InputFilter
 					// Insure each value is a string
 					foreach ($matches as $each_value)
 					{
-					      $result[] = (string) $each_value;
+						$result[] = (string) $each_value;
 					}
 				}
 				else
