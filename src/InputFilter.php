@@ -173,47 +173,52 @@ class InputFilter
 		{
 			case 'INT':
 			case 'INTEGER':
+				$pattern = '/-?[0-9]+/';
 
 				if (is_array($source))
 				{
-					$pattern = '/-?[0-9]+/';
 					$matches = preg_grep($pattern, $source);
+					$result = $matches;
 				}
 				else
 				{
-					preg_match('/-?[0-9]+/', (string) $source, $matches);
+					preg_match($pattern, (string) $source, $matches);
+					$result = isset($matches[0]) ? (int) $matches[0] : 0;
 				}
 
-				$result = isset($matches[0]) ? (int) $matches[0] : 0;
 				break;
 
 			case 'UINT':
+				$pattern = '/-?[0-9]+/';
+
 				if (is_array($source))
 				{
-					$pattern = '/-?[0-9]+/';
 					$matches = preg_grep($pattern, $source);
+					$result = $matches;
 				}
 				else
 				{
-					preg_match('/-?[0-9]+/', (string) $source, $matches);
+					preg_match($pattern, (string) $source, $matches);
+					$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
 				}
 
-				$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
 				break;
 
 			case 'FLOAT':
 			case 'DOUBLE':
+				$pattern = '/-?[0-9]+(\.[0-9]+)?/';
+
 				if (is_array($source))
 				{
-					$pattern = '/-?[0-9]+(\.[0-9]+)?/';
 					$matches = preg_grep($pattern, $source);
+					$result = $matches;
 				}
 				else
 				{
-					preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $source, $matches);
+					preg_match($pattern, (string) $source, $matches);
+					$result = isset($matches[0]) ? (float) $matches[0] : 0;
 				}
 
-				$result = isset($matches[0]) ? (float) $matches[0] : 0;
 				break;
 
 			case 'BOOL':
@@ -256,13 +261,14 @@ class InputFilter
 				if (is_array($source))
 				{
 					$matches = preg_grep($pattern, $source);
+					$result = $matches;
 				}
 				else
 				{
 					preg_match($pattern, $source, $matches);
+					$result = isset($matches[0]) ? (string) $matches[0] : '';
 				}
 
-				$result = isset($matches[0]) ? (string) $matches[0] : '';
 				break;
 
 			case 'TRIM':
@@ -280,6 +286,7 @@ class InputFilter
 				break;
 
 			default:
+
 				// Are we dealing with an array?
 				if (is_array($source))
 				{
