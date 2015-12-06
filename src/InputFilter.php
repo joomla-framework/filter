@@ -181,7 +181,7 @@ class InputFilter
 					foreach ($source as $eachString)
 					{
 						preg_match($pattern, (string) $eachString, $matches);
-						$result[] = isset($match[0]) ? (int) $match[0] : 0;;
+						$result[] = isset($matches[0]) ? (int) $matches[0] : 0;;
 					}
 				}
 				else
