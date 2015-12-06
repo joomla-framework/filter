@@ -173,7 +173,7 @@ class InputFilter
 		{
 			case 'INT':
 			case 'INTEGER':
-				$pattern = '/-?[0-9]+/';
+				$pattern = '/[-+]?\d+/';
 
 				if (is_array($source))
 				{
@@ -194,7 +194,7 @@ class InputFilter
 				break;
 
 			case 'UINT':
-				$pattern = '/-?[0-9]+/';
+				$pattern = '/[-+]?\d+/';
 
 				if (is_array($source))
 				{
@@ -216,7 +216,7 @@ class InputFilter
 
 			case 'FLOAT':
 			case 'DOUBLE':
-				$pattern = '/[-]?\d+(\.\d+)?([eE][-]?\d+)?/';
+				$pattern = '/[-+]?\d+(\.\d+)?([eE][-+]?\d+)?/';
 
 				if (is_array($source))
 				{
