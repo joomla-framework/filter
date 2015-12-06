@@ -139,7 +139,7 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				'From generic cases'
 			),
 			'uint_4' => array(
-				'int',
+				'uint',
 				array(1, 'ab-123ab', '-ab123.456ab'),
 				array(1, 123, 123),
 				'From generic cases'
