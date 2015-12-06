@@ -181,7 +181,8 @@ class InputFilter
 					foreach ($source as $eachString)
 					{
 						preg_match($pattern, (string) $eachString, $matches);
-						$result[] = isset($matches[0]) ? (int) $matches[0] : 0;;
+
+						$result[] = isset($matches[0]) ? (int) $matches[0] : 0;
 					}
 				}
 				else
@@ -197,12 +198,12 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$matches = preg_grep($pattern, $source);
-
-					// Insure each value is a uint
-					foreach ($matches as $each_number)
+					// Itterate through the array
+					foreach ($source as $eachString)
 					{
-						$result[] = abs((int) $each_number);
+						preg_match($pattern, (string) $eachString, $matches);
+
+						$result[] = isset($matches[0]) ? abs((int) $matches[0]) : 0;
 					}
 				}
 				else
@@ -219,12 +220,12 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$matches = preg_grep($pattern, $source);
-
-					// Insure each value is an float
-					foreach ($matches as $each_number)
+					// Itterate through the array
+					foreach ($source as $eachString)
 					{
-						$result[] = (float) $each_number;
+						preg_match($pattern, (string) $eachString, $matches);
+
+						$result[] = isset($matches[0]) ? (float) $matches[0] : 0;
 					}
 				}
 				else
@@ -237,7 +238,7 @@ class InputFilter
 
 			case 'BOOL':
 			case 'BOOLEAN':
-					$result = (bool) $source;
+				$result = (bool) $source;
 				break;
 
 			case 'WORD':
@@ -258,7 +259,7 @@ class InputFilter
 				break;
 
 			case 'STRING':
-					$result = (string) $this->remove(html_entity_decode((string) $source, ENT_QUOTES, 'UTF-8'));
+				$result = (string) $this->remove(html_entity_decode((string) $source, ENT_QUOTES, 'UTF-8'));
 				break;
 
 			case 'HTML':
@@ -274,12 +275,12 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$matches = preg_grep($pattern, $source);
-
-					// Insure each value is a string
-					foreach ($matches as $each_value)
+					// Itterate through the array
+					foreach ($source as $eachString)
 					{
-						$result[] = (string) $each_value;
+						preg_match($pattern, (string) $eachString, $matches);
+
+						$result[] = isset($matches[0]) ? (string) $matches[0] : '';
 					}
 				}
 				else
