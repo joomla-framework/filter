@@ -216,7 +216,7 @@ class InputFilter
 
 			case 'FLOAT':
 			case 'DOUBLE':
-				$pattern = "[\-\+]*\d+*(\.\d+)([eE][\-\+]*\d+)";
+				$pattern = "[\-\+]?*\d+(\.\d+)?([eE][\-\+]\d+)?";
 
 				if (is_array($source))
 				{
