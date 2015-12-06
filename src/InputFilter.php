@@ -183,15 +183,12 @@ class InputFilter
 								{
 									// This return is to the closure (i.e. inline-function)
 									preg_match($pattern, (string) $inlineFunction, $match);
-									return $match;
+
+									return isset($match[0]) ? (int) $match[0] : 0;
 								}
 					);
 
-					// Insure each value is an int
-					foreach ($matches as $each_number)
-					{
-						$result[] = (int) $each_number;
-					}
+					$result[] = $matches;
 				}
 				else
 				{
