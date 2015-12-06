@@ -206,17 +206,23 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 			),
 			'float_10' => array(
 				'float',
+				'27.3e-34',
+				27.3e-34,
+				'From generic cases'
+			),
+			'float_11' => array(
+				'float',
 				array(1.0, 3.1, 6.2),
 				array(1.0, 3.1, 6.2),
 				'From generic cases'
 			),
-			'float_11' => array(
+			'float_13' => array(
 				'float',
 				array(1.0, 'abc-12. 456', 'abc-12.456abc'),
 				array(1.0, -12, -12.456),
 				'From generic cases'
 			),
-			'float_12' => array(
+			'float_14' => array(
 				'float',
 				array(1.0, 'abcdef-7E-10', '+27.3E-34', '+27.3e-34'),
 				array(1.0, -7E-10, 27.3E-34, 27.3e-34),
