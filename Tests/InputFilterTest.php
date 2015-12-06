@@ -216,6 +216,12 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				array(1.0, -12, -12.456),
 				'From generic cases'
 			),
+			'float_12' => array(
+				'float',
+				array(1.0, 'abcdef-7E-10', '+27.3E-34', '+27.3e-34'),
+				array(1.0, -7E-10, 27.3E-34, 27.3e-34),
+				'From generic cases'
+			),
 			'bool_0' => array(
 				'bool',
 				$input,
