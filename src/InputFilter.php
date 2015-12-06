@@ -182,7 +182,7 @@ class InputFilter
 								function($inlineFunction) use($pattern)
 								{
 									// This return is to the closure (i.e. inline-function)
-									preg_match($pattern, (string) $source, $match);
+									preg_match($pattern, (string) $inlineFunction, $match);
 									return $match;
 								}
 					);
