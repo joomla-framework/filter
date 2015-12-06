@@ -177,18 +177,12 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$matches = array_filter(
-								$source,
-								function($inlineFunction) use($pattern)
-								{
-									// This return is to the closure (i.e. inline-function)
-									preg_match($pattern, (string) $inlineFunction, $match);
-
-									return isset($match[0]) ? (int) $match[0] : 0;
-								}
-					);
-
-					$result[] = $matches;
+					// Itterate through the array
+					foreach ($source as $eachString)
+					{
+						preg_match($pattern, (string) $eachString, $matches);
+						$result[] = isset($match[0]) ? (int) $match[0] : 0;;
+					}
 				}
 				else
 				{
