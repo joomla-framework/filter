@@ -96,7 +96,7 @@ class InputFilter
 		'script',
 		'style',
 		'title',
-		'xml'
+		'xml',
 	);
 
 	/**
@@ -110,7 +110,7 @@ class InputFilter
 		'background',
 		'codebase',
 		'dynsrc',
-		'lowsrc'
+		'lowsrc',
 	);
 
 	/**
@@ -168,27 +168,72 @@ class InputFilter
 	 */
 	public function clean($source, $type = 'string')
 	{
-		// Handle the type constraint
+		// Handle the type constraint cases and when $source is an array
 		switch (strtoupper($type))
 		{
 			case 'INT':
 			case 'INTEGER':
-				// Only use the first integer value
-				preg_match('/-?[0-9]+/', (string) $source, $matches);
-				$result = isset($matches[0]) ? (int) $matches[0] : 0;
+				$pattern = '/[-+]?[0-9]+/';
+
+				if (is_array($source))
+				{
+					// Itterate through the array
+					foreach ($source as $eachString)
+					{
+						preg_match($pattern, (string) $eachString, $matches);
+
+						$result[] = isset($matches[0]) ? (int) $matches[0] : 0;
+					}
+				}
+				else
+				{
+					preg_match($pattern, (string) $source, $matches);
+					$result = isset($matches[0]) ? (int) $matches[0] : 0;
+				}
+
 				break;
 
 			case 'UINT':
-				// Only use the first integer value
-				preg_match('/-?[0-9]+/', (string) $source, $matches);
-				$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
+				$pattern = '/[-+]?[0-9]+/';
+
+				if (is_array($source))
+				{
+					// Itterate through the array
+					foreach ($source as $eachString)
+					{
+						preg_match($pattern, (string) $eachString, $matches);
+
+						$result[] = isset($matches[0]) ? abs((int) $matches[0]) : 0;
+					}
+				}
+				else
+				{
+					preg_match($pattern, (string) $source, $matches);
+					$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
+				}
+
 				break;
 
 			case 'FLOAT':
 			case 'DOUBLE':
-				// Only use the first floating point value
-				preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $source, $matches);
-				$result = isset($matches[0]) ? (float) $matches[0] : 0;
+				$pattern = '/[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?/';
+
+				if (is_array($source))
+				{
+					// Itterate through the array
+					foreach ($source as $eachString)
+					{
+						preg_match($pattern, (string) $eachString, $matches);
+
+						$result[] = isset($matches[0]) ? (float) $matches[0] : 0;
+					}
+				}
+				else
+				{
+					preg_match($pattern, (string) $source, $matches);
+					$result = isset($matches[0]) ? (float) $matches[0] : 0;
+				}
+
 				break;
 
 			case 'BOOL':
@@ -214,7 +259,7 @@ class InputFilter
 				break;
 
 			case 'STRING':
-				$result = (string) $this->remove($this->decode((string) $source));
+				$result = (string) $this->remove(html_entity_decode((string) $source, ENT_QUOTES, 'UTF-8'));
 				break;
 
 			case 'HTML':
@@ -227,8 +272,23 @@ class InputFilter
 
 			case 'PATH':
 				$pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-				preg_match($pattern, (string) $source, $matches);
-				$result = isset($matches[0]) ? (string) $matches[0] : '';
+
+				if (is_array($source))
+				{
+					// Itterate through the array
+					foreach ($source as $eachString)
+					{
+						preg_match($pattern, (string) $eachString, $matches);
+
+						$result[] = isset($matches[0]) ? (string) $matches[0] : '';
+					}
+				}
+				else
+				{
+					preg_match($pattern, $source, $matches);
+					$result = isset($matches[0]) ? (string) $matches[0] : '';
+				}
+
 				break;
 
 			case 'TRIM':
@@ -246,6 +306,7 @@ class InputFilter
 				break;
 
 			default:
+
 				// Are we dealing with an array?
 				if (is_array($source))
 				{
@@ -254,7 +315,7 @@ class InputFilter
 						// Filter element for XSS and other 'bad' code etc.
 						if (is_string($value))
 						{
-							$source[$key] = $this->remove($this->decode($value));
+							$source[$key] = $this->remove(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
 						}
 					}
 
@@ -266,11 +327,11 @@ class InputFilter
 					if (is_string($source) && !empty($source))
 					{
 						// Filter source for XSS and other 'bad' code etc.
-						$result = $this->remove($this->decode($source));
+						$result = $this->remove(html_entity_decode($source, ENT_QUOTES, 'UTF-8'));
 					}
 					else
 					{
-						// Not an array or string.. return the passed parameter
+						// Not an array or string... return the passed parameter
 						$result = $source;
 					}
 				}
@@ -296,8 +357,8 @@ class InputFilter
 		$attrSubSet[1] = strtolower($attrSubSet[1]);
 
 		return (((strpos($attrSubSet[1], 'expression') !== false) && ($attrSubSet[0]) == 'style') || (strpos($attrSubSet[1], 'javascript:') !== false) ||
-			(strpos($attrSubSet[1], 'behaviour:') !== false) || (strpos($attrSubSet[1], 'vbscript:') !== false) ||
-			(strpos($attrSubSet[1], 'mocha:') !== false) || (strpos($attrSubSet[1], 'livescript:') !== false));
+				(strpos($attrSubSet[1], 'behaviour:') !== false) || (strpos($attrSubSet[1], 'vbscript:') !== false) ||
+				(strpos($attrSubSet[1], 'mocha:') !== false) || (strpos($attrSubSet[1], 'livescript:') !== false));
 	}
 
 	/**
@@ -483,7 +544,7 @@ class InputFilter
 					}
 				}
 				else
-				// No more equal signs so add any extra text in the tag into the attribute array [eg. checked]
+					// No more equal signs so add any extra text in the tag into the attribute array [eg. checked]
 				{
 					if ($fromSpace != '/')
 					{
@@ -534,7 +595,7 @@ class InputFilter
 					}
 				}
 				else
-				// Closing tag
+					// Closing tag
 				{
 					$preTag .= '</' . $tagName . '>';
 				}
