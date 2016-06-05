@@ -95,8 +95,7 @@ class OutputFilter
 		// Remove any '-' from the string since they will be used as concatenaters
 		$str = str_replace('-', ' ', $string);
 
-		$factory = new LanguageFactory;
-		$str = $factory->getLanguage()->transliterate($str);
+		$str = (new LanguageFactory)->getLanguage()->transliterate($str);
 
 		// Trim white spaces at beginning and end of alias and make lowercase
 		$str = trim(StringHelper::strtolower($str));

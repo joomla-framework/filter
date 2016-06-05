@@ -98,7 +98,7 @@ class InputFilter
 	 * @var    array
 	 * @since  1.0
 	 */
-	public $tagBlacklist = array(
+	public $tagBlacklist = [
 		'applet',
 		'body',
 		'bgsound',
@@ -121,7 +121,7 @@ class InputFilter
 		'style',
 		'title',
 		'xml',
-	);
+	];
 
 	/**
 	 * The list of the default blacklisted tag attributes. All event handlers implicit.
@@ -129,13 +129,13 @@ class InputFilter
 	 * @var    array
 	 * @since  1.0
 	 */
-	public $attrBlacklist = array(
+	public $attrBlacklist = [
 		'action',
 		'background',
 		'codebase',
 		'dynsrc',
 		'lowsrc',
-	);
+	];
 
 	/**
 	 * Constructor for InputFilter class.
@@ -148,7 +148,7 @@ class InputFilter
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = self::TAGS_WHITELIST, $attrMethod = self::ATTR_WHITELIST,
+	public function __construct(array $tagsArray = [], array $attrArray = [], $tagsMethod = self::TAGS_WHITELIST, $attrMethod = self::ATTR_WHITELIST,
 		$xssAuto = 1)
 	{
 		// Make sure user defined arrays are in lowercase
@@ -202,7 +202,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -224,7 +224,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -247,7 +247,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -269,7 +269,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -289,7 +289,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -309,7 +309,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -329,7 +329,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -351,7 +351,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -369,7 +369,7 @@ class InputFilter
 			case 'STRING':
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -387,7 +387,7 @@ class InputFilter
 			case 'HTML':
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -411,7 +411,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -431,7 +431,7 @@ class InputFilter
 			case 'TRIM':
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -455,7 +455,7 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					$result = array();
+					$result = [];
 
 					// Iterate through the array
 					foreach ($source as $eachString)
@@ -619,7 +619,7 @@ class InputFilter
 			$currentTag = substr($fromTagOpen, 0, $tagOpen_end);
 			$tagLength = strlen($currentTag);
 			$tagLeft = $currentTag;
-			$attrSet = array();
+			$attrSet = [];
 			$currentSpace = strpos($tagLeft, ' ');
 
 			// Are we an open tag or a close tag?
@@ -791,9 +791,9 @@ class InputFilter
 	 *
 	 * @since   1.0
 	 */
-	protected function cleanAttributes($attrSet)
+	protected function cleanAttributes(array $attrSet)
 	{
-		$newSet = array();
+		$newSet = [];
 
 		$count = count($attrSet);
 
@@ -911,8 +911,8 @@ class InputFilter
 	{
 		$alreadyFiltered = '';
 		$remainder = $source;
-		$badChars = array('<', '"', '>');
-		$escapedChars = array('&lt;', '&quot;', '&gt;');
+		$badChars = ['<', '"', '>'];
+		$escapedChars = ['&lt;', '&quot;', '&gt;'];
 
 		// Process each portion based on presence of =" and "<space>, "/>, or ">
 		// See if there are any more attributes to process
