@@ -763,10 +763,9 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCleanByCallingMember($type, $data, $expect, $message)
 	{
-		$filter = new InputFilter;
-		$this->assertThat(
-			$filter->clean($data, $type),
-			$this->equalTo($expect),
+		$this->assertEquals(
+			$expect,
+			(new InputFilter)->clean($data, $type),
 			$message
 		);
 	}
@@ -903,10 +902,9 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCleanWithImgWhitelisted($type, $data, $expect, $message)
 	{
-		$filter = new InputFilter(array('img'), null, 0, 0);
-		$this->assertThat(
-			$filter->clean($data, $type),
-			$this->equalTo($expect),
+		$this->assertEquals(
+			$expect,
+			(new InputFilter(['img'], [], 0, 0))->clean($data, $type),
 			$message
 		);
 	}
@@ -1009,10 +1007,9 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCleanWithClassWhitelisted($type, $data, $expect, $message)
 	{
-		$filter = new InputFilter(null, array('class'), 0, 0);
-		$this->assertThat(
-			$filter->clean($data, $type),
-			$this->equalTo($expect),
+		$this->assertEquals(
+			$expect,
+			(new InputFilter([], ['class'], 0, 0))->clean($data, $type),
 			$message
 		);
 	}
@@ -1122,10 +1119,9 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCleanWithImgAndClassWhitelisted($type, $data, $expect, $message)
 	{
-		$filter = new InputFilter(array('img'), array('class'), 0, 0);
-		$this->assertThat(
-			$filter->clean($data, $type),
-			$this->equalTo($expect),
+		$this->assertEquals(
+			$expect,
+			(new InputFilter(['img'], ['class'], 0, 0))->clean($data, $type),
 			$message
 		);
 	}
@@ -1338,10 +1334,9 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCleanWithDefaultBlackList($type, $data, $expect, $message)
 	{
-		$filter = new InputFilter(null, null, 1, 1);
-		$this->assertThat(
-			$filter->clean($data, $type),
-			$this->equalTo($expect),
+		$this->assertEquals(
+			$expect,
+			(new InputFilter([], [], 1, 1))->clean($data, $type),
 			$message
 		);
 	}
@@ -1437,10 +1432,9 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCleanWithImgBlackList($type, $data, $expect, $message)
 	{
-		$filter = new InputFilter(array('img'), null, 1, 1);
-		$this->assertThat(
-			$filter->clean($data, $type),
-			$this->equalTo($expect),
+		$this->assertEquals(
+			$expect,
+			(new InputFilter(['img'], [], 1, 1))->clean($data, $type),
 			$message
 		);
 	}
@@ -1483,10 +1477,9 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCleanWithClassBlackList($type, $data, $expect, $message)
 	{
-		$filter = new InputFilter(null, array('class'), 1, 1);
-		$this->assertThat(
-			$filter->clean($data, $type),
-			$this->equalTo($expect),
+		$this->assertEquals(
+			$expect,
+			(new InputFilter([], ['class'], 1, 1))->clean($data, $type),
 			$message
 		);
 	}
