@@ -104,6 +104,7 @@ class InputFilter
 		'bgsound',
 		'base',
 		'basefont',
+		'canvas',
 		'embed',
 		'frame',
 		'frameset',
@@ -137,6 +138,19 @@ class InputFilter
 		'formaction',
 		'lowsrc',
 	];
+
+	/**
+	 * A special list of blacklisted chars
+	 *
+	 * @var    array
+	 * @since  1.3.3
+	 */
+	private $blacklistedChars = array(
+		'&tab;',
+		'&space;',
+		'&colon;',
+		'&column;',
+	);
 
 	/**
 	 * Constructor for InputFilter class.
@@ -525,9 +539,8 @@ class InputFilter
 		$attrSubSet[0] = strtolower($attrSubSet[0]);
 		$attrSubSet[1] = html_entity_decode(strtolower($attrSubSet[1]), ENT_QUOTES | ENT_HTML401, 'UTF-8');
 
-		return (((strpos($attrSubSet[1], 'expression') !== false) && ($attrSubSet[0]) == 'style') || (strpos($attrSubSet[1], 'javascript:') !== false) ||
-			(strpos($attrSubSet[1], 'behaviour:') !== false) || (strpos($attrSubSet[1], 'vbscript:') !== false) ||
-			(strpos($attrSubSet[1], 'mocha:') !== false) || (strpos($attrSubSet[1], 'livescript:') !== false));
+		return ((strpos($attrSubSet[1], 'expression') !== false && $attrSubSet[0] === 'style')
+			|| preg_match('/(?:(?:java|vb|live)script|behaviour|mocha)(?::|&colon;|&column;)/', $attrSubSet[1]) !== 0);
 	}
 
 	/**
@@ -547,7 +560,7 @@ class InputFilter
 			$temp = $source;
 			$source = $this->cleanTags($source);
 		}
-		while ($temp != $source);
+		while ($temp !== $source);
 
 		return $source;
 	}
@@ -625,7 +638,7 @@ class InputFilter
 			$currentSpace = StringHelper::strpos($tagLeft, ' ');
 
 			// Are we an open tag or a close tag?
-			if (StringHelper::substr($currentTag, 0, 1) == '/')
+			if (StringHelper::substr($currentTag, 0, 1) === '/')
 			{
 				// Close Tag
 				$isCloseTag = true;
@@ -688,7 +701,7 @@ class InputFilter
 				}
 
 				// Do we have an attribute to process? [check for equal sign]
-				if ($fromSpace != '/' && (($nextEqual && $nextSpace && $nextSpace < $nextEqual) || !$nextEqual))
+				if ($fromSpace !== '/' && (($nextEqual && $nextSpace && $nextSpace < $nextEqual) || !$nextEqual))
 				{
 					if (!$nextEqual)
 					{
@@ -725,14 +738,14 @@ class InputFilter
 				else
 				// No more equal signs so add any extra text in the tag into the attribute array [eg. checked]
 				{
-					if ($fromSpace != '/')
+					if ($fromSpace !== '/')
 					{
 						$attr = StringHelper::substr($fromSpace, 0, $nextSpace);
 					}
 				}
 
 				// Last Attribute Pair
-				if (!$attr && $fromSpace != '/')
+				if (!$attr && $fromSpace !== '/')
 				{
 					$attr = $fromSpace;
 				}
@@ -786,7 +799,7 @@ class InputFilter
 		}
 
 		// Append any code after the end of tags and return
-		if ($postTag != '<')
+		if ($postTag !== '<')
 		{
 			$preTag .= $postTag;
 		}
@@ -822,8 +835,22 @@ class InputFilter
 			$attrSubSet = explode('=', trim($attrSet[$i]), 2);
 
 			// Take the last attribute in case there is an attribute with no value
-			$attrSubSet_0 = explode(' ', trim($attrSubSet[0]));
+			$attrSubSet_0  = explode(' ', trim($attrSubSet[0]));
 			$attrSubSet[0] = array_pop($attrSubSet_0);
+
+			$attrSubSet[0] = strtolower($attrSubSet[0]);
+			$quoteStyle = version_compare(PHP_VERSION, '5.4', '>=') ? ENT_QUOTES | ENT_HTML401 : ENT_QUOTES;
+
+			// Remove all spaces as valid attributes does not have spaces.
+			$attrSubSet[0] = html_entity_decode($attrSubSet[0], $quoteStyle, 'UTF-8');
+			$attrSubSet[0] = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $attrSubSet[0]);
+			$attrSubSet[0] = preg_replace('/\s+/u', '', $attrSubSet[0]);
+
+			// Replace special blacklisted chars here
+			foreach ($this->blacklistedChars as $blacklistedChar)
+			{
+				$attrSubSet[0] = str_replace($blacklistedChar, '', $attrSubSet[0]);
+			}
 
 			// Remove all "non-regular" attribute names
 			// AND blacklisted attributes

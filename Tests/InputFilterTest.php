@@ -542,8 +542,8 @@ class InputFilterTest extends TestCase
 			),
 			'unknown_03' => array(
 				'',
-				array("key" => "Value", "key2" => "This&That", "key2" => "This&amp;That"),
-				array("key" => "Value", "key2" => "This&That", "key2" => "This&That"),
+				array("key" => "Value", "key2" => "This&amp;That"),
+				array("key" => "Value", "key2" => "This&That"),
 				'From generic cases'
 			),
 			'unknown_04' => array(
@@ -1383,19 +1383,19 @@ class InputFilterTest extends TestCase
 			'tracker25558b' => array(
 				'string',
 				'<IMG STYLE="xss:expression(alert(\'XSS\'))" />',
-				'<IMG STYLE="xss(alert(\'XSS\'))" />',
+				'<IMG style="xss(alert(\'XSS\'))" />',
 				'Test mal-formed element from 25558b'
 			),
 			'tracker25558c' => array(
 				'string',
 				'<IMG STYLE="xss:expr/*XSS*/ession(alert(\'XSS\'))" />',
-				'<IMG STYLE="xss(alert(\'XSS\'))" />',
+				'<IMG style="xss(alert(\'XSS\'))" />',
 				'Test mal-formed element from 25558b'
 			),
 			'tracker25558d' => array(
 				'string',
 				'<IMG STYLE="xss:expr/*XSS*/ess/*another comment*/ion(alert(\'XSS\'))" />',
-				'<IMG STYLE="xss(alert(\'XSS\'))" />',
+				'<IMG style="xss(alert(\'XSS\'))" />',
 				'Test mal-formed element from 25558b'
 			),
 			'tracker25558e' => array(
