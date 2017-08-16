@@ -11,7 +11,7 @@
     },
     "require-dev": {
         "joomla/language": "~2.0@dev",
-        "phpunit/phpunit": "~6.0",
+        "phpunit/phpunit": "~6.3",
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
