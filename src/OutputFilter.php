@@ -8,7 +8,8 @@
 
 namespace Joomla\Filter;
 
-use Joomla\Language\LanguageFactory;
+use Joomla\Language\Language;
+use Joomla\Language\Transliterate;
 use Joomla\String\StringHelper;
 
 /**
@@ -18,6 +19,14 @@ use Joomla\String\StringHelper;
  */
 class OutputFilter
 {
+	/**
+	 * Language instance for making a string URL safe
+	 *
+	 * @var    Language
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private static $language;
+
 	/**
 	 * Makes an object safe to display in forms
 	 *
@@ -96,11 +105,28 @@ class OutputFilter
 		// Remove any '-' from the string since they will be used as concatenaters
 		$str = str_replace('-', ' ', $string);
 
-		// The language factory looks for a null default value, so convert our default if need be
-		$language = empty($language) ? null : $language;
-
-		// Transliterate on the language requested (fallback to current language if not specified)
-		$str = (new LanguageFactory)->getLanguage($language)->transliterate($str);
+		if (self::$language)
+		{
+			/*
+			 * Transliterate on the language requested (fallback to current language if not specified)
+			 *
+			 * 1) If the language is empty, is an asterisk (used in the CMS for "All"), or the langauge matches, use the active Language instance
+			 * 2) If the language does not match the active Language instance, build a new one to get the right transliterator
+			 */
+			if (empty($language) || $language === '*' || self::$language->getLanguage() === $language)
+			{
+				$str = self::$language->transliterate($str);
+			}
+			else
+			{
+				$str = (new Language(self::$language->getBasePath(), $language, self::$language->getDebug()))->transliterate($str);
+			}
+		}
+		else
+		{
+			// Fallback behavior based on the Language package's en-GB LocaliseInterface implementation
+			$str = StringHelper::strtolower((new Transliterate)->utf8_latin_to_ascii($string));
+		}
 
 		// Trim white spaces at beginning and end of alias and make lowercase
 		$str = trim(StringHelper::strtolower($str));
@@ -184,6 +210,20 @@ class OutputFilter
 		$text = htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
 
 		return $text;
+	}
+
+	/**
+	 * Set a Language instance for use
+	 *
+	 * @param   Language  $language  The Language instance to use.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function setLanguage(Language $language)
+	{
+		self::$language = $language;
 	}
 
 	/**

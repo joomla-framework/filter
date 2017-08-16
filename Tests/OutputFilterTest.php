@@ -109,10 +109,10 @@ class OutputFilterTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testStringUrlSafe()
+	public function testStringUrlSafeWithoutALanguageInstance()
 	{
 		$this->assertEquals(
-			'1234567890-qwertyuiop-qwertyuiop-asdfghjkl-asdfghjkl-zxcvbnm-zxcvbnm',
+			'1234567890--qwertyuiop-qwertyuiop-asdfghjkl-asdfghjkl-zxcvbnm-zxcvbnm',
 			$this->object->stringUrlSafe('`1234567890-=~!@#$%^&*()_+	qwertyuiop[]\QWERTYUIOP{}|asdfghjkl;\'ASDFGHJKL:"zxcvbnm,./ZXCVBNM<>?'),
 			'Should clean keyboard string down to ASCII-7'
 		);
