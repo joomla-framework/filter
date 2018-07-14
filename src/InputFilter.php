@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Filter Package
  *
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -216,7 +216,7 @@ class InputFilter
 			case 'INTEGER':
 				$pattern = '/[-+]?[0-9]+/';
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -238,7 +238,7 @@ class InputFilter
 			case 'UINT':
 				$pattern = '/[-+]?[0-9]+/';
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -261,7 +261,7 @@ class InputFilter
 			case 'DOUBLE':
 				$pattern = '/[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?/';
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -283,7 +283,7 @@ class InputFilter
 			case 'BOOL':
 			case 'BOOLEAN':
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -303,7 +303,7 @@ class InputFilter
 			case 'WORD':
 				$pattern = '/[^A-Z_]/i';
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -323,7 +323,7 @@ class InputFilter
 			case 'ALNUM':
 				$pattern = '/[^A-Z0-9]/i';
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -343,7 +343,7 @@ class InputFilter
 			case 'CMD':
 				$pattern = '/[^A-Z0-9_\.-]/i';
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -365,7 +365,7 @@ class InputFilter
 			case 'BASE64':
 				$pattern = '/[^A-Z0-9\/+=]/i';
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -383,7 +383,7 @@ class InputFilter
 				break;
 
 			case 'STRING':
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -401,7 +401,7 @@ class InputFilter
 				break;
 
 			case 'HTML':
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -425,7 +425,7 @@ class InputFilter
 			case 'PATH':
 				$pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -445,7 +445,7 @@ class InputFilter
 				break;
 
 			case 'TRIM':
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -453,15 +453,15 @@ class InputFilter
 					foreach ($source as $eachString)
 					{
 						$cleaned  = (string) trim($eachString);
-						$cleaned  = StringHelper::trim($cleaned, chr(0xE3) . chr(0x80) . chr(0x80));
-						$result[] = StringHelper::trim($cleaned, chr(0xC2) . chr(0xA0));
+						$cleaned  = StringHelper::trim($cleaned, \chr(0xE3) . \chr(0x80) . \chr(0x80));
+						$result[] = StringHelper::trim($cleaned, \chr(0xC2) . \chr(0xA0));
 					}
 				}
 				else
 				{
 					$result = (string) trim($source);
-					$result = StringHelper::trim($result, chr(0xE3) . chr(0x80) . chr(0x80));
-					$result = StringHelper::trim($result, chr(0xC2) . chr(0xA0));
+					$result = StringHelper::trim($result, \chr(0xE3) . \chr(0x80) . \chr(0x80));
+					$result = StringHelper::trim($result, \chr(0xC2) . \chr(0xA0));
 				}
 
 				break;
@@ -469,7 +469,7 @@ class InputFilter
 			case 'USERNAME':
 				$pattern = '/[\x00-\x1F\x7F<>"\'%&]/';
 
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					$result = [];
 
@@ -492,12 +492,12 @@ class InputFilter
 
 			default:
 				// Are we dealing with an array?
-				if (is_array($source))
+				if (\is_array($source))
 				{
 					foreach ($source as $key => $value)
 					{
 						// Filter element for XSS and other 'bad' code etc.
-						if (is_string($value))
+						if (\is_string($value))
 						{
 							$source[$key] = $this->remove($this->decode($value));
 						}
@@ -508,7 +508,7 @@ class InputFilter
 				else
 				{
 					// Or a string?
-					if (is_string($source) && !empty($source))
+					if (\is_string($source) && !empty($source))
 					{
 						// Filter source for XSS and other 'bad' code etc.
 						$result = $this->remove($this->decode($source));
@@ -660,7 +660,7 @@ class InputFilter
 			 */
 			if ((!preg_match("/^[a-z][a-z0-9]*$/i", $tagName))
 				|| (!$tagName)
-				|| ((in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
+				|| ((\in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
 			{
 				$postTag = StringHelper::substr($postTag, ($tagLength + 2));
 				$tagOpenStart = StringHelper::strpos($postTag, '<');
@@ -760,7 +760,7 @@ class InputFilter
 			}
 
 			// Is our tag in the user input array?
-			$tagFound = in_array(strtolower($tagName), $this->tagsArray);
+			$tagFound = \in_array(strtolower($tagName), $this->tagsArray);
 
 			// If the tag is allowed let's append it to the output string.
 			if ((!$tagFound && $this->tagsMethod) || ($tagFound && !$this->tagsMethod))
@@ -772,7 +772,7 @@ class InputFilter
 					$attrSet = $this->cleanAttributes($attrSet);
 					$preTag .= '<' . $tagName;
 
-					for ($i = 0, $count = count($attrSet); $i < $count; $i++)
+					for ($i = 0, $count = \count($attrSet); $i < $count; $i++)
 					{
 						$preTag .= ' ' . $attrSet[$i];
 					}
@@ -821,7 +821,7 @@ class InputFilter
 	{
 		$newSet = [];
 
-		$count = count($attrSet);
+		$count = \count($attrSet);
 
 		// Iterate through attribute pairs
 		for ($i = 0; $i < $count; $i++)
@@ -854,12 +854,12 @@ class InputFilter
 			}
 
 			// Remove all symbols
-			$attrSubSet[0] = preg_replace('/[^\p{L}\p{N}\s]/u', '', $attrSubSet[0]);
+			$attrSubSet[0] = preg_replace('/[^\p{L}\p{N}\-\s]/u', '', $attrSubSet[0]);
 
 			// Remove all "non-regular" attribute names
 			// AND blacklisted attributes
 			if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
-				|| (($this->xssAuto) && ((in_array(strtolower($attrSubSet[0]), $this->attrBlacklist))
+				|| (($this->xssAuto) && ((\in_array(strtolower($attrSubSet[0]), $this->attrBlacklist))
 				|| (substr($attrSubSet[0], 0, 2) == 'on'))))
 			{
 				continue;
@@ -905,7 +905,7 @@ class InputFilter
 			}
 
 			// Is our attribute in the user input array?
-			$attrFound = in_array(strtolower($attrSubSet[0]), $this->attrArray);
+			$attrFound = \in_array(strtolower($attrSubSet[0]), $this->attrArray);
 
 			// If the tag is allowed lets keep it
 			if ((!$attrFound && $this->attrMethod) || ($attrFound && !$this->attrMethod))

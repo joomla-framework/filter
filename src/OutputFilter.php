@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Filter Package
  *
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -43,20 +43,20 @@ class OutputFilter
 	 */
 	public static function objectHtmlSafe(&$mixed, $quoteStyle = ENT_QUOTES, $excludeKeys = '')
 	{
-		if (is_object($mixed))
+		if (\is_object($mixed))
 		{
 			foreach (get_object_vars($mixed) as $k => $v)
 			{
-				if (is_array($v) || is_object($v) || $v == null || substr($k, 1, 1) == '_')
+				if (\is_array($v) || \is_object($v) || $v == null || substr($k, 1, 1) == '_')
 				{
 					continue;
 				}
 
-				if (is_string($excludeKeys) && $k == $excludeKeys)
+				if (\is_string($excludeKeys) && $k == $excludeKeys)
 				{
 					continue;
 				}
-				elseif (is_array($excludeKeys) && in_array($k, $excludeKeys))
+				elseif (\is_array($excludeKeys) && \in_array($k, $excludeKeys))
 				{
 					continue;
 				}
