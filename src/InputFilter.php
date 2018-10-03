@@ -145,12 +145,12 @@ class InputFilter
 	 * @var    array
 	 * @since  1.3.3
 	 */
-	private $blacklistedChars = array(
+	private $blacklistedChars = [
 		'&tab;',
 		'&space;',
 		'&colon;',
 		'&column;',
-	);
+	];
 
 	/**
 	 * Constructor for InputFilter class.
