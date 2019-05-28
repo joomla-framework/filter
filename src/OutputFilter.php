@@ -111,7 +111,7 @@ class OutputFilter
 			/*
 			 * Transliterate on the language requested (fallback to current language if not specified)
 			 *
-			 * 1) If the language is empty, is an asterisk (used in the CMS for "All"), or the langauge matches, use the active Language instance
+			 * 1) If the language is empty, is an asterisk (used in the CMS for "All"), or the language matches, use the active Language instance
 			 * 2) If the language does not match the active Language instance, build a new one to get the right transliterator
 			 */
 			if (empty($language) || $language === '*' || self::$language->getLanguage() === $language)
