@@ -844,7 +844,7 @@ class InputFilter
 			$attrSubSet[0] = array_pop($attrSubSet0);
 
 			$attrSubSet[0] = strtolower($attrSubSet[0]);
-			$quoteStyle    = version_compare(PHP_VERSION, '5.4', '>=') ? ENT_QUOTES | ENT_HTML401 : ENT_QUOTES;
+			$quoteStyle    = ENT_QUOTES | ENT_HTML401;
 
 			// Remove all spaces as valid attributes does not have spaces.
 			$attrSubSet[0] = html_entity_decode($attrSubSet[0], $quoteStyle, 'UTF-8');
