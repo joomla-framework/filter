@@ -222,7 +222,7 @@ class OutputFilter
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public static function setLanguage(Language $language)
+	public static function setLanguage(Language $language): void
 	{
 		self::$language = $language;
 	}
