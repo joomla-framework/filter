@@ -11,8 +11,8 @@
     },
     "require-dev": {
         "joomla/coding-standards": "~2.0@alpha",
-        "joomla/language": "~2.0@dev",
-        "phpunit/phpunit": "~6.3"
+        "joomla/language": "~2.0",
+        "phpunit/phpunit": "~8.2"
     },
     "suggest": {
         "joomla/language": "Required only if you want to use `OutputFilter::stringURLSafe`."

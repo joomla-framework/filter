@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test class for Filter\InputFilter
  *
- * @since  1.0
+ * @note Do not refactor providers to use Generators, they rely on being able to overwrite keys from the generic cases
  */
 class InputFilterTest extends TestCase
 {
@@ -35,669 +35,632 @@ class InputFilterTest extends TestCase
 			'ŸÃ Ã¡Ã¢Ã£Ã¤Ã¥Ã¦Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã' .
 			'°Ã±Ã²Ã³Ã´ÃµÃ¶Ã·Ã¸Ã¹ÃºÃ»Ã¼Ã½Ã¾Ã¿';
 
-		return array(
-			'int_01' => array(
+		return [
+			'int_01'                                                        => [
 				'int',
 				$input,
 				123456789,
-				'From generic cases'
-			),
-			'integer' => array(
+				'From generic cases',
+			],
+			'integer'                                                       => [
 				'integer',
 				$input,
 				123456789,
-				'From generic cases'
-			),
-			'int_02' => array(
+				'From generic cases',
+			],
+			'int_02'                                                        => [
 				'int',
 				'abc123456789abc123456789',
 				123456789,
-				'From generic cases'
-			),
-			'int_03' => array(
+				'From generic cases',
+			],
+			'int_03'                                                        => [
 				'int',
 				'123456789abc123456789abc',
 				123456789,
-				'From generic cases'
-			),
-			'int_04' => array(
+				'From generic cases',
+			],
+			'int_04'                                                        => [
 				'int',
 				'empty',
 				0,
-				'From generic cases'
-			),
-			'int_05' => array(
+				'From generic cases',
+			],
+			'int_05'                                                        => [
 				'int',
 				'ab-123ab',
 				-123,
-				'From generic cases'
-			),
-			'int_06' => array(
+				'From generic cases',
+			],
+			'int_06'                                                        => [
 				'int',
 				'-ab123ab',
 				123,
-				'From generic cases'
-			),
-			'int_07' => array(
+				'From generic cases',
+			],
+			'int_07'                                                        => [
 				'int',
 				'-ab123.456ab',
 				123,
-				'From generic cases'
-			),
-			'int_08' => array(
+				'From generic cases',
+			],
+			'int_08'                                                        => [
 				'int',
 				'456',
 				456,
-				'From generic cases'
-			),
-			'int_09' => array(
+				'From generic cases',
+			],
+			'int_09'                                                        => [
 				'int',
 				'-789',
 				-789,
-				'From generic cases'
-			),
-			'int_10' => array(
+				'From generic cases',
+			],
+			'int_10'                                                        => [
 				'int',
 				-789,
 				-789,
-				'From generic cases'
-			),
-			'int_11' => array(
+				'From generic cases',
+			],
+			'int_11'                                                        => [
 				'int',
 				'',
 				0,
-				'From generic cases'
-			),
-			'int_12' => array(
+				'From generic cases',
+			],
+			'int_12'                                                        => [
 				'int',
-				array(1, 3, 9),
-				array(1, 3, 9),
-				'From generic cases'
-			),
-			'int_13' => array(
+				[1, 3, 9],
+				[1, 3, 9],
+				'From generic cases',
+			],
+			'int_13'                                                        => [
 				'int',
-				array(1, 'ab-123ab', '-ab123.456ab'),
-				array(1, -123, 123),
-				'From generic cases'
-			),
-			'uint_1' => array(
+				[1, 'ab-123ab', '-ab123.456ab'],
+				[1, -123, 123],
+				'From generic cases',
+			],
+			'uint_1'                                                        => [
 				'uint',
 				-789,
 				789,
-				'From generic cases'
-			),
-			'uint_2' => array(
+				'From generic cases',
+			],
+			'uint_2'                                                        => [
 				'uint',
 				'',
 				0,
-				'From generic cases'
-			),
-			'uint_3' => array(
+				'From generic cases',
+			],
+			'uint_3'                                                        => [
 				'uint',
-				array(-1, -3, -9),
-				array(1, 3, 9),
-				'From generic cases'
-			),
-			'uint_4' => array(
+				[-1, -3, -9],
+				[1, 3, 9],
+				'From generic cases',
+			],
+			'uint_4'                                                        => [
 				'uint',
-				array(1, 'ab-123ab', '-ab123.456ab'),
-				array(1, 123, 123),
-				'From generic cases'
-			),
-			'float_01' => array(
+				[1, 'ab-123ab', '-ab123.456ab'],
+				[1, 123, 123],
+				'From generic cases',
+			],
+			'float_01'                                                      => [
 				'float',
 				$input,
 				123456789,
-				'From generic cases'
-			),
-			'double' => array(
+				'From generic cases',
+			],
+			'double'                                                        => [
 				'double',
 				$input,
 				123456789,
-				'From generic cases'
-			),
-			'float_02' => array(
+				'From generic cases',
+			],
+			'float_02'                                                      => [
 				'float',
 				20.20,
 				20.2,
-				'From generic cases'
-			),
-			'float_03' => array(
+				'From generic cases',
+			],
+			'float_03'                                                      => [
 				'float',
 				'-38.123',
 				-38.123,
-				'From generic cases'
-			),
-			'float_04' => array(
+				'From generic cases',
+			],
+			'float_04'                                                      => [
 				'float',
 				'abc-12.456',
 				-12.456,
-				'From generic cases'
-			),
-			'float_05' => array(
+				'From generic cases',
+			],
+			'float_05'                                                      => [
 				'float',
 				'-abc12.456',
 				12.456,
-				'From generic cases'
-			),
-			'float_06' => array(
+				'From generic cases',
+			],
+			'float_06'                                                      => [
 				'float',
 				'abc-12.456abc',
 				-12.456,
-				'From generic cases'
-			),
-			'float_07' => array(
+				'From generic cases',
+			],
+			'float_07'                                                      => [
 				'float',
 				'abc-12 . 456',
 				-12,
-				'From generic cases'
-			),
-			'float_08' => array(
+				'From generic cases',
+			],
+			'float_08'                                                      => [
 				'float',
 				'abc-12. 456',
 				-12,
-				'From generic cases'
-			),
-			'float_09' => array(
+				'From generic cases',
+			],
+			'float_09'                                                      => [
 				'float',
 				'',
 				0,
-				'From generic cases'
-			),
-			'float_10' => array(
+				'From generic cases',
+			],
+			'float_10'                                                      => [
 				'float',
 				'27.3e-34',
 				27.3e-34,
-				'From generic cases'
-			),
-			'float_11' => array(
+				'From generic cases',
+			],
+			'float_11'                                                      => [
 				'float',
-				array(1.0, 3.1, 6.2),
-				array(1.0, 3.1, 6.2),
-				'From generic cases'
-			),
-			'float_13' => array(
+				[1.0, 3.1, 6.2],
+				[1.0, 3.1, 6.2],
+				'From generic cases',
+			],
+			'float_13'                                                      => [
 				'float',
-				array(1.0, 'abc-12. 456', 'abc-12.456abc'),
-				array(1.0, -12, -12.456),
-				'From generic cases'
-			),
-			'float_14' => array(
+				[1.0, 'abc-12. 456', 'abc-12.456abc'],
+				[1.0, -12, -12.456],
+				'From generic cases',
+			],
+			'float_14'                                                      => [
 				'float',
-				array(1.0, 'abcdef-7E-10', '+27.3E-34', '+27.3e-34'),
-				array(1.0, -7E-10, 27.3E-34, 27.3e-34),
-				'From generic cases'
-			),
-			'bool_0' => array(
+				[1.0, 'abcdef-7E-10', '+27.3E-34', '+27.3e-34'],
+				[1.0, -7E-10, 27.3E-34, 27.3e-34],
+				'From generic cases',
+			],
+			'bool_0'                                                        => [
 				'bool',
 				$input,
 				true,
-				'From generic cases'
-			),
-			'boolean' => array(
+				'From generic cases',
+			],
+			'boolean'                                                       => [
 				'boolean',
 				$input,
 				true,
-				'From generic cases'
-			),
-			'bool_1' => array(
+				'From generic cases',
+			],
+			'bool_1'                                                        => [
 				'bool',
 				true,
 				true,
-				'From generic cases'
-			),
-			'bool_2' => array(
+				'From generic cases',
+			],
+			'bool_2'                                                        => [
 				'bool',
 				false,
 				false,
-				'From generic cases'
-			),
-			'bool_3' => array(
+				'From generic cases',
+			],
+			'bool_3'                                                        => [
 				'bool',
 				'',
 				false,
-				'From generic cases'
-			),
-			'bool_4' => array(
+				'From generic cases',
+			],
+			'bool_4'                                                        => [
 				'bool',
 				0,
 				false,
-				'From generic cases'
-			),
-			'bool_5' => array(
+				'From generic cases',
+			],
+			'bool_5'                                                        => [
 				'bool',
 				1,
 				true,
-				'From generic cases'
-			),
-			'bool_6' => array(
+				'From generic cases',
+			],
+			'bool_6'                                                        => [
 				'bool',
 				null,
 				false,
-				'From generic cases'
-			),
-			'bool_7' => array(
+				'From generic cases',
+			],
+			'bool_7'                                                        => [
 				'bool',
 				'false',
 				true,
-				'From generic cases'
-			),
-			'bool_8' => array(
+				'From generic cases',
+			],
+			'bool_8'                                                        => [
 				'bool',
-				array('false', null, true, false, 1, 0, ''),
-				array(true, false, true, false, true, false, false),
-				'From generic cases'
-				),
-			'word_01' => array(
+				['false', null, true, false, 1, 0, ''],
+				[true, false, true, false, true, false, false],
+				'From generic cases',
+			],
+			'word_01'                                                       => [
 				'word',
 				$input,
 				'ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz',
-				'From generic cases'
-			),
-			'word_02' => array(
+				'From generic cases',
+			],
+			'word_02'                                                       => [
 				'word',
 				null,
 				'',
-				'From generic cases'
-			),
-			'word_03' => array(
+				'From generic cases',
+			],
+			'word_03'                                                       => [
 				'word',
 				123456789,
 				'',
-				'From generic cases'
-			),
-			'word_04' => array(
+				'From generic cases',
+			],
+			'word_04'                                                       => [
 				'word',
 				'word123456789',
 				'word',
-				'From generic cases'
-			),
-			'word_05' => array(
+				'From generic cases',
+			],
+			'word_05'                                                       => [
 				'word',
 				'123456789word',
 				'word',
-				'From generic cases'
-			),
-			'word_06' => array(
+				'From generic cases',
+			],
+			'word_06'                                                       => [
 				'word',
 				'w123o4567r89d',
 				'word',
-				'From generic cases'
-			),
-			'word_07' => array(
+				'From generic cases',
+			],
+			'word_07'                                                       => [
 				'word',
-				array('w123o', '4567r89d'),
-				array('wo', 'rd'),
-				'From generic cases'
-			),
-			'alnum_01' => array(
+				['w123o', '4567r89d'],
+				['wo', 'rd'],
+				'From generic cases',
+			],
+			'alnum_01'                                                      => [
 				'alnum',
 				$input,
 				'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-				'From generic cases'
-			),
-			'alnum_02' => array(
+				'From generic cases',
+			],
+			'alnum_02'                                                      => [
 				'alnum',
 				null,
 				'',
-				'From generic cases'
-			),
-			'alnum_03' => array(
+				'From generic cases',
+			],
+			'alnum_03'                                                      => [
 				'alnum',
 				'~!@#$%^&*()_+abc',
 				'abc',
-				'From generic cases'
-			),
-			'alnum_04' => array(
+				'From generic cases',
+			],
+			'alnum_04'                                                      => [
 				'alnum',
-				array('~!@#$%^abc', '&*()_+def'),
-				array('abc', 'def'),
-				'From generic cases'
-			),
-			'cmd_string' => array(
+				['~!@#$%^abc', '&*()_+def'],
+				['abc', 'def'],
+				'From generic cases',
+			],
+			'cmd_string'                                                    => [
 				'cmd',
 				$input,
 				'-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz',
-				'From generic cases'
-			),
-			'cmd_array' => array(
+				'From generic cases',
+			],
+			'cmd_array'                                                     => [
 				'cmd',
-				array($input, $input),
-				array('-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz', '-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'),
-				'From generic cases'
-			),
-			'base64_string' => array(
+				[$input, $input],
+				[
+					'-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz',
+					'-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz',
+				],
+				'From generic cases',
+			],
+			'base64_string'                                                 => [
 				'base64',
 				$input,
 				'+/0123456789=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-				'From generic cases'
-			),
-			'base64_array' => array(
+				'From generic cases',
+			],
+			'base64_array'                                                  => [
 				'base64',
-				array($input, $input),
-				array('+/0123456789=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', '+/0123456789=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'),
-				'From generic cases'
-			),
-			'array' => array(
+				[$input, $input],
+				[
+					'+/0123456789=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+					'+/0123456789=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+				],
+				'From generic cases',
+			],
+			'array'                                                         => [
 				'array',
-				array(1, 3, 6),
-				array(1, 3, 6),
-				'From generic cases'
-			),
-			'path_01' => array(
+				[1, 3, 6],
+				[1, 3, 6],
+				'From generic cases',
+			],
+			'path_01'                                                       => [
 				'path',
 				'images/system',
 				'images/system',
-				'From generic cases'
-			),
-			'path_02' => array(
+				'From generic cases',
+			],
+			'path_02'                                                       => [
 				'path',
 				'http://www.fred.com/josephus',
 				'',
-				'From generic cases'
-			),
-			'path_03' => array(
+				'From generic cases',
+			],
+			'path_03'                                                       => [
 				'path',
 				'',
 				'',
-				'From generic cases'
-			),
-			'path_04' => array(
+				'From generic cases',
+			],
+			'path_04'                                                       => [
 				'path',
 				'/images/system',
 				'/images/system',
-				'From generic cases'
-			),
-			'path_05' => array(
+				'From generic cases',
+			],
+			'path_05'                                                       => [
 				'path',
-				array('images/system', '/var/www/html/index.html'),
-				array('images/system', '/var/www/html/index.html'),
-				'From generic cases'
-			),
-			'path_06' => array(
+				['images/system', '/var/www/html/index.html'],
+				['images/system', '/var/www/html/index.html'],
+				'From generic cases',
+			],
+			'path_06'                                                       => [
 				'path',
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
-				'From generic cases'
-			),
-			'user_01' => array(
+				'From generic cases',
+			],
+			'user_01'                                                       => [
 				'username',
 				'&<f>r%e\'d',
 				'fred',
-				'From generic cases'
-			),
-			'user_02' => array(
+				'From generic cases',
+			],
+			'user_02'                                                       => [
 				'username',
 				'fred',
 				'fred',
-				'From generic cases'
-			),
-			'user_03' => array(
+				'From generic cases',
+			],
+			'user_03'                                                       => [
 				'username',
-				array('&<f>r%e\'d', '$user69'),
-				array('fred', '$user69'),
-				'From generic cases'
-			),
-			'user_04' => array(
+				['&<f>r%e\'d', '$user69'],
+				['fred', '$user69'],
+				'From generic cases',
+			],
+			'user_04'                                                       => [
 				'username',
 				'фамилия',
 				'фамилия',
-				'From generic cases'
-			),
-			'user_05' => array(
+				'From generic cases',
+			],
+			'user_05'                                                       => [
 				'username',
 				'Φρεντ',
 				'Φρεντ',
-				'From generic cases'
-			),
-			'user_06' => array(
+				'From generic cases',
+			],
+			'user_06'                                                       => [
 				'username',
 				'محمد',
 				'محمد',
-				'From generic utf-8 multibyte cases'
-			),
-			'trim_01' => array(
+				'From generic utf-8 multibyte cases',
+			],
+			'trim_01'                                                       => [
 				'trim',
 				'nonbreaking nonbreaking',
 				'nonbreaking nonbreaking',
-				'From generic cases'
-			),
-			'trim_02' => array(
+				'From generic cases',
+			],
+			'trim_02'                                                       => [
 				'trim',
 				'multi　multi',
 				'multi　multi',
-				'From generic cases'
-			),
-			'trim_03' => array(
+				'From generic cases',
+			],
+			'trim_03'                                                       => [
 				'trim',
-				array('nonbreaking nonbreaking', 'multi　multi'),
-				array('nonbreaking nonbreaking', 'multi　multi'),
-				'From generic cases'
-			),
-			'string_01' => array(
+				['nonbreaking nonbreaking', 'multi　multi'],
+				['nonbreaking nonbreaking', 'multi　multi'],
+				'From generic cases',
+			],
+			'string_01'                                                     => [
 				'string',
 				'123.567',
 				'123.567',
-				'From generic cases'
-			),
-			'string_single_quote' => array(
+				'From generic cases',
+			],
+			'string_single_quote'                                           => [
 				'string',
 				"this is a 'test' of ?",
 				"this is a 'test' of ?",
-				'From generic cases'
-			),
-			'string_double_quote' => array(
+				'From generic cases',
+			],
+			'string_double_quote'                                           => [
 				'string',
 				'this is a "test" of "double" quotes',
 				'this is a "test" of "double" quotes',
-				'From generic cases'
-			),
-			'string_odd_double_quote' => array(
+				'From generic cases',
+			],
+			'string_odd_double_quote'                                       => [
 				'string',
 				'this is a "test of "odd number" of quotes',
 				'this is a "test of "odd number" of quotes',
-				'From generic cases'
-			),
-			'string_odd_mixed_quote' => array(
+				'From generic cases',
+			],
+			'string_odd_mixed_quote'                                        => [
 				'string',
 				'this is a "test\' of "odd number" of quotes',
 				'this is a "test\' of "odd number" of quotes',
-				'From generic cases'
-			),
-			'string_array' => array(
+				'From generic cases',
+			],
+			'string_array'                                                  => [
 				'string',
-				array('this is a "test\' of "odd number" of quotes', 'executed in an array'),
-				array('this is a "test\' of "odd number" of quotes', 'executed in an array'),
-				'From generic cases'
-			),
-			'raw_01' => array(
+				['this is a "test\' of "odd number" of quotes', 'executed in an array'],
+				['this is a "test\' of "odd number" of quotes', 'executed in an array'],
+				'From generic cases',
+			],
+			'raw_01'                                                        => [
 				'raw',
 				'<script type="text/javascript">alert("foo");</script>',
 				'<script type="text/javascript">alert("foo");</script>',
-				'From generic cases'
-			),
-			'raw_02' => array(
+				'From generic cases',
+			],
+			'raw_02'                                                        => [
 				'raw',
 				'<p>This is a test of a html <b>snippet</b></p>',
 				'<p>This is a test of a html <b>snippet</b></p>',
-				'From generic cases'
-			),
-			'raw_03' => array(
+				'From generic cases',
+			],
+			'raw_03'                                                        => [
 				'raw',
 				'0123456789',
 				'0123456789',
-				'From generic cases'
-			),
-			'unknown_01' => array(
+				'From generic cases',
+			],
+			'unknown_01'                                                    => [
 				'',
 				'123.567',
 				'123.567',
-				'From generic cases'
-			),
-			'unknown_02' => array(
+				'From generic cases',
+			],
+			'unknown_02'                                                    => [
 				'',
-				array(1, 3, 9),
-				array(1, 3, 9),
-				'From generic cases'
-			),
-			'unknown_03' => array(
+				[1, 3, 9],
+				[1, 3, 9],
+				'From generic cases',
+			],
+			'unknown_03'                                                    => [
 				'',
-				array("key" => "Value", "key2" => "This&amp;That"),
-				array("key" => "Value", "key2" => "This&That"),
-				'From generic cases'
-			),
-			'unknown_04' => array(
+				["key" => "Value", "key2" => "This&amp;That"],
+				["key" => "Value", "key2" => "This&That"],
+				'From generic cases',
+			],
+			'unknown_04'                                                    => [
 				'',
 				12.6,
 				12.6,
-				'From generic cases'
-			),
-			'tag_01' => array(
+				'From generic cases',
+			],
+			'tag_01'                                                        => [
 				'',
 				'<em',
 				'em',
-				'From generic cases'
-			),
-			'Kill script' => array(
+				'From generic cases',
+			],
+			'Kill script'                                                   => [
 				'',
 				'<img src="javascript:alert();" />',
 				'<img />',
-				'From generic cases'
-			),
-			'Nested tags' => array(
+				'From generic cases',
+			],
+			'Nested tags'                                                   => [
 				'',
 				'<em><strong>Fred</strong></em>',
 				'<em><strong>Fred</strong></em>',
-				'From generic cases'
-			),
-			'Nested tags 02' => array(
+				'From generic cases',
+			],
+			'Nested tags 02'                                                => [
 				'',
 				'<em><strong>Φρεντ</strong></em>',
 				'<em><strong>Φρεντ</strong></em>',
-				'From generic cases'
-			),
-			'Nested tags with utf-8 multibyte persian characters' => array(
+				'From generic cases',
+			],
+			'Nested tags with utf-8 multibyte persian characters'           => [
 				'',
 				'<em><strong>محمد</strong></em>',
 				'<em><strong>محمد</strong></em>',
-				'From generic utf-8 multibyte cases'
-			),
-			'Malformed Nested tags' => array(
+				'From generic utf-8 multibyte cases',
+			],
+			'Malformed Nested tags'                                         => [
 				'',
 				'<em><strongFred</strong></em>',
 				'<em>strongFred</strong></em>',
-				'From generic cases'
-			),
-			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'From generic cases',
+			],
+			'Malformed Nested tags with utf-8 multibyte persian characters' => [
 				'',
 				'<em><strongمحمد</strong></em>',
 				'<em>strongمحمد</strong></em>',
-				'From generic utf-8 multibyte cases'
-			),
-			'Unquoted Attribute Without Space' => array(
+				'From generic utf-8 multibyte cases',
+			],
+			'Unquoted Attribute Without Space'                              => [
 				'',
 				'<img height=300>',
 				'<img height="300" />',
-				'From generic cases'
-			),
-			'Unquoted Attribute' => array(
+				'From generic cases',
+			],
+			'Unquoted Attribute'                                            => [
 				'',
 				'<img height=300 />',
 				'<img height="300" />',
-				'From generic cases'
-			),
-			'Single quoted Attribute' => array(
+				'From generic cases',
+			],
+			'Single quoted Attribute'                                       => [
 				'',
 				'<img height=\'300\' />',
 				'<img height="300" />',
-				'From generic cases'
-			),
-			'Attribute is zero' => array(
+				'From generic cases',
+			],
+			'Attribute is zero'                                             => [
 				'',
 				'<img height=0 />',
 				'<img height="0" />',
-				'From generic cases'
-			),
-			'Attribute value missing' => array(
+				'From generic cases',
+			],
+			'Attribute value missing'                                       => [
 				'',
 				'<img height= />',
 				'<img height="" />',
-				'From generic cases'
-			),
-			'Attribute without =' => array(
+				'From generic cases',
+			],
+			'Attribute without ='                                           => [
 				'',
 				'<img height="300" ismap />',
 				'<img height="300" />',
-				'From generic cases'
-			),
-			'Bad Attribute Name' => array(
+				'From generic cases',
+			],
+			'Bad Attribute Name'                                            => [
 				'',
 				'<br 3bb />',
 				'<br />',
-				'From generic cases'
-			),
-			'Bad Tag Name' => array(
+				'From generic cases',
+			],
+			'Bad Tag Name'                                                  => [
 				'',
 				'<300 />',
 				'',
-				'From generic cases'
-			),
-			'tracker9725' => array(
+				'From generic cases',
+			],
+			'tracker9725'                                                   => [
 				'string',
 				'<img class="one two" />',
 				'<img class="one two" />',
-				'Test for recursion with single tags - From generic cases'
-			),
-			'missing_quote' => array(
+				'Test for recursion with single tags - From generic cases',
+			],
+			'missing_quote'                                                 => [
 				'string',
 				'<img height="123 />',
 				'img height="123 /&gt;"',
-				'From generic cases'
-			),
-		);
-	}
-
-	/**
-	 * Produces the array of test cases for the Clean Text test run.
-	 *
-	 * @return  array  Two dimensional array of test cases. Each row consists of two values
-	 *                 The first is the input data for the test run,
-	 *                 and the second is the expected result of filtering.
-	 */
-	public function casesCleanText()
-	{
-		$cases = array(
-			'case_1' => array(
-				'',
-				''
-			),
-			'script_0' => array(
-				'<script>alert(\'hi!\');</script>',
-				''
-			)
-		);
-		$tests = $cases;
-
-		return $tests;
-	}
-
-	/**
-	 * Execute a cleanText test case.
-	 *
-	 * @param   string  $data    The original output
-	 * @param   string  $expect  The expected result for this test.
-	 *
-	 * @return  void
-	 *
-	 * @dataProvider casesCleanText
-	 */
-	public function testCleanText($data, $expect)
-	{
-		$this->markTestSkipped('Why are we calling JFilterOutput in JFilterInputTest?');
-		$this->assertThat(
-			$expect,
-			$this->equalTo(Output::cleanText($data))
-		);
+				'From generic cases',
+			],
+		];
 	}
 
 	/**
@@ -710,109 +673,108 @@ class InputFilterTest extends TestCase
 	 */
 	public function whitelist()
 	{
-		$casesSpecific = array(
-			'Kill script' => array(
+		$casesSpecific = [
+			'Kill script'                                                   => [
 				'',
 				'<img src="javascript:alert();" />',
 				'',
-				'From specific cases'
-			),
-			'Nested tags' => array(
+				'From specific cases',
+			],
+			'Nested tags'                                                   => [
 				'',
 				'<em><strong>Fred</strong></em>',
 				'Fred',
-				'From specific cases'
-			),
-			'Nested tags 02' => array(
+				'From specific cases',
+			],
+			'Nested tags 02'                                                => [
 				'',
 				'<em><strong>Φρεντ</strong></em>',
 				'Φρεντ',
-				'From specific cases'
-			),
-			'Nested tags with utf-8 multibyte persian characters' => array(
+				'From specific cases',
+			],
+			'Nested tags with utf-8 multibyte persian characters'           => [
 				'',
 				'<em><strong>محمد</strong></em>',
 				'محمد',
-				'From specific utf-8 multibyte cases'
-			),
-			'Malformed Nested tags' => array(
+				'From specific utf-8 multibyte cases',
+			],
+			'Malformed Nested tags'                                         => [
 				'',
 				'<em><strongFred</strong></em>',
 				'strongFred',
-				'From specific cases'
-			),
-			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'From specific cases',
+			],
+			'Malformed Nested tags with utf-8 multibyte persian characters' => [
 				'',
 				'<em><strongمحمد</strong></em>',
 				'strongمحمد',
-				'From specific utf-8 multibyte cases'
-			),
-			'Unquoted Attribute Without Space' => array(
+				'From specific utf-8 multibyte cases',
+			],
+			'Unquoted Attribute Without Space'                              => [
 				'',
 				'<img height=300>',
 				'',
-				'From specific cases'
-			),
-			'Unquoted Attribute' => array(
+				'From specific cases',
+			],
+			'Unquoted Attribute'                                            => [
 				'',
 				'<img height=300 />',
 				'',
-				'From specific cases'
-			),
-			'Single quoted Attribute' => array(
+				'From specific cases',
+			],
+			'Single quoted Attribute'                                       => [
 				'',
 				'<img height=\'300\' />',
 				'',
-				'From specific cases'
-			),
-			'Attribute is zero' => array(
+				'From specific cases',
+			],
+			'Attribute is zero'                                             => [
 				'',
 				'<img height=0 />',
 				'',
-				'From specific cases'
-			),
-			'Attribute value missing' => array(
+				'From specific cases',
+			],
+			'Attribute value missing'                                       => [
 				'',
 				'<img height= />',
 				'',
-				'From specific cases'
-			),
-			'Attribute without =' => array(
+				'From specific cases',
+			],
+			'Attribute without ='                                           => [
 				'',
 				'<img height="300" ismap />',
 				'',
-				'From specific cases'
-			),
-			'Bad Attribute Name' => array(
+				'From specific cases',
+			],
+			'Bad Attribute Name'                                            => [
 				'',
 				'<br 300 />',
 				'',
-				'From specific cases'
-			),
-			'tracker9725' => array(
+				'From specific cases',
+			],
+			'tracker9725'                                                   => [
 				// Test for recursion with single tags
 				'string',
 				'<img class="one two" />',
 				'',
-				'From specific cases'
-			),
-			'tracker24258' => array(
+				'From specific cases',
+			],
+			'tracker24258'                                                  => [
 				// Test for recursion on attributes
 				'string',
 				'<scrip &nbsp; t>alert(\'test\');</scrip t>',
 				'alert(\'test\');',
-				'From generic cases'
-			),
-			'Attribute with dash' => array(
+				'From generic cases',
+			],
+			'Attribute with dash'                                           => [
 				'string',
 				'<img data-value="1" />',
 				'',
-				'From generic cases'
-			),
-		);
-		$tests = array_merge($this->casesGeneric(), $casesSpecific);
+				'From generic cases',
+			],
+		];
 
-		return $tests;
+		return array_merge($this->casesGeneric(), $casesSpecific);
 	}
 
 	/**
@@ -850,132 +812,131 @@ class InputFilterTest extends TestCase
 			"(atob(/KGZ1bmN0aW9uKCl7dHJ5e3ZhciBkPWRvY3VtZW50LGI9ZC5ib2R5LHM9ZC5jcmVhdGVFbGVtZW50KCdzY3JpcHQnKTtzLnNldEF0dHJpYnV0ZSgnc3J" .
 			"jJywnaHR0cDovL2hhLmNrZXJzLm9yZy94c3MuanMnKTtiLmFwcGVuZENoaWxkKHMpO31jYXRjaChlKXt9fSkoKTs=/.source))//'/> ";
 
-		$casesSpecific = array(
-			'Kill script' => array(
+		$casesSpecific = [
+			'Kill script'                                                   => [
 				'',
 				'<img src="javascript:alert();" />',
 				'<img />',
-				'From specific cases'
-			),
-			'Nested tags' => array(
+				'From specific cases',
+			],
+			'Nested tags'                                                   => [
 				'',
 				'<em><strong>Fred</strong></em>',
 				'Fred',
-				'From specific cases'
-			),
-			'Nested tags 02' => array(
+				'From specific cases',
+			],
+			'Nested tags 02'                                                => [
 				'',
 				'<em><strong>Φρεντ</strong></em>',
 				'Φρεντ',
-				'From specific cases'
-			),
-			'Nested tags with utf-8 multibyte persian characters' => array(
+				'From specific cases',
+			],
+			'Nested tags with utf-8 multibyte persian characters'           => [
 				'',
 				'<em><strong>محمد</strong></em>',
 				'محمد',
-				'From specific utf-8 multibyte cases'
-			),
-			'Malformed Nested tags' => array(
+				'From specific utf-8 multibyte cases',
+			],
+			'Malformed Nested tags'                                         => [
 				'',
 				'<em><strongFred</strong></em>',
 				'strongFred',
-				'From specific cases'
-			),
-			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'From specific cases',
+			],
+			'Malformed Nested tags with utf-8 multibyte persian characters' => [
 				'',
 				'<em><strongمحمد</strong></em>',
 				'strongمحمد',
-				'From specific utf-8 multibyte cases'
-			),
-			'Unquoted Attribute Without Space' => array(
+				'From specific utf-8 multibyte cases',
+			],
+			'Unquoted Attribute Without Space'                              => [
 				'',
 				'<img height=300>',
 				'<img />',
-				'From specific cases'
-			),
-			'Unquoted Attribute' => array(
+				'From specific cases',
+			],
+			'Unquoted Attribute'                                            => [
 				'',
 				'<img height=300 />',
 				'<img />',
-				'From specific cases'
-			),
-			'Single quoted Attribute' => array(
+				'From specific cases',
+			],
+			'Single quoted Attribute'                                       => [
 				'',
 				'<img height=\'300\' />',
 				'<img />',
-				'From specific cases'
-			),
-			'Attribute is zero' => array(
+				'From specific cases',
+			],
+			'Attribute is zero'                                             => [
 				'',
 				'<img height=0 />',
 				'<img />',
-				'From specific cases'
-			),
-			'Attribute value missing' => array(
+				'From specific cases',
+			],
+			'Attribute value missing'                                       => [
 				'',
 				'<img height= />',
 				'<img />',
-				'From specific cases'
-			),
-			'Attribute without =' => array(
+				'From specific cases',
+			],
+			'Attribute without ='                                           => [
 				'',
 				'<img height="300" ismap />',
 				'<img />',
-				'From specific cases'
-			),
-			'Bad Attribute Name' => array(
+				'From specific cases',
+			],
+			'Bad Attribute Name'                                            => [
 				'',
 				'<br 300 />',
 				'',
-				'From specific cases'
-			),
-			'tracker9725' => array(
+				'From specific cases',
+			],
+			'tracker9725'                                                   => [
 				// Test for recursion with single tags
 				'string',
 				'<img class="one two" />',
 				'<img />',
-				'From specific cases'
-			),
-			'security_20110329a' => array(
+				'From specific cases',
+			],
+			'security_20110329a'                                            => [
 				'string',
 				"<img src='<img src='///'/> ",
 				'<img /> ',
-				'From specific cases'
-			),
-			'security_20110329b' => array(
+				'From specific cases',
+			],
+			'security_20110329b'                                            => [
 				'string',
 				$security20110329bString,
 				'<img /> ',
-				'From specific cases'
-			),
-			'hanging_quote' => array(
+				'From specific cases',
+			],
+			'hanging_quote'                                                 => [
 				'string',
 				"<img src=\' />",
 				'<img />',
-				'From specific cases'
-			),
-			'hanging_quote2' => array(
+				'From specific cases',
+			],
+			'hanging_quote2'                                                => [
 				'string',
 				'<img src slkdjls " this is "more " stuff',
 				'img src slkdjls " this is "more " stuff',
-				'From specific cases'
-			),
-			'hanging_quote3' => array(
+				'From specific cases',
+			],
+			'hanging_quote3'                                                => [
 				'string',
 				"<img src=\"\'\" />",
 				'<img />',
-				'From specific cases'
-			),
-			'Attribute with dash' => array(
+				'From specific cases',
+			],
+			'Attribute with dash'                                           => [
 				'string',
 				'<img data-value="1" />',
 				'<img />',
-				'From generic cases'
-			),
-		);
-		$tests = array_merge($this->casesGeneric(), $casesSpecific);
+				'From generic cases',
+			],
+		];
 
-		return $tests;
+		return array_merge($this->casesGeneric(), $casesSpecific);
 	}
 
 	/**
@@ -1009,102 +970,101 @@ class InputFilterTest extends TestCase
 	 */
 	public function whitelistClass()
 	{
-		$casesSpecific = array(
-			'Kill script' => array(
+		$casesSpecific = [
+			'Kill script'                                                   => [
 				'',
 				'<img src="javascript:alert();" />',
 				'',
-				'From specific cases'
-			),
-			'Nested tags' => array(
+				'From specific cases',
+			],
+			'Nested tags'                                                   => [
 				'',
 				'<em><strong>Fred</strong></em>',
 				'Fred',
-				'From specific cases'
-			),
-			'Nested tags 02' => array(
+				'From specific cases',
+			],
+			'Nested tags 02'                                                => [
 				'',
 				'<em><strong>Φρεντ</strong></em>',
 				'Φρεντ',
-				'From specific cases'
-			),
-			'Nested tags with utf-8 multibyte persian characters' => array(
+				'From specific cases',
+			],
+			'Nested tags with utf-8 multibyte persian characters'           => [
 				'',
 				'<em><strong>محمد</strong></em>',
 				'محمد',
-				'From specific utf-8 multibyte cases'
-			),
-			'Malformed Nested tags' => array(
+				'From specific utf-8 multibyte cases',
+			],
+			'Malformed Nested tags'                                         => [
 				'',
 				'<em><strongFred</strong></em>',
 				'strongFred',
-				'From specific cases'
-			),
-			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'From specific cases',
+			],
+			'Malformed Nested tags with utf-8 multibyte persian characters' => [
 				'',
 				'<em><strongمحمد</strong></em>',
 				'strongمحمد',
-				'From specific utf-8 multibyte cases'
-			),
-			'Unquoted Attribute Without Space' => array(
+				'From specific utf-8 multibyte cases',
+			],
+			'Unquoted Attribute Without Space'                              => [
 				'',
 				'<img height=300>',
 				'',
-				'From specific cases'
-			),
-			'Unquoted Attribute' => array(
+				'From specific cases',
+			],
+			'Unquoted Attribute'                                            => [
 				'',
 				'<img height=300 />',
 				'',
-				'From specific cases'
-			),
-			'Single quoted Attribute' => array(
+				'From specific cases',
+			],
+			'Single quoted Attribute'                                       => [
 				'',
 				'<img height=\'300\' />',
 				'',
-				'From specific cases'
-			),
-			'Attribute is zero' => array(
+				'From specific cases',
+			],
+			'Attribute is zero'                                             => [
 				'',
 				'<img height=0 />',
 				'',
-				'From specific cases'
-			),
-			'Attribute value missing' => array(
+				'From specific cases',
+			],
+			'Attribute value missing'                                       => [
 				'',
 				'<img height= />',
 				'',
-				'From specific cases'
-			),
-			'Attribute without =' => array(
+				'From specific cases',
+			],
+			'Attribute without ='                                           => [
 				'',
 				'<img height="300" ismap />',
 				'',
-				'From specific cases'
-			),
-			'Bad Attribute Name' => array(
+				'From specific cases',
+			],
+			'Bad Attribute Name'                                            => [
 				'',
 				'<br 300 />',
 				'',
-				'From specific cases'
-			),
-			'tracker9725' => array(
+				'From specific cases',
+			],
+			'tracker9725'                                                   => [
 				// Test for recursion with single tags
 				'string',
 				'<img class="one two" />',
 				'',
-				'From specific cases'
-			),
-			'Attribute with dash' => array(
+				'From specific cases',
+			],
+			'Attribute with dash'                                           => [
 				'string',
 				'<img data-value="1" />',
 				'',
-				'From generic cases'
-			),
-		);
-		$tests = array_merge($this->casesGeneric(), $casesSpecific);
+				'From generic cases',
+			],
+		];
 
-		return $tests;
+		return array_merge($this->casesGeneric(), $casesSpecific);
 	}
 
 	/**
@@ -1138,109 +1098,108 @@ class InputFilterTest extends TestCase
 	 */
 	public function whitelistClassImg()
 	{
-		$casesSpecific = array(
-			'Kill script' => array(
+		$casesSpecific = [
+			'Kill script'                                                   => [
 				'',
 				'<img src="javascript:alert();" />',
 				'<img />',
-				'From specific cases'
-			),
-			'Nested tags' => array(
+				'From specific cases',
+			],
+			'Nested tags'                                                   => [
 				'',
 				'<em><strong>Fred</strong></em>',
 				'Fred',
-				'From specific cases'
-			),
-			'Nested tags 02' => array(
+				'From specific cases',
+			],
+			'Nested tags 02'                                                => [
 				'',
 				'<em><strong>Φρεντ</strong></em>',
 				'Φρεντ',
-				'From specific cases'
-			),
-			'Nested tags with utf-8 multibyte persian characters' => array(
+				'From specific cases',
+			],
+			'Nested tags with utf-8 multibyte persian characters'           => [
 				'',
 				'<em><strong>محمد</strong></em>',
 				'محمد',
-				'From specific utf-8 multibyte cases'
-			),
-			'Malformed Nested tags' => array(
+				'From specific utf-8 multibyte cases',
+			],
+			'Malformed Nested tags'                                         => [
 				'',
 				'<em><strongFred</strong></em>',
 				'strongFred',
-				'From specific cases'
-			),
-			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'From specific cases',
+			],
+			'Malformed Nested tags with utf-8 multibyte persian characters' => [
 				'',
 				'<em><strongمحمد</strong></em>',
 				'strongمحمد',
-				'From specific utf-8 multibyte cases'
-			),
-			'Unquoted Attribute Without Space' => array(
+				'From specific utf-8 multibyte cases',
+			],
+			'Unquoted Attribute Without Space'                              => [
 				'',
 				'<img class=myclass height=300 >',
 				'<img class="myclass" />',
-				'From specific cases'
-			),
-			'Unquoted Attribute' => array(
+				'From specific cases',
+			],
+			'Unquoted Attribute'                                            => [
 				'',
 				'<img class = myclass  height = 300/>',
 				'<img />',
-				'From specific cases'
-			),
-			'Single quoted Attribute' => array(
+				'From specific cases',
+			],
+			'Single quoted Attribute'                                       => [
 				'',
 				'<img class=\'myclass\' height=\'300\' />',
 				'<img class="myclass" />',
-				'From specific cases'
-			),
-			'Attribute is zero' => array(
+				'From specific cases',
+			],
+			'Attribute is zero'                                             => [
 				'',
 				'<img class=0 height=0 />',
 				'<img class="0" />',
-				'From specific cases'
-			),
-			'Attribute value missing' => array(
+				'From specific cases',
+			],
+			'Attribute value missing'                                       => [
 				'',
 				'<img class= height= />',
 				'<img class="" />',
-				'From specific cases'
-			),
-			'Attribute without =' => array(
+				'From specific cases',
+			],
+			'Attribute without ='                                           => [
 				'',
 				'<img ismap class />',
 				'<img />',
-				'From specific cases'
-			),
-			'Bad Attribute Name' => array(
+				'From specific cases',
+			],
+			'Bad Attribute Name'                                            => [
 				'',
 				'<br 300 />',
 				'',
-				'From specific cases'
-			),
-			'tracker9725' => array(
+				'From specific cases',
+			],
+			'tracker9725'                                                   => [
 				// Test for recursion with single tags
 				'string',
 				'<img class="one two" />',
 				'<img class="one two" />',
-				'From specific cases'
-			),
-			'class with no =' => array(
+				'From specific cases',
+			],
+			'class with no ='                                               => [
 				// Test for recursion with single tags
 				'string',
 				'<img class />',
 				'<img />',
-				'From specific cases'
-			),
-			'Attribute with dash' => array(
+				'From specific cases',
+			],
+			'Attribute with dash'                                           => [
 				'string',
 				'<img data-value="1" />',
 				'<img />',
-				'From generic cases'
-			),
-		);
-		$tests = array_merge($this->casesGeneric(), $casesSpecific);
+				'From generic cases',
+			],
+		];
 
-		return $tests;
+		return array_merge($this->casesGeneric(), $casesSpecific);
 	}
 
 	/**
@@ -1283,203 +1242,202 @@ class InputFilterTest extends TestCase
 		$normalNested2 = '<p class="my_class">This is a <a href="http://mysite.com" img="my_image">link test</a>. ' .
 			'This is <span class="myclass" font="myfont"> some more</span> text.</p>';
 
-		$casesSpecific = array(
-			'security_tracker_24802_a' => array(
+		$casesSpecific = [
+			'security_tracker_24802_a' => [
 				'',
 				'<img src="<img src=x"/onerror=alert(1)//">',
 				'<img src="&lt;img src=x&quot;/onerror=alert(1)//" />',
-				'From specific cases'
-			),
-			'security_tracker_24802_b' => array(
+				'From specific cases',
+			],
+			'security_tracker_24802_b' => [
 				'',
 				'<img src="<img src=x"/onerror=alert(1)"//>"',
 				'img src="&lt;img src=x&quot;/onerror=alert(1)&quot;//&gt;"',
-				'From specific cases'
-			),
-			'security_tracker_24802_c' => array(
+				'From specific cases',
+			],
+			'security_tracker_24802_c' => [
 				'',
 				'<img src="<img src=x"/onerror=alert(1)"//>',
 				'img src="&lt;img src=x&quot;/onerror=alert(1)&quot;//&gt;"',
-				'From specific cases'
-			),
-			'security_tracker_24802_d' => array(
+				'From specific cases',
+			],
+			'security_tracker_24802_d' => [
 				'',
 				'<img src="x"/onerror=alert(1)//">',
 				'<img src="x&quot;/onerror=alert(1)//" />',
-				'From specific cases'
-			),
-			'security_tracker_24802_e' => array(
+				'From specific cases',
+			],
+			'security_tracker_24802_e' => [
 				'',
 				'<img src=<img src=x"/onerror=alert(1)//">',
 				'img src=<img src="x/onerror=alert(1)//" />',
-				'From specific cases'
-			),
-			'empty_alt' => array(
+				'From specific cases',
+			],
+			'empty_alt'                => [
 				'string',
 				'<img alt="" src="my_source" />',
 				'<img alt="" src="my_source" />',
-				'Test empty alt attribute'
-			),
-			'disabled_no_equals_a' => array(
+				'Test empty alt attribute',
+			],
+			'disabled_no_equals_a'     => [
 				'string',
 				'<img disabled src="my_source" />',
 				'<img src="my_source" />',
-				'Test empty alt attribute'
-			),
-			'disabled_no_equals_b' => array(
+				'Test empty alt attribute',
+			],
+			'disabled_no_equals_b'     => [
 				'string',
 				'<img alt="" disabled src="aaa" />',
 				'<img alt="" src="aaa" />',
-				'Test empty alt attribute'
-			),
-			'disabled_no_equals_c' => array(
+				'Test empty alt attribute',
+			],
+			'disabled_no_equals_c'     => [
 				'string',
 				'<img disabled />',
 				'<img />',
-				'Test empty alt attribute'
-			),
-			'disabled_no_equals_d' => array(
+				'Test empty alt attribute',
+			],
+			'disabled_no_equals_d'     => [
 				'string',
 				'<img height="300" disabled />',
 				'<img height="300" />',
-				'Test empty alt attribute'
-			),
-			'disabled_no_equals_e' => array(
+				'Test empty alt attribute',
+			],
+			'disabled_no_equals_e'     => [
 				'string',
 				'<img height disabled />',
 				'<img />',
-				'Test empty alt attribute'
-			),
-			'test_nested' => array(
+				'Test empty alt attribute',
+			],
+			'test_nested'              => [
 				'string',
 				'<img src="<img src=x"/onerror=alert(1)//>" />',
 				'<img src="&lt;img src=x&quot;/onerror=alert(1)//&gt;" />',
-				'Test empty alt attribute'
-			),
-			'infinte_loop_a' => array(
+				'Test empty alt attribute',
+			],
+			'infinte_loop_a'           => [
 				'string',
 				'<img src="x" height = "zzz" />',
 				'<img src="x" height="zzz" />',
-				'Test empty alt attribute'
-			),
-			'infinte_loop_b' => array(
+				'Test empty alt attribute',
+			],
+			'infinte_loop_b'           => [
 				'string',
 				'<img src = "xxx" height = "zzz" />',
 				'<img src="xxx" height="zzz" />',
-				'Test empty alt attribute'
-			),
-			'quotes_in_text' => array(
+				'Test empty alt attribute',
+			],
+			'quotes_in_text'           => [
 				'string',
 				$quotesInText1,
 				$quotesInText2,
-				'Test valid nested tag'
-			),
-			'normal_nested' => array(
+				'Test valid nested tag',
+			],
+			'normal_nested'            => [
 				'string',
 				$normalNested1,
 				$normalNested2,
-				'Test valid nested tag'
-			),
-			'hanging_quote' => array(
+				'Test valid nested tag',
+			],
+			'hanging_quote'            => [
 				'string',
 				"<img src=\' />",
 				'<img src="" />',
-				'From specific cases'
-			),
-			'hanging_quote2' => array(
+				'From specific cases',
+			],
+			'hanging_quote2'           => [
 				'string',
 				'<img src slkdjls " this is "more " stuff',
 				'img src slkdjls " this is "more " stuff',
-				'From specific cases'
-			),
-			'hanging_quote3' => array(
+				'From specific cases',
+			],
+			'hanging_quote3'           => [
 				'string',
 				"<img src=\"\' />",
 				'img src="\\\' /&gt;"',
-				'From specific cases'
-			),
-			'tracker25558a' => array(
+				'From specific cases',
+			],
+			'tracker25558a'            => [
 				'string',
 				'<SCRIPT SRC=http://jeffchannell.com/evil.js#<B />',
 				'SCRIPT SRC=http://jeffchannell.com/evil.js#<B />',
-				'Test mal-formed element from 25558a'
-			),
-			'tracker25558b' => array(
+				'Test mal-formed element from 25558a',
+			],
+			'tracker25558b'            => [
 				'string',
 				'<IMG STYLE="xss:expression(alert(\'XSS\'))" />',
 				'<IMG style="xss(alert(\'XSS\'))" />',
-				'Test mal-formed element from 25558b'
-			),
-			'tracker25558c' => array(
+				'Test mal-formed element from 25558b',
+			],
+			'tracker25558c'            => [
 				'string',
 				'<IMG STYLE="xss:expr/*XSS*/ession(alert(\'XSS\'))" />',
 				'<IMG style="xss(alert(\'XSS\'))" />',
-				'Test mal-formed element from 25558b'
-			),
-			'tracker25558d' => array(
+				'Test mal-formed element from 25558b',
+			],
+			'tracker25558d'            => [
 				'string',
 				'<IMG STYLE="xss:expr/*XSS*/ess/*another comment*/ion(alert(\'XSS\'))" />',
 				'<IMG style="xss(alert(\'XSS\'))" />',
-				'Test mal-formed element from 25558b'
-			),
-			'tracker25558e' => array(
+				'Test mal-formed element from 25558b',
+			],
+			'tracker25558e'            => [
 				'string',
 				'<b><script<b></b><alert(1)</script </b>',
 				'<b>script<b></b>alert(1)/script</b>',
-				'Test mal-formed element from 25558e'
-			),
-			'security_20110329a' => array(
+				'Test mal-formed element from 25558e',
+			],
+			'security_20110329a'       => [
 				'string',
 				"<img src='<img src='///'/> ",
 				"<img src=\"'&lt;img\" src=\"'///'/\" /> ",
-				'From specific cases'
-			),
-			'html_01' => array(
+				'From specific cases',
+			],
+			'html_01'                  => [
 				'html',
 				'<div>Hello</div>',
 				'<div>Hello</div>',
-				'Generic test case for HTML cleaning'
-			),
-			'tracker26439a' => array(
+				'Generic test case for HTML cleaning',
+			],
+			'tracker26439a'            => [
 				'string',
 				'<p>equals quote =" inside valid tag</p>',
 				'<p>equals quote =" inside valid tag</p>',
-				'Test quote equals inside valid tag'
-			),
-			'tracker26439b' => array(
+				'Test quote equals inside valid tag',
+			],
+			'tracker26439b'            => [
 				'string',
 				"<p>equals quote =' inside valid tag</p>",
 				"<p>equals quote =' inside valid tag</p>",
-				'Test single quote equals inside valid tag'
-			),
-			'forward_slash' => array(
+				'Test single quote equals inside valid tag',
+			],
+			'forward_slash'            => [
 				'',
 				'<textarea autofocus /onfocus=alert(1)>',
 				'<textarea />',
-				'Test for detection of leading forward slashes in attributes'
-			),
-			'tracker25558f' => array(
+				'Test for detection of leading forward slashes in attributes',
+			],
+			'tracker25558f'            => [
 				'string',
 				'<a href="javas&Tab;cript:alert(&tab;document.domain&TaB;)">Click Me</a>',
 				'<a>Click Me</a>',
-				'Test mal-formed element from 25558f'
-			),
-			'Attribute with dash' => array(
+				'Test mal-formed element from 25558f',
+			],
+			'Attribute with dash'      => [
 				'string',
 				'<img data-value="1" />',
 				'<img data-value="1" />',
-				'From generic cases'
-			),
-		);
-		$tests = array_merge($this->casesGeneric(), $casesSpecific);
+				'From generic cases',
+			],
+		];
 
-		return $tests;
+		return array_merge($this->casesGeneric(), $casesSpecific);
 	}
 
 	/**
 	 * Execute a test case with clean() default blacklist filter settings (strips bad tags).
 	 *
-	 * @param   string  $type     The type of input
+	 * @param string $type The type of input
 	 * @param   string  $data     The input
 	 * @param   string  $expect   The expected result for this test.
 	 * @param   string  $message  The failure message identifying the source of the test case.
@@ -1512,66 +1470,65 @@ class InputFilterTest extends TestCase
 			"tZW50KCdzY3JpcHQnKTtzLnNldEF0dHJpYnV0ZSgnc3JjJywnaHR0cDovL2hhLmNrZXJzLm9yZy94c3MuanMnKTtiLmFwcGVuZENoaWxkKHMpO31jYXRjaChlKXt9fSkoKTs=" .
 			"/.source))//'/> ";
 
-		$casesSpecific = array(
-			'Kill script' => array(
+		$casesSpecific = [
+			'Kill script'                      => [
 				'',
 				'<img src="javascript:alert();" />',
 				'',
-				'From specific cases'
-			),
-			'Unquoted Attribute Without Space' => array(
+				'From specific cases',
+			],
+			'Unquoted Attribute Without Space' => [
 				'',
 				'<img height=300>',
 				'',
-				'From specific cases'
-			),
-			'Unquoted Attribute' => array(
+				'From specific cases',
+			],
+			'Unquoted Attribute'               => [
 				'',
 				'<img height=300 />',
 				'',
-				'From specific cases'
-			),
-			'Single quoted Attribute' => array(
+				'From specific cases',
+			],
+			'Single quoted Attribute'          => [
 				'',
 				'<img height=\'300\' />',
 				'',
-				'From specific cases'
-			),
-			'Attribute is zero' => array(
+				'From specific cases',
+			],
+			'Attribute is zero'                => [
 				'',
 				'<img height=0 />',
 				'',
-				'From specific cases'
-			),
-			'Attribute value missing' => array(
+				'From specific cases',
+			],
+			'Attribute value missing'          => [
 				'',
 				'<img height= />',
 				'',
-				'From specific cases'
-			),
-			'Attribute without =' => array(
+				'From specific cases',
+			],
+			'Attribute without ='              => [
 				'',
 				'<img height="300" ismap />',
 				'',
-				'From specific cases'
-			),
-			'tracker9725' => array(
+				'From specific cases',
+			],
+			'tracker9725'                      => [
 				// Test for recursion with single tags
 				'string',
 				'<img class="one two" />',
 				'',
-				'From specific cases'
-			),
-			'security_20110328' => array(
+				'From specific cases',
+			],
+			'security_20110328'                => [
 				'string',
 				$security20110328String,
 				' ',
-				'From specific cases'
-			),
-		);
-		$tests = array_merge($this->casesGeneric(), $casesSpecific);
+				'From specific cases',
+			],
+		];
 
-		return $tests;
+		return array_merge($this->casesGeneric(), $casesSpecific);
 	}
 
 	/**
@@ -1605,15 +1562,15 @@ class InputFilterTest extends TestCase
 	 */
 	public function blacklistClass()
 	{
-		$casesSpecific = array(
-			'tracker9725' => array(
+		$casesSpecific = [
+			'tracker9725'         => [
 				// Test for recursion with single tags
 				'string',
 				'<img class="one two" />',
 				'<img />',
-				'From specific cases'
-			),
-			'tracker15673' => array(
+				'From specific cases',
+			],
+			'tracker15673'        => [
 				'raw',
 				'<ul>
 <li><a href="../">презентация</a>)</li>
@@ -1623,9 +1580,9 @@ class InputFilterTest extends TestCase
 <li><a href="../">презентация</a>)</li>
 <li>Елфимова О.Т. Разработка системы отделения космического аппарата Метеор-М в системе MSC.Adams<a style="color: maroon;" href="../../pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf">диплом</a></li>
 </ul>',
-				'From generic cases'
-			),
-			'tracker15673a' => array(
+				'From generic cases',
+			],
+			'tracker15673a'       => [
 				'string',
 				'<ul>
 <li><a href="../">презентация</a>)</li>
@@ -1635,9 +1592,9 @@ class InputFilterTest extends TestCase
 <li><a href="../">презентация</a>)</li>
 <li>Елфимова О.Т. Разработка системы отделения космического аппарата Метеор-М в системе MSC.Adams<a style="color: maroon;" href="../../pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf">диплом</a></li>
 </ul>',
-				'From generic cases'
-			),
-			'tracker15673b' => array(
+				'From generic cases',
+			],
+			'tracker15673b'       => [
 				'string',
 				'<h3>Инженеры</h3>
 <ul>
@@ -1657,9 +1614,9 @@ class InputFilterTest extends TestCase
 <li>Елфимова О.Т. "Разработка системы отделения космического аппарата "Метеор-М" в системе MSC.Adams" <br />(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Elfimova_O_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
 <li>Ранкова А.В. "Исследование и разработка методов и алгоритмов распознавания и селекции наземных стационарных объектов"<br />(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Rankova_A_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Rankova_A_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
 </ul>',
-				'From generic cases'
-			),
-			'tracker15673c' => array(
+				'From generic cases',
+			],
+			'tracker15673c'       => [
 				'raw',
 				'<h3>Инженеры</h3>
 <ul>
@@ -1679,9 +1636,9 @@ class InputFilterTest extends TestCase
 <li>Елфимова О.Т. "Разработка системы отделения космического аппарата "Метеор-М" в системе MSC.Adams" <br />(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Elfimova_O_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
 <li>Ранкова А.В. "Исследование и разработка методов и алгоритмов распознавания и селекции наземных стационарных объектов"<br />(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Rankova_A_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Rankova_A_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
 </ul>',
-				'From generic cases'
-			),
-			'tracker15673d' => array(
+				'From generic cases',
+			],
+			'tracker15673d'       => [
 				'raw',
 				'<li><strong>Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°</strong>. Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°-Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°. Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° â€“ Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°, Ð°Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°. Ð° Ð°Ð°Ð°, Ð°Ð°Ð° Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°, Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°, Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð° â€“ Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°. Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°, Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° â€“ Ð°Ð°Ð°Ð°Ñ‘Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°, Ð° Ð°Ð° Ð°Ð°Ð°Ð°Ð°-Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°. Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð° Ð°Ð°, Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° â€“ Ð°Ð° Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°.</li>
 </ol>
@@ -1713,9 +1670,9 @@ class InputFilterTest extends TestCase
   "embedUrl": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 }</script>
 </p>',
-				'From generic cases'
-			),
-			'tracker15673e' => array(
+				'From generic cases',
+			],
+			'tracker15673e'       => [
 				'raw',
 				'<li><strong>Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°</strong>. Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°-Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°. Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° â€“ Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°, Ð°Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°. Ð° Ð°Ð°Ð°, Ð°Ð°Ð° Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°, Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°, Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð° â€“ Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°. Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°, Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° â€“ Ð°Ð°Ð°Ð°Ñ‘Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°, Ð° Ð°Ð° Ð°Ð°Ð°Ð°Ð°-Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°. Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð° Ð°Ð°, Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° â€“ Ð°Ð° Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð° Ð°Ð°Ð°Ð°Ð°Ð°Ð°Ð°.</li>
 </ol>
@@ -1747,54 +1704,53 @@ class InputFilterTest extends TestCase
   "embedUrl": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 }</script>
 </p>',
-				'From generic cases'
-			),
-			'tracker15673f' => array(
+				'From generic cases',
+			],
+			'tracker15673f'       => [
 				'raw',
 				'<a rel="new" href="#"></a>',
 				'<a rel="new" href="#"></a>',
-				'From generic cases'
-			),
-			'tracker15673g' => array(
+				'From generic cases',
+			],
+			'tracker15673g'       => [
 				'string',
 				'<a rel="new" href="#"></a>',
 				'<a rel="new" href="#"></a>',
-				'From generic cases'
-			),
-			'tracker15673h' => array(
+				'From generic cases',
+			],
+			'tracker15673h'       => [
 				'raw',
 				'<hr id="system-readmore" />',
 				'<hr id="system-readmore" />',
-				'From generic cases'
-			),
-			'tracker15673i' => array(
+				'From generic cases',
+			],
+			'tracker15673i'       => [
 				'string',
 				'<hr id="system-readmore" />',
 				'<hr id="system-readmore" />',
-				'From generic cases'
-			),
-			'tracker15673j' => array(
+				'From generic cases',
+			],
+			'tracker15673j'       => [
 				'string',
 				'<p style="text-align: justify;"><strong>Nafta nebo baterie? Za nás jednoznačně to druhé. Před pár dny jsme si vyzvedli nový elektromobil. Nyní jej testujeme a zatím můžeme říct jedno - pozor, toto vozítko je vysoce návykové!</strong></p>',
 				'<p style="text-align: justify;"><strong>Nafta nebo baterie? Za nás jednoznačně to druhé. Před pár dny jsme si vyzvedli nový elektromobil. Nyní jej testujeme a zatím můžeme říct jedno - pozor, toto vozítko je vysoce návykové!</strong></p>',
-				'From generic cases'
-			),
-			'tracker15673k' => array(
+				'From generic cases',
+			],
+			'tracker15673k'       => [
 				'string',
 				'<p style="text-align: justify;"><a href="http://www.example.com" target="_blank" rel="noopener noreferrer">Auta.</a> </p>',
 				'<p style="text-align: justify;"><a href="http://www.example.com" target="_blank" rel="noopener noreferrer">Auta.</a> </p>',
-				'From generic cases'
-			),
-			'Attribute with dash' => array(
+				'From generic cases',
+			],
+			'Attribute with dash' => [
 				'string',
 				'<img data-value="1" />',
 				'<img data-value="1" />',
-				'From generic cases'
-			),
-		);
-		$tests = array_merge($this->casesGeneric(), $casesSpecific);
+				'From generic cases',
+			],
+		];
 
-		return $tests;
+		return array_merge($this->casesGeneric(), $casesSpecific);
 	}
 
 	/**
