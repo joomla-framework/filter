@@ -22,7 +22,7 @@ class OutputFilter
 	/**
 	 * Language instance for making a string URL safe
 	 *
-	 * @var    Language
+	 * @var    Language|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private static $language;
