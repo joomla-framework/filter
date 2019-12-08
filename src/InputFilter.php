@@ -690,7 +690,7 @@ class InputFilter
 				$startAttPosition = 0;
 
 				// Find position of equal and open quotes ignoring
-				if (preg_match('#\s*=\s*\"#', $fromSpace, $matches, PREG_OFFSET_CAPTURE))
+				if (preg_match('#\s*=\s*\"#', $fromSpace, $matches, \PREG_OFFSET_CAPTURE))
 				{
 					// We have found an attribute, convert its byte position to a UTF-8 string length, using non-multibyte substr()
 					$stringBeforeAttr = substr($fromSpace, 0, $matches[0][1]);
@@ -844,7 +844,7 @@ class InputFilter
 			$attrSubSet[0] = array_pop($attrSubSet0);
 
 			$attrSubSet[0] = strtolower($attrSubSet[0]);
-			$quoteStyle    = ENT_QUOTES | ENT_HTML401;
+			$quoteStyle    = \ENT_QUOTES | \ENT_HTML401;
 
 			// Remove all spaces as valid attributes does not have spaces.
 			$attrSubSet[0] = html_entity_decode($attrSubSet[0], $quoteStyle, 'UTF-8');
@@ -948,7 +948,7 @@ class InputFilter
 	 */
 	protected function decode($source)
 	{
-		return html_entity_decode($source, ENT_QUOTES, 'UTF-8');
+		return html_entity_decode($source, \ENT_QUOTES, 'UTF-8');
 	}
 
 	/**
@@ -969,7 +969,7 @@ class InputFilter
 
 		// Process each portion based on presence of =" and "<space>, "/>, or ">
 		// See if there are any more attributes to process
-		while (preg_match('#<[^>]*?=\s*?(\"|\')#s', $remainder, $matches, PREG_OFFSET_CAPTURE))
+		while (preg_match('#<[^>]*?=\s*?(\"|\')#s', $remainder, $matches, \PREG_OFFSET_CAPTURE))
 		{
 			// We have found a tag with an attribute, convert its byte position to a UTF-8 string length, using non-multibyte substr()
 			$stringBeforeTag = substr($remainder, 0, $matches[0][1]);
@@ -986,7 +986,7 @@ class InputFilter
 			// Get the portion after attribute value
 			$attributeValueRemainder = StringHelper::substr($remainder, $nextBefore);
 
-			if (preg_match($pregMatch, $attributeValueRemainder, $matches, PREG_OFFSET_CAPTURE))
+			if (preg_match($pregMatch, $attributeValueRemainder, $matches, \PREG_OFFSET_CAPTURE))
 			{
 				// We have a closing quote, convert its byte position to a UTF-8 string length, using non-multibyte substr()
 				$stringBeforeQuote = substr($attributeValueRemainder, 0, $matches[0][1]);
