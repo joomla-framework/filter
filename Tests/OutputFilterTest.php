@@ -210,9 +210,10 @@ class OutputFilterTest extends TestCase
 	{
 		$this->assertEquals(
 			'Hello  I am waving at you.',
-			$this->object->stripIframes('Hello <iframe src="http://player.vimeo.com/video/37576499" width="500"' .
-				' height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> I am waving at you.'),
-				'Should remove iFrame tags'
+			$this->object->stripIframes(
+				'Hello <iframe src="http://player.vimeo.com/video/37576499" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> I am waving at you.'
+			),
+			'Should remove iFrame tags'
 		);
 	}
 }
