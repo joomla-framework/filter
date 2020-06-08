@@ -21,42 +21,6 @@ use Joomla\String\StringHelper;
 class InputFilter
 {
 	/**
-	 * Defines the InputFilter instance should use a whitelist method for sanitising tags.
-	 *
-	 * @var         integer
-	 * @since       1.3.0
-	 * @deprecated  2.0
-	 */
-	public const TAGS_WHITELIST = 0;
-
-	/**
-	 * Defines the InputFilter instance should use a blacklist method for sanitising tags.
-	 *
-	 * @var         integer
-	 * @since       1.3.0
-	 * @deprecated  2.0
-	 */
-	public const TAGS_BLACKLIST = 1;
-
-	/**
-	 * Defines the InputFilter instance should use a whitelist method for sanitising attributes.
-	 *
-	 * @var         integer
-	 * @since       1.3.0
-	 * @deprecated  2.0
-	 */
-	public const ATTR_WHITELIST = 0;
-
-	/**
-	 * Defines the InputFilter instance should use a blacklist method for sanitising attributes.
-	 *
-	 * @var         integer
-	 * @since       1.3.0
-	 * @deprecated  2.0
-	 */
-	const ATTR_BLACKLIST = 1;
-
-	/**
 	 * Defines the InputFilter instance should only allow the supplied list of HTML tags.
 	 *
 	 * @var    integer
@@ -133,9 +97,8 @@ class InputFilter
 	 *
 	 * @var    array
 	 * @since  1.0
-	 * @notes  This property will be renamed to $blockedTags in version 2.0
 	 */
-	public $tagBlacklist = [
+	public $blockedTags = [
 		'applet',
 		'body',
 		'bgsound',
@@ -162,13 +125,12 @@ class InputFilter
 	];
 
 	/**
-	 * The list of the default blacklisted tag attributes. All event handlers implicit.
+	 * The list of the default blocked tag attributes. All event handlers implicit.
 	 *
 	 * @var    array
 	 * @since  1.0
-	 * @notes  This property will be renamed to $blockedAttributes in version 2.0
 	 */
-	public $attrBlacklist = [
+	public $blockedAttributes = [
 		'action',
 		'background',
 		'codebase',
@@ -201,8 +163,8 @@ class InputFilter
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(array $tagsArray = [], array $attrArray = [], $tagsMethod = self::TAGS_WHITELIST, $attrMethod = self::ATTR_WHITELIST,
-		$xssAuto = 1
+	public function __construct(array $tagsArray = [], array $attrArray = [], $tagsMethod = self::ONLY_ALLOW_DEFINED_TAGS,
+		$attrMethod = self::ONLY_ALLOW_DEFINED_ATTRIBUTES, $xssAuto = 1
 	)
 	{
 		// Make sure user defined arrays are in lowercase
@@ -702,7 +664,7 @@ class InputFilter
 			 */
 			if ((!preg_match('/^[a-z][a-z0-9]*$/i', $tagName))
 				|| (!$tagName)
-				|| ((\in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
+				|| ((\in_array(strtolower($tagName), $this->blockedTags)) && ($this->xssAuto)))
 			{
 				$postTag      = StringHelper::substr($postTag, ($tagLength + 2));
 				$tagOpenStart = StringHelper::strpos($postTag, '<');
@@ -901,7 +863,7 @@ class InputFilter
 			// Remove all "non-regular" attribute names
 			// AND blocked attributes
 			if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
-				|| (($this->xssAuto) && ((\in_array(strtolower($attrSubSet[0]), $this->attrBlacklist))
+				|| (($this->xssAuto) && ((\in_array(strtolower($attrSubSet[0]), $this->blockedAttributes))
 				|| (substr($attrSubSet[0], 0, 2) == 'on'))))
 			{
 				continue;
