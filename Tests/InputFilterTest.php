@@ -664,14 +664,14 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Produces the array of test cases for plain Whitelist test run.
+	 * Produces the array of test cases for plain allowed test run.
 	 *
 	 * @return  array  Two dimensional array of test cases. Each row consists of three values
 	 *                 The first is the type of input data, the second is the actual input data,
 	 *                 the third is the expected result of filtering, and the fourth is
 	 *                 the failure message identifying the source of the data.
 	 */
-	public function whitelist()
+	public function allowed()
 	{
 		$casesSpecific = [
 			'Kill script'                                                   => [
@@ -778,7 +778,7 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Execute a test case on clean() called as member with default filter settings (whitelist - no html).
+	 * Execute a test case on clean() called as member with default filter settings (allowed - no html).
 	 *
 	 * @param   string  $type     The type of input
 	 * @param   string  $data     The input
@@ -787,7 +787,7 @@ class InputFilterTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @dataProvider whitelist
+	 * @dataProvider allowed
 	 */
 	public function testCleanByCallingMember($type, $data, $expect, $message)
 	{
@@ -799,14 +799,14 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Produces the array of test cases for the Whitelist img tag test run.
+	 * Produces the array of test cases for the allowed img tag test run.
 	 *
 	 * @return  array  Two dimensional array of test cases. Each row consists of three values
 	 *                 The first is the type of input data, the second is the actual input data,
 	 *                 the third is the expected result of filtering, and the fourth is
 	 *                 the failure message identifying the source of the data.
 	 */
-	public function whitelistImg()
+	public function allowImg()
 	{
 		$security20110329bString = "<img src='<img src='/onerror=eval" .
 			"(atob(/KGZ1bmN0aW9uKCl7dHJ5e3ZhciBkPWRvY3VtZW50LGI9ZC5ib2R5LHM9ZC5jcmVhdGVFbGVtZW50KCdzY3JpcHQnKTtzLnNldEF0dHJpYnV0ZSgnc3J" .
@@ -940,7 +940,7 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Execute a test case on clean() called as member with custom filter settings (whitelist).
+	 * Execute a test case on clean() called as member with custom filter settings.
 	 *
 	 * @param   string  $type     The type of input
 	 * @param   string  $data     The input
@@ -949,9 +949,9 @@ class InputFilterTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @dataProvider whitelistImg
+	 * @dataProvider allowImg
 	 */
-	public function testCleanWithImgWhitelisted($type, $data, $expect, $message)
+	public function testCleanWithImgAllowed($type, $data, $expect, $message)
 	{
 		$this->assertEquals(
 			$expect,
@@ -961,14 +961,14 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Produces the array of test cases for the Whitelist class attribute test run.
+	 * Produces the array of test cases for the allowed class attribute test run.
 	 *
 	 * @return  array  Two dimensional array of test cases. Each row consists of three values
 	 *                 The first is the type of input data, the second is the actual input data,
 	 *                 the third is the expected result of filtering, and the fourth is
 	 *                 the failure message identifying the source of the data.
 	 */
-	public function whitelistClass()
+	public function allowClass()
 	{
 		$casesSpecific = [
 			'Kill script'                                                   => [
@@ -1068,7 +1068,7 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Execute a test case on clean() called as member with custom filter settings (whitelist).
+	 * Execute a test case on clean() called as member with custom filter settings.
 	 *
 	 * @param   string  $type     The type of input
 	 * @param   string  $data     The input
@@ -1077,9 +1077,9 @@ class InputFilterTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @dataProvider whitelistClass
+	 * @dataProvider allowClass
 	 */
-	public function testCleanWithClassWhitelisted($type, $data, $expect, $message)
+	public function testCleanWithClassAllowed($type, $data, $expect, $message)
 	{
 		$this->assertEquals(
 			$expect,
@@ -1089,14 +1089,14 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Produces the array of test cases for the Whitelist class attribute img tag test run.
+	 * Produces the array of test cases for the allowed class attribute img tag test run.
 	 *
 	 * @return  array  Two dimensional array of test cases. Each row consists of three values
 	 *                 The first is the type of input data, the second is the actual input data,
 	 *                 the third is the expected result of filtering, and the fourth is
 	 *                 the failure message identifying the source of the data.
 	 */
-	public function whitelistClassImg()
+	public function allowClassImg()
 	{
 		$casesSpecific = [
 			'Kill script'                                                   => [
@@ -1203,7 +1203,7 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Execute a test case on clean() called as member with custom filter settings (whitelist).
+	 * Execute a test case on clean() called as member with custom filter settings.
 	 *
 	 * @param   string  $type     The type of input
 	 * @param   string  $data     The input
@@ -1212,9 +1212,9 @@ class InputFilterTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @dataProvider whitelistClassImg
+	 * @dataProvider allowClassImg
 	 */
-	public function testCleanWithImgAndClassWhitelisted($type, $data, $expect, $message)
+	public function testCleanWithImgAndClassAllowed($type, $data, $expect, $message)
 	{
 		$this->assertEquals(
 			$expect,
@@ -1224,14 +1224,14 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Produces the array of test cases for the plain Blacklist test run.
+	 * Produces the array of test cases for the plain blocked data test run.
 	 *
 	 * @return  array  Two dimensional array of test cases. Each row consists of three values
 	 *                 The first is the type of input data, the second is the actual input data,
 	 *                 the third is the expected result of filtering, and the fourth is
 	 *                 the failure message identifying the source of the data.
 	 */
-	public function blacklist()
+	public function blocked()
 	{
 		$quotesInText1 = '<p class="my_class">This is a = "test" ' .
 			'<a href="http://mysite.com" img="my_image">link test</a>. This is some more text.</p>';
@@ -1435,7 +1435,7 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Execute a test case with clean() default blacklist filter settings (strips bad tags).
+	 * Execute a test case with clean() default blocked filter settings (strips bad tags).
 	 *
 	 * @param string $type The type of input
 	 * @param   string  $data     The input
@@ -1444,9 +1444,9 @@ class InputFilterTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @dataProvider blacklist
+	 * @dataProvider blocked
 	 */
-	public function testCleanWithDefaultBlackList($type, $data, $expect, $message)
+	public function testCleanWithDefaultBlockedProperties($type, $data, $expect, $message)
 	{
 		$this->assertEquals(
 			$expect,
@@ -1456,14 +1456,14 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Produces the array of test cases for the Blacklist img tag test run.
+	 * Produces the array of test cases for the blocked img tag test run.
 	 *
 	 * @return  array  Two dimensional array of test cases. Each row consists of three values
 	 *                 The first is the type of input data, the second is the actual input data,
 	 *                 the third is the expected result of filtering, and the fourth is
 	 *                 the failure message identifying the source of the data.
 	 */
-	public function blacklistImg()
+	public function blockedImg()
 	{
 		$security20110328String = "<img src='<img src='/onerror=" .
 			"eval(atob(/KGZ1bmN0aW9uKCl7dHJ5e3ZhciBkPWRvY3VtZW50LGI9ZC5ib2R5LHM9ZC5jcmVhdGVFbGV" .
@@ -1532,7 +1532,7 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Execute a test case with clean() using custom img blacklist filter settings (strips bad tags).
+	 * Execute a test case with clean() using custom img blocked filter settings (strips bad tags).
 	 *
 	 * @param   string  $type     The type of input
 	 * @param   string  $data     The input
@@ -1541,9 +1541,9 @@ class InputFilterTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @dataProvider blacklistImg
+	 * @dataProvider blockedImg
 	 */
-	public function testCleanWithImgBlackList($type, $data, $expect, $message)
+	public function testCleanWithImgBlocked($type, $data, $expect, $message)
 	{
 		$this->assertEquals(
 			$expect,
@@ -1553,14 +1553,14 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Produces the array of test cases for the Blacklist class attribute test run.
+	 * Produces the array of test cases for the blocked class attribute test run.
 	 *
 	 * @return  array  Two dimensional array of test cases. Each row consists of three values
 	 *                 The first is the type of input data, the second is the actual input data,
 	 *                 the third is the expected result of filtering, and the fourth is
 	 *                 the failure message identifying the source of the data.
 	 */
-	public function blacklistClass()
+	public function blockedClass()
 	{
 		$casesSpecific = [
 			'tracker9725'         => [
@@ -1754,7 +1754,7 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Execute a test case with clean() using custom class blacklist filter settings (strips bad tags).
+	 * Execute a test case with clean() using custom class blocked filter settings (strips bad tags).
 	 *
 	 * @param   string  $type     The type of input
 	 * @param   string  $data     The input
@@ -1763,9 +1763,9 @@ class InputFilterTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @dataProvider blacklistClass
+	 * @dataProvider blockedClass
 	 */
-	public function testCleanWithClassBlackList($type, $data, $expect, $message)
+	public function testCleanWithClassAttributeBlocked($type, $data, $expect, $message)
 	{
 		$this->assertEquals(
 			$expect,
