@@ -23,7 +23,7 @@ class OutputFilter
 	 * Language instance for making a string URL safe
 	 *
 	 * @var    Language|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private static $language;
 
@@ -221,7 +221,7 @@ class OutputFilter
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public static function setLanguage(Language $language): void
 	{
