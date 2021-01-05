@@ -23,6 +23,12 @@ Alternatively, you can simply run the following from the command line:
 composer require joomla/filter "2.0.*@dev"
 ```
 
+If you want to include the test sources, use
+
+```sh
+composer require --prefer-source joomla/filter "~1.0"
+```
+
 Note that the `Joomla\Language` package is an optional dependency and is only required if the application requires the use of `OutputFilter::stringURLSafe`.
 
 ## Upgrades from 1 to 2
