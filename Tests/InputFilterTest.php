@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test class for Filter\InputFilter
  *
- * @note Do not refactor providers to use Generators, they rely on being able to overwrite keys from the generic cases
+ * @note   Do not refactor providers to use Generators, they rely on being able to overwrite keys from the generic cases
  * @since  1.0
  */
 class InputFilterTest extends TestCase
@@ -391,61 +391,61 @@ class InputFilterTest extends TestCase
 				[1, 3, 6],
 				'From generic cases',
 			],
-			'relative path'                                                       => [
+			'relative path'                                                 => [
 				'path',
 				'images/system',
 				'images/system',
 				'From generic cases',
 			],
-			'path with double separator'                                        => array(
+			'path with double separator'                                    => array(
 				'path',
 				'images//system',
 				'images/system',
 				'From generic cases'
 			),
-			'url as path'                                                       => [
+			'url as path'                                                   => [
 				'path',
 				'http://www.fred.com/josephus',
 				'',
 				'From generic cases',
 			],
-			'empty path'                                                        => [
+			'empty path'                                                    => [
 				'path',
 				'',
 				'',
 				'From generic cases',
 			],
-			'absolute path'                                                       => [
+			'absolute path'                                                 => [
 				'path',
 				'/images/system',
 				'/images/system',
 				'From generic cases',
 			],
-			'path array'                                                       => [
+			'path array'                                                    => [
 				'path',
 				['images/system', '/var/www/html/index.html'],
 				['images/system', '/var/www/html/index.html'],
 				'From generic cases',
 			],
-			'long path'                                                       => [
+			'long path'                                                     => [
 				'path',
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
 				'From generic cases'
 			],
-			'windows path' => [
+			'windows path'                                                  => [
 				'path',
 				'C:\Documents\Newsletters\Summer2018.pdf',
 				'C:\Documents\Newsletters\Summer2018.pdf',
 				'From generic cases'
 			],
-			'windows path with double separator' => [
+			'windows path with double separator'                            => [
 				'path',
 				'C:\Documents\Newsletters\\Summer2018.pdf',
 				'C:\Documents\Newsletters\Summer2018.pdf',
 				'From generic cases'
 			],
-			'user_01' => [
+			'user_01'                                                       => [
 				'username',
 				'&<f>r%e\'d',
 				'fred',
