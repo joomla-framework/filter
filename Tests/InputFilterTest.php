@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
  * Test class for Filter\InputFilter
  *
  * @note Do not refactor providers to use Generators, they rely on being able to overwrite keys from the generic cases
+ * @since  1.0
  */
 class InputFilterTest extends TestCase
 {
@@ -390,43 +391,61 @@ class InputFilterTest extends TestCase
 				[1, 3, 6],
 				'From generic cases',
 			],
-			'path_01'                                                       => [
+			'relative path'                                                       => [
 				'path',
 				'images/system',
 				'images/system',
 				'From generic cases',
 			],
-			'path_02'                                                       => [
+			'path with double separator'                                        => array(
+				'path',
+				'images//system',
+				'images/system',
+				'From generic cases'
+			),
+			'url as path'                                                       => [
 				'path',
 				'http://www.fred.com/josephus',
 				'',
 				'From generic cases',
 			],
-			'path_03'                                                       => [
+			'empty path'                                                        => [
 				'path',
 				'',
 				'',
 				'From generic cases',
 			],
-			'path_04'                                                       => [
+			'absolute path'                                                       => [
 				'path',
 				'/images/system',
 				'/images/system',
 				'From generic cases',
 			],
-			'path_05'                                                       => [
+			'path array'                                                       => [
 				'path',
 				['images/system', '/var/www/html/index.html'],
 				['images/system', '/var/www/html/index.html'],
 				'From generic cases',
 			],
-			'path_06'                                                       => [
+			'long path'                                                       => [
 				'path',
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
-				'From generic cases',
+				'From generic cases'
 			],
-			'user_01'                                                       => [
+			'windows path' => [
+				'path',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			],
+			'windows path with double separator' => [
+				'path',
+				'C:\Documents\Newsletters\\Summer2018.pdf',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			],
+			'user_01' => [
 				'username',
 				'&<f>r%e\'d',
 				'fred',
@@ -1437,7 +1456,7 @@ class InputFilterTest extends TestCase
 	/**
 	 * Execute a test case with clean() default blocked filter settings (strips bad tags).
 	 *
-	 * @param string $type The type of input
+	 * @param   string  $type     The type of input
 	 * @param   string  $data     The input
 	 * @param   string  $expect   The expected result for this test.
 	 * @param   string  $message  The failure message identifying the source of the test case.
