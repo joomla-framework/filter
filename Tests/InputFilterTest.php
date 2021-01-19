@@ -202,7 +202,7 @@ class InputFilterTest extends TestCase
 			'float_09'                                                      => [
 				'float',
 				'',
-				0,
+				0.0,
 				'From generic cases',
 			],
 			'float_10'                                                      => [
@@ -610,7 +610,7 @@ class InputFilterTest extends TestCase
 			'unknown_04'                                                    => [
 				'',
 				12.6,
-				12.6,
+				'12.6',
 				'From generic cases',
 			],
 			'tag_01'                                                        => [
