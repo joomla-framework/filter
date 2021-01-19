@@ -215,6 +215,11 @@ class InputFilter
 			return (array) $source;
 		}
 
+		if ($type === 'Raw')
+		{
+			return $source;
+		}
+
 		if (\is_array($source))
 		{
 			$result = [];
@@ -819,7 +824,7 @@ class InputFilter
 
 		preg_match($pattern, $source, $matches);
 
-		return isset($matches[0]) ? (float) $matches[0] : 0;
+		return isset($matches[0]) ? (float) $matches[0] : 0.0;
 	}
 
 	/**
@@ -957,7 +962,7 @@ class InputFilter
 			return preg_replace('~/+~', '/', $source);
 		}
 
-		$windowsPattern = '/^([A-Z]:\\\\)?[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*(\\\\+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
+		$windowsPattern = '/^([A-Za-z]:\\\\)?[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*(\\\\+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
 
 		if (preg_match($windowsPattern, $source))
 		{
@@ -995,17 +1000,5 @@ class InputFilter
 		$pattern = '/[\x00-\x1F\x7F<>"\'%&]/';
 
 		return preg_replace($pattern, '', $source);
-	}
-
-	/**
-	 * Raw filter
-	 *
-	 * @param   string  $source  The string to be filtered
-	 *
-	 * @return  string  The filtered string
-	 */
-	private function cleanRaw($source)
-	{
-		return $source;
 	}
 }

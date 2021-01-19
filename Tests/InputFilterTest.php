@@ -148,13 +148,13 @@ class InputFilterTest extends TestCase
 			'float_01'                                                      => [
 				'float',
 				$input,
-				123456789,
+				123456789.0,
 				'From generic cases',
 			],
 			'double'                                                        => [
 				'double',
 				$input,
-				123456789,
+				123456789.0,
 				'From generic cases',
 			],
 			'float_02'                                                      => [
@@ -190,13 +190,13 @@ class InputFilterTest extends TestCase
 			'float_07'                                                      => [
 				'float',
 				'abc-12 . 456',
-				-12,
+				-12.0,
 				'From generic cases',
 			],
 			'float_08'                                                      => [
 				'float',
 				'abc-12. 456',
-				-12,
+				-12.0,
 				'From generic cases',
 			],
 			'float_09'                                                      => [
@@ -220,7 +220,7 @@ class InputFilterTest extends TestCase
 			'float_13'                                                      => [
 				'float',
 				[1.0, 'abc-12. 456', 'abc-12.456abc'],
-				[1.0, -12, -12.456],
+				[1.0, -12.0, -12.456],
 				'From generic cases',
 			],
 			'float_14'                                                      => [
@@ -439,6 +439,36 @@ class InputFilterTest extends TestCase
 				'C:\Documents\Newsletters\Summer2018.pdf',
 				'From generic cases'
 			],
+			'windows path lowercase drive letter'                           => [
+				'path',
+				'c:\Documents\Newsletters\Summer2018.pdf',
+				'c:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			],
+			'windows path folder'                                           => [
+				'path',
+				'C:\Documents\Newsletters',
+				'C:\Documents\Newsletters',
+				'From generic cases'
+			],
+			'windows path with lower case drive letter'                     => [
+				'path',
+				'c:\Documents\Newsletters',
+				'c:\Documents\Newsletters',
+				'From generic cases'
+			],
+			'windows path with two drive letters'                           => [
+				'path',
+				'CC:\Documents\Newsletters',
+				'',
+				'From generic cases'
+			],
+			'windows path without drive letter'                             => [
+				'path',
+				'Documents\Newsletters',
+				'Documents\Newsletters',
+				'From generic cases'
+			],
 			'windows path with double separator'                            => [
 				'path',
 				'C:\Documents\Newsletters\\Summer2018.pdf',
@@ -535,23 +565,29 @@ class InputFilterTest extends TestCase
 				['this is a "test\' of "odd number" of quotes', 'executed in an array'],
 				'From generic cases',
 			],
-			'raw_01'                                                        => [
+			'HTML script tag'                                                        => [
 				'raw',
 				'<script type="text/javascript">alert("foo");</script>',
 				'<script type="text/javascript">alert("foo");</script>',
 				'From generic cases',
 			],
-			'raw_02'                                                        => [
+			'nested HTML tags'                                                        => [
 				'raw',
 				'<p>This is a test of a html <b>snippet</b></p>',
 				'<p>This is a test of a html <b>snippet</b></p>',
 				'From generic cases',
 			],
-			'raw_03'                                                        => [
+			'numeric string'                                                        => [
 				'raw',
 				'0123456789',
 				'0123456789',
 				'From generic cases',
+			],
+			'issue#38' => [
+				'raw',
+				1,
+				1,
+				'From generic cases'
 			],
 			'unknown_01'                                                    => [
 				'',
@@ -562,7 +598,7 @@ class InputFilterTest extends TestCase
 			'unknown_02'                                                    => [
 				'',
 				[1, 3, 9],
-				[1, 3, 9],
+				['1', '3', '9'],
 				'From generic cases',
 			],
 			'unknown_03'                                                    => [
@@ -799,22 +835,18 @@ class InputFilterTest extends TestCase
 	/**
 	 * Execute a test case on clean() called as member with default filter settings (allowed - no html).
 	 *
-	 * @param   string  $type     The type of input
-	 * @param   string  $data     The input
-	 * @param   string  $expect   The expected result for this test.
-	 * @param   string  $message  The failure message identifying source of test case.
+	 * @param   string  $type       The type of input
+	 * @param   string  $data       The input
+	 * @param   string  $expected   The expected result for this test.
+	 * @param   string  $caseGroup  The failure message identifying source of test case.
 	 *
 	 * @return  void
 	 *
 	 * @dataProvider allowed
 	 */
-	public function testCleanByCallingMember($type, $data, $expect, $message)
+	public function testCleanByCallingMember($type, $data, $expected, $caseGroup)
 	{
-		$this->assertEquals(
-			$expect,
-			(new InputFilter)->clean($data, $type),
-			$message
-		);
+		$this->assertSame($expected, (new InputFilter)->clean($data, $type));
 	}
 
 	/**
