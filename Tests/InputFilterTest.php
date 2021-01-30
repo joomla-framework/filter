@@ -397,12 +397,12 @@ class InputFilterTest extends TestCase
 				'images/system',
 				'From generic cases',
 			],
-			'path with double separator'                                    => array(
+			'path with double separator'                                    => [
 				'path',
 				'images//system',
 				'images/system',
 				'From generic cases'
-			),
+			],
 			'url as path'                                                   => [
 				'path',
 				'http://www.fred.com/josephus',
@@ -473,6 +473,36 @@ class InputFilterTest extends TestCase
 				'path',
 				'C:\Documents\Newsletters\\Summer2018.pdf',
 				'C:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			],
+			'windows path with 2 times double separator'                    => [
+				'path',
+				'C:\Documents\\Newsletters\\Summer2018.pdf',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			],
+			'windows path with 3 times double separator'                    => [
+				'path',
+				'C:\\Documents\\Newsletters\\Summer2018.pdf',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			],
+			'windows path with /'                                           => [
+				'path',
+				'C:\\Documents\\Newsletters/tmp',
+				'C:\Documents\Newsletters\tmp',
+				'From generic cases'
+			],
+			'windows path with 2 times /'                                   => [
+				'path',
+				'C:\\Documents/Newsletters/tmp',
+				'C:\Documents\Newsletters\tmp',
+				'From generic cases'
+			],
+			'windows path with 3 times /'                                   => [
+				'path',
+				'C:/Documents/Newsletters/tmp',
+				'C:\Documents\Newsletters\tmp',
 				'From generic cases'
 			],
 			'user_01'                                                       => [
