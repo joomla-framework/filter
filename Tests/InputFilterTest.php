@@ -1902,4 +1902,19 @@ class InputFilterTest extends TestCase
 			$message
 		);
 	}
+
+	/**
+	 * Test that a less than symbol isn't removed.
+	 *
+	 * @return  void
+	 */
+	public function testLessThanSymbolsAreNotStripped()
+	{
+		$filter = new InputFilter;
+		$this->assertEquals(
+			$filter->clean('1<4', 'string'),
+			'1<4',
+			'This sucks hard'
+		);
+	}
 }
