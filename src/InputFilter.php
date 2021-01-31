@@ -281,7 +281,7 @@ class InputFilter
 
 		$method = 'clean' . $type;
 
-		if (method_exists($this, $method))
+		if ($type !== '' && method_exists($this, $method))
 		{
 			return $this->$method((string) $source);
 		}
