@@ -1917,6 +1917,6 @@ class InputFilterTest extends TestCase
 
 		$filter = new InputFilter();
 
-		$this->assertEquals($expected, $filter->clean($object));
+		$this->assertEquals($expected, $filter->clean($object, ''));
 	}
 }
