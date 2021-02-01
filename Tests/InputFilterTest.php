@@ -7,6 +7,7 @@
 namespace Joomla\Filter\Tests;
 
 use Joomla\Filter\InputFilter;
+use Joomla\Filter\Tests\Stubs\ArbitraryObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -1853,5 +1854,21 @@ class InputFilterTest extends TestCase
 			(new InputFilter([], ['class'], 1, 1))->clean($data, $type),
 			$message
 		);
+	}
+
+	/**
+	 * Test object filtering
+	 */
+	public function testCleanObject()
+	{
+		$rawInput   = '<img src="javascript:alert();" />';
+		$cleanInput = '';
+
+		$object   = new ArbitraryObject($rawInput, $rawInput, $rawInput);
+		$expected = new ArbitraryObject($cleanInput, $rawInput, $rawInput);
+
+		$filter = new InputFilter();
+
+		$this->assertEquals($expected, $filter->clean($object));
 	}
 }
