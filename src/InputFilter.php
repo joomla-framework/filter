@@ -92,7 +92,7 @@ class InputFilter
 	 * A container for InputFilter instances.
 	 *
 	 * @var    InputFilter[]
-	 * @since       1.0
+	 * @since  1.0
 	 * @deprecated  2.0
 	 */
 	protected static $instances = array();
@@ -210,16 +210,13 @@ class InputFilter
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(
-		$tagsArray = array(),
-		$attrArray = array(),
-		$tagsMethod = self::ONLY_ALLOW_DEFINED_TAGS,
-		$attrMethod = self::ONLY_ALLOW_DEFINED_ATTRIBUTES,
-		$xssAuto = 1
-	) {
+	public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = self::ONLY_ALLOW_DEFINED_TAGS,
+		$attrMethod = self::ONLY_ALLOW_DEFINED_ATTRIBUTES, $xssAuto = 1
+	)
+	{
 		// Make sure user defined arrays are in lowercase
-		$tagsArray = array_map('strtolower', (array)$tagsArray);
-		$attrArray = array_map('strtolower', (array)$attrArray);
+		$tagsArray = array_map('strtolower', (array) $tagsArray);
+		$attrArray = array_map('strtolower', (array) $attrArray);
 
 		// Assign member variables
 		$this->tagsArray  = $tagsArray;
@@ -232,26 +229,26 @@ class InputFilter
 	/**
 	 * Cleans the given input source based on the instance configuration and specified data type
 	 *
-	 * @param   string|string[]|object  $source             Input string/array-of-string/object to be 'cleaned'
-	 * @param   string                  $type               The return type for the variable:
-	 *                                                      INT:       An integer
-	 *                                                      UINT:      An unsigned integer
-	 *                                                      FLOAT:     A floating point number
-	 *                                                      BOOLEAN:   A boolean value
-	 *                                                      WORD:      A string containing A-Z or underscores only (not case sensitive)
-	 *                                                      ALNUM:     A string containing A-Z or 0-9 only (not case sensitive)
-	 *                                                      CMD:       A string containing A-Z, 0-9, underscores, periods or hyphens (not case
+	 * @param   string|string[]|object  $source  Input string/array-of-string/object to be 'cleaned'
+	 * @param   string                  $type    The return type for the variable:
+	 *                                           INT:       An integer
+	 *                                           UINT:      An unsigned integer
+	 *                                           FLOAT:     A floating point number
+	 *                                           BOOLEAN:   A boolean value
+	 *                                           WORD:      A string containing A-Z or underscores only (not case sensitive)
+	 *                                           ALNUM:     A string containing A-Z or 0-9 only (not case sensitive)
+	 *                                           CMD:       A string containing A-Z, 0-9, underscores, periods or hyphens (not case
 	 *                                                      sensitive)
-	 *                                                      BASE64:    A string containing A-Z, 0-9, forward slashes, plus or equals (not case
+	 *                                           BASE64:    A string containing A-Z, 0-9, forward slashes, plus or equals (not case
 	 *                                                      sensitive)
-	 *                                                      STRING:    A fully decoded and sanitised string (default)
-	 *                                                      HTML:      A sanitised string
-	 *                                                      ARRAY:     An array
-	 *                                                      PATH:      A sanitised file path
-	 *                                                      TRIM:      A string trimmed from normal, non-breaking and multibyte spaces
-	 *                                                      USERNAME:  Do not use (use an application specific filter)
-	 *                                                      RAW:       The raw string is returned with no filtering
-	 *                                                      unknown:   An unknown filter will act like STRING. If the input is an array it will
+	 *                                           STRING:    A fully decoded and sanitised string (default)
+	 *                                           HTML:      A sanitised string
+	 *                                           ARRAY:     An array
+	 *                                           PATH:      A sanitised file path
+	 *                                           TRIM:      A string trimmed from normal, non-breaking and multibyte spaces
+	 *                                           USERNAME:  Do not use (use an application specific filter)
+	 *                                           RAW:       The raw string is returned with no filtering
+	 *                                           unknown:   An unknown filter will act like STRING. If the input is an array it will
 	 *                                                      return an array of fully decoded and sanitised strings.
 	 *
 	 * @return  mixed  'Cleaned' version of the `$source` parameter
@@ -264,7 +261,7 @@ class InputFilter
 
 		if ($type === 'Array')
 		{
-			return (array)$source;
+			return (array) $source;
 		}
 
 		if ($type === 'Raw')
@@ -298,7 +295,7 @@ class InputFilter
 
 		if (method_exists($this, $method))
 		{
-			return $this->$method((string)$source);
+			return $this->$method((string) $source);
 		}
 
 		// Unknown filter method
@@ -329,10 +326,7 @@ class InputFilter
 		$attrSubSet[1] = html_entity_decode(strtolower($attrSubSet[1]), $quoteStyle, 'UTF-8');
 
 		return (strpos($attrSubSet[1], 'expression') !== false && $attrSubSet[0] === 'style')
-			   || preg_match(
-					  '/(?:(?:java|vb|live)script|behaviour|mocha)(?::|&colon;|&column;)/',
-					  $attrSubSet[1]
-				  ) !== 0;
+			|| preg_match('/(?:(?:java|vb|live)script|behaviour|mocha)(?::|&colon;|&column;)/', $attrSubSet[1]) !== 0;
 	}
 
 	/**
@@ -385,25 +379,18 @@ class InputFilter
 		while ($tagOpenStart !== false)
 		{
 			// Get some information about the tag we are processing
-			$preTag      .= StringHelper::substr($postTag, 0, $tagOpenStart);
+			$preTag .= StringHelper::substr($postTag, 0, $tagOpenStart);
 			$postTag     = StringHelper::substr($postTag, $tagOpenStart);
 			$fromTagOpen = StringHelper::substr($postTag, 1);
 			$tagOpenEnd  = StringHelper::strpos($fromTagOpen, '>');
 
 			// Check for mal-formed tag where we have a second '<' before the first '>'
-			$nextOpenTag = (StringHelper::strlen($postTag) > $tagOpenStart) ? StringHelper::strpos(
-				$postTag,
-				'<',
-				$tagOpenStart + 1
-			) : false;
+			$nextOpenTag = (StringHelper::strlen($postTag) > $tagOpenStart) ? StringHelper::strpos($postTag, '<', $tagOpenStart + 1) : false;
 
 			if (($nextOpenTag !== false) && ($nextOpenTag < $tagOpenEnd))
 			{
 				// At this point we have a mal-formed tag -- remove the offending open
-				$postTag      = StringHelper::substr($postTag, 0, $tagOpenStart) . StringHelper::substr(
-						$postTag,
-						$tagOpenStart + 1
-					);
+				$postTag      = StringHelper::substr($postTag, 0, $tagOpenStart) . StringHelper::substr($postTag, $tagOpenStart + 1);
 				$tagOpenStart = StringHelper::strpos($postTag, '<');
 
 				continue;
@@ -442,14 +429,14 @@ class InputFilter
 			if (StringHelper::substr($currentTag, 0, 1) === '/')
 			{
 				// Close Tag
-				$isCloseTag = true;
+				$isCloseTag    = true;
 				list($tagName) = explode(' ', $currentTag);
-				$tagName = StringHelper::substr($tagName, 1);
+				$tagName       = StringHelper::substr($tagName, 1);
 			}
 			else
 			{
 				// Open Tag
-				$isCloseTag = false;
+				$isCloseTag    = false;
 				list($tagName) = explode(' ', $currentTag);
 			}
 
@@ -480,10 +467,7 @@ class InputFilter
 				$nextEqual   = StringHelper::strpos($fromSpace, '=');
 				$nextSpace   = StringHelper::strpos($fromSpace, ' ');
 				$openQuotes  = StringHelper::strpos($fromSpace, '"');
-				$closeQuotes = StringHelper::strpos(
-						StringHelper::substr($fromSpace, ($openQuotes + 1)),
-						'"'
-					) + $openQuotes + 1;
+				$closeQuotes = StringHelper::strpos(StringHelper::substr($fromSpace, ($openQuotes + 1)), '"') + $openQuotes + 1;
 
 				$startAtt         = '';
 				$startAttPosition = 0;
@@ -496,16 +480,12 @@ class InputFilter
 					$startAttPosition = StringHelper::strlen($stringBeforeAttr);
 					$startAtt         = $matches[0][0];
 					$closeQuotePos    = StringHelper::strpos(
-						StringHelper::substr($fromSpace, ($startAttPosition + StringHelper::strlen($startAtt))),
-						'"'
+						StringHelper::substr($fromSpace, ($startAttPosition + StringHelper::strlen($startAtt))), '"'
 					);
-					$closeQuotes      = $closeQuotePos + $startAttPosition + StringHelper::strlen($startAtt);
-					$nextEqual        = $startAttPosition + StringHelper::strpos($startAtt, '=');
-					$openQuotes       = $startAttPosition + StringHelper::strpos($startAtt, '"');
-					$nextSpace        = StringHelper::strpos(
-							StringHelper::substr($fromSpace, $closeQuotes),
-							' '
-						) + $closeQuotes;
+					$closeQuotes = $closeQuotePos + $startAttPosition + StringHelper::strlen($startAtt);
+					$nextEqual   = $startAttPosition + StringHelper::strpos($startAtt, '=');
+					$openQuotes  = $startAttPosition + StringHelper::strpos($startAtt, '"');
+					$nextSpace   = StringHelper::strpos(StringHelper::substr($fromSpace, $closeQuotes), ' ') + $closeQuotes;
 				}
 
 				// Do we have an attribute to process? [check for equal sign]
@@ -577,7 +557,7 @@ class InputFilter
 				{
 					// Open or single tag
 					$attrSet = $this->cleanAttributes($attrSet);
-					$preTag  .= '<' . $tagName;
+					$preTag .= '<' . $tagName;
 
 					for ($i = 0, $count = \count($attrSet); $i < $count; $i++)
 					{
@@ -667,7 +647,7 @@ class InputFilter
 			// AND blocked attributes
 			if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
 				|| (($this->xssAuto) && ((\in_array(strtolower($attrSubSet[0]), $this->attrBlacklist))
-										 || (substr($attrSubSet[0], 0, 2) == 'on'))))
+				|| (substr($attrSubSet[0], 0, 2) == 'on'))))
 			{
 				continue;
 			}
@@ -697,11 +677,7 @@ class InputFilter
 			$attrSubSet[1] = str_replace('"', '', $attrSubSet[1]);
 
 			// Convert single quotes from either side to doubles (Single quotes shouldn't be used to pad attr values)
-			if ((substr($attrSubSet[1], 0, 1) == "'") && (substr(
-															  $attrSubSet[1],
-															  (\strlen($attrSubSet[1]) - 1),
-															  1
-														  ) == "'"))
+			if ((substr($attrSubSet[1], 0, 1) == "'") && (substr($attrSubSet[1], (\strlen($attrSubSet[1]) - 1), 1) == "'"))
 			{
 				$attrSubSet[1] = substr($attrSubSet[1], 1, (\strlen($attrSubSet[1]) - 2));
 			}
@@ -750,7 +726,7 @@ class InputFilter
 	 *
 	 * @return  string  Plaintext string
 	 *
-	 * @since       1.0
+	 * @since   1.0
 	 * @deprecated  This method will be removed once support for PHP 5.3 is discontinued.
 	 */
 	protected function decode($source)
@@ -810,10 +786,10 @@ class InputFilter
 			$attributeValue = StringHelper::substr($remainder, $nextBefore, $nextAfter - $nextBefore);
 
 			// Escape bad chars
-			$attributeValue  = str_replace($badChars, $escapedChars, $attributeValue);
-			$attributeValue  = $this->stripCssExpressions($attributeValue);
+			$attributeValue = str_replace($badChars, $escapedChars, $attributeValue);
+			$attributeValue = $this->stripCssExpressions($attributeValue);
 			$alreadyFiltered .= StringHelper::substr($remainder, 0, $nextBefore) . $attributeValue . $quote;
-			$remainder       = StringHelper::substr($remainder, $nextAfter + 1);
+			$remainder = StringHelper::substr($remainder, $nextAfter + 1);
 		}
 
 		// At this point, we just have to return the $alreadyFiltered and the $remainder
@@ -865,7 +841,7 @@ class InputFilter
 
 		preg_match($pattern, $source, $matches);
 
-		return isset($matches[0]) ? (int)$matches[0] : 0;
+		return isset($matches[0]) ? (int) $matches[0] : 0;
 	}
 
 	/**
@@ -893,7 +869,7 @@ class InputFilter
 
 		preg_match($pattern, $source, $matches);
 
-		return isset($matches[0]) ? abs((int)$matches[0]) : 0;
+		return isset($matches[0]) ? abs((int) $matches[0]) : 0;
 	}
 
 	/**
@@ -909,7 +885,7 @@ class InputFilter
 
 		preg_match($pattern, $source, $matches);
 
-		return isset($matches[0]) ? (float)$matches[0] : 0.0;
+		return isset($matches[0]) ? (float) $matches[0] : 0.0;
 	}
 
 	/**
@@ -933,7 +909,7 @@ class InputFilter
 	 */
 	private function cleanBool($source)
 	{
-		return (bool)$source;
+		return (bool) $source;
 	}
 
 	/**
@@ -1041,7 +1017,7 @@ class InputFilter
 	private function cleanPath($source)
 	{
 		// Linux and other Unixoids
-		$filePattern = '(?:[^\x00\/:*?]{1,255})';
+		$filePattern          = '(?:[^\x00\/:*?]{1,255})';
 		$pathSeparatorPattern = '(?:\/+)';
 		$rootPattern          = '(?:\/)';
 
@@ -1051,7 +1027,7 @@ class InputFilter
 		}
 
 		// Windows
-		$filePattern = '(?:[^\x00\\\\\/:*"?<>|]{1,255})';
+		$filePattern          = '(?:[^\x00\\\\\/:*"?<>|]{1,255})';
 		$pathSeparatorPattern = '(?:[\\\\\/])';
 		$rootPattern          = '(?:[A-Za-z]:(\\\\|\/))';
 
