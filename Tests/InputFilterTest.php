@@ -505,6 +505,30 @@ class InputFilterTest extends TestCase
 				'C:\Documents\Newsletters\tmp',
 				'From generic cases'
 			),
+			'non-ascii path'                                                => array(
+				'path',
+				'εικόνες',
+				'εικόνες',
+				'From generic cases'
+			),
+			'symbol path'                                                   => array(
+				'path',
+				'#+-!$§%&()=,°;<>|',
+				'#+-!$§%&()=,°;<>|',
+				'From generic cases'
+			),
+			'abs numeric path'                                              => array(
+				'path',
+				'/8/86/86753/html/',
+				'/8/86/86753/html/',
+				'From generic cases'
+			),
+			'rel numeric path'                                              => array(
+				'path',
+				'8/86/86753/html/',
+				'8/86/86753/html/',
+				'From generic cases'
+			),
 			'user_01'                                                       => array(
 				'username',
 				'&<f>r%e\'d',
