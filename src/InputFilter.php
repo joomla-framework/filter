@@ -1050,7 +1050,7 @@ class InputFilter
 	 * @param   string  $filePattern           The pattern for valid file and directory names
 	 * @param   string  $pathSeparator         The native path separator
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
 	private function pathMatches(&$source, $rootPattern, $pathSeparatorPattern, $filePattern, $pathSeparator)
 	{
