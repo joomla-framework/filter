@@ -725,7 +725,7 @@ class InputFilterTest extends TestCase
 			'Bad Attribute Name'                                            => [
 				'',
 				'<br 3bb />',
-				'<br />',
+				'<br>',
 				'From generic cases',
 			],
 			'Bad Tag Name'                                                  => [
@@ -1689,12 +1689,12 @@ class InputFilterTest extends TestCase
 </ul>',
 				'<h3>Инженеры</h3>
 <ul>
-<li>Агасиев Т.А. "Программная система для автоматизированной настройки параметров алгоритмов оптимизации"<br />(<a href="/pub/diplom_labors/2016/2016_Agasiev_T_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Agasiev_T_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
-<li>Логунова А.О. "Исследование и разработка программного обеспечения определения параметров электрокардиограмм"<br />(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Logunova_A_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Logunova_A_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
-<li>Спасёнов А.Ю. "Разработка экспериментального программного комплекса анализа и интерпретации электрокардиограмм"<br />(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Spasenov_A_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Spasenov_A_prezentation.pdf">презентация</a>)</li>
-<li>Щетинин В.Н. "Имитационное моделирование эксперимента EXPERT физики радиоактивных пучков"<br />(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Shhetinin_V_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Shhetinin_V_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
-<li>Елфимова О.Т. "Разработка системы отделения космического аппарата "Метеор-М" в системе MSC.Adams" <br />(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Elfimova_O_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
-<li>Ранкова А.В. "Исследование и разработка методов и алгоритмов распознавания и селекции наземных стационарных объектов"<br />(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Rankova_A_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Rankova_A_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
+<li>Агасиев Т.А. "Программная система для автоматизированной настройки параметров алгоритмов оптимизации"<br>(<a href="/pub/diplom_labors/2016/2016_Agasiev_T_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Agasiev_T_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
+<li>Логунова А.О. "Исследование и разработка программного обеспечения определения параметров электрокардиограмм"<br>(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Logunova_A_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Logunova_A_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
+<li>Спасёнов А.Ю. "Разработка экспериментального программного комплекса анализа и интерпретации электрокардиограмм"<br>(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Spasenov_A_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Spasenov_A_prezentation.pdf">презентация</a>)</li>
+<li>Щетинин В.Н. "Имитационное моделирование эксперимента EXPERT физики радиоактивных пучков"<br>(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Shhetinin_V_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Shhetinin_V_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
+<li>Елфимова О.Т. "Разработка системы отделения космического аппарата "Метеор-М" в системе MSC.Adams" <br>(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Elfimova_O_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
+<li>Ранкова А.В. "Исследование и разработка методов и алгоритмов распознавания и селекции наземных стационарных объектов"<br>(<a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Rankova_A_rpz.pdf" target="_blank" rel="noopener noreferrer">диплом</a>, <a style="color: maroon;" href="/pub/diplom_labors/2016/2016_Rankova_A_prezentation.pdf" target="_blank" rel="noopener noreferrer">презентация</a>)</li>
 </ul>',
 				'From generic cases',
 			],
