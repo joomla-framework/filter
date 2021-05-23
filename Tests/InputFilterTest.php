@@ -725,6 +725,7 @@ class InputFilterTest extends TestCase
 			'Bad Attribute Name'                                            => [
 				'',
 				'<br 3bb />',
+				'<br />',
 				'<br>',
 				'From generic cases',
 			],
