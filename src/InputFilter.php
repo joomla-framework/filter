@@ -516,7 +516,7 @@ class InputFilter
 					}
 
 					// Reformat single tags to XHTML
-					if (StringHelper::strpos($fromTagOpen, '</' . $tagName))
+					if ($tagName == 'br' || StringHelper::strpos($fromTagOpen, '</' . $tagName))
 					{
 						$preTag .= '>';
 					}
