@@ -153,6 +153,11 @@ class OutputFilter
 	 */
 	public static function stringUrlUnicodeSlug($string)
 	{
+		if ($string === null)
+		{
+			$string = '';
+		}
+
 		// Replace double byte whitespaces by single byte (East Asian languages)
 		$str = preg_replace('/\xE3\x80\x80/', ' ', $string);
 
