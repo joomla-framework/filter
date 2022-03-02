@@ -433,6 +433,12 @@ class InputFilterTest extends TestCase
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
 				'From generic cases'
 			),
+			'double-dot path'                                               => array(
+				'path',
+				'/var/www/html/pub/diplom_labors/../2016_Elfimova_O_rpz.pdf',
+				'/var/www/html/pub/diplom_labors/../2016_Elfimova_O_rpz.pdf',
+				'From generic cases'
+			),
 			'windows path'                                                  => array(
 				'path',
 				'C:\Documents\Newsletters\Summer2018.pdf',
@@ -503,6 +509,30 @@ class InputFilterTest extends TestCase
 				'path',
 				'C:/Documents/Newsletters/tmp',
 				'C:\Documents\Newsletters\tmp',
+				'From generic cases'
+			),
+			'non-ascii path'                                                => array(
+				'path',
+				'εικόνες',
+				'εικόνες',
+				'From generic cases'
+			),
+			'symbol path'                                                   => array(
+				'path',
+				'#+-!$§%&()=,°;<>|',
+				'#+-!$§%&()=,°;<>|',
+				'From generic cases'
+			),
+			'abs numeric path'                                              => array(
+				'path',
+				'/8/86/86753/html/',
+				'/8/86/86753/html/',
+				'From generic cases'
+			),
+			'rel numeric path'                                              => array(
+				'path',
+				'8/86/86753/html/',
+				'8/86/86753/html/',
 				'From generic cases'
 			),
 			'user_01'                                                       => array(

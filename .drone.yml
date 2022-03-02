@@ -115,62 +115,6 @@ volumes:
 
 ---
 kind: pipeline
-name: PHP 5.4
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: composer
-  image: joomlaprojects/docker-images:php5.4
-  commands:
-  - php -v
-  - composer update --prefer-stable
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-
-- name: PHPUnit
-  image: joomlaprojects/docker-images:php5.4
-  commands:
-  - vendor/bin/phpunit
-
-volumes:
-- name: composer-cache
-  host:
-    path: /tmp/composer-cache
-
----
-kind: pipeline
-name: PHP 5.5
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: composer
-  image: joomlaprojects/docker-images:php5.5
-  commands:
-  - php -v
-  - composer update --prefer-stable
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-
-- name: PHPUnit
-  image: joomlaprojects/docker-images:php5.5
-  commands:
-  - vendor/bin/phpunit
-
-volumes:
-- name: composer-cache
-  host:
-    path: /tmp/composer-cache
-
----
-kind: pipeline
 name: PHP 5.6
 
 platform:
@@ -368,6 +312,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 6fa33d7b14ec559e67074903960cc2ea6cc3153fc0fc3840346596dda345543e
+hmac: 6b92d54a1ca911a67230ba4707aaad03363d62f357a81081b667f40e6bbade73
 
 ...
