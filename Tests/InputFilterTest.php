@@ -433,6 +433,12 @@ class InputFilterTest extends TestCase
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
 				'From generic cases'
 			),
+			'double-dot path'                                               => array(
+				'path',
+				'/var/www/html/pub/diplom_labors/../2016_Elfimova_O_rpz.pdf',
+				'/var/www/html/pub/diplom_labors/../2016_Elfimova_O_rpz.pdf',
+				'From generic cases'
+			),
 			'windows path'                                                  => array(
 				'path',
 				'C:\Documents\Newsletters\Summer2018.pdf',
