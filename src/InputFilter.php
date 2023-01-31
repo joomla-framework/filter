@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Filter Package
  *
@@ -382,9 +383,11 @@ class InputFilter
              * OR no tagname
              * OR remove if xssauto is on and tag is blocked
              */
-            if ((!preg_match('/^[a-z][a-z0-9]*$/i', $tagName))
+            if (
+                (!preg_match('/^[a-z][a-z0-9]*$/i', $tagName))
                 || (!$tagName)
-                || ((\in_array(strtolower($tagName), $this->blockedTags)) && $this->xssAuto)) {
+                || ((\in_array(strtolower($tagName), $this->blockedTags)) && $this->xssAuto)
+            ) {
                 $postTag      = StringHelper::substr($postTag, ($tagLength + 2));
                 $tagOpenStart = StringHelper::strpos($postTag, '<');
 
@@ -442,8 +445,10 @@ class InputFilter
                      * If the attribute value is wrapped in quotes we need to grab the substring from the closing quote,
                      * otherwise grab until the next space.
                      */
-                    if (($openQuotes !== false)
-                        && (StringHelper::strpos(StringHelper::substr($fromSpace, ($openQuotes + 1)), '"') !== false)) {
+                    if (
+                        ($openQuotes !== false)
+                        && (StringHelper::strpos(StringHelper::substr($fromSpace, ($openQuotes + 1)), '"') !== false)
+                    ) {
                         $attr = StringHelper::substr($fromSpace, 0, ($closeQuotes + 1));
                     } else {
                         $attr = StringHelper::substr($fromSpace, 0, $nextSpace);
@@ -555,9 +560,11 @@ class InputFilter
 
             // Remove all "non-regular" attribute names
             // AND blocked attributes
-            if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
+            if (
+                (!preg_match('/[a-z]*$/i', $attrSubSet[0]))
                 || ($this->xssAuto && ((\in_array(strtolower($attrSubSet[0]), $this->blockedAttributes))
-                || substr($attrSubSet[0], 0, 2) == 'on'))) {
+                || substr($attrSubSet[0], 0, 2) == 'on'))
+            ) {
                 continue;
             }
 
