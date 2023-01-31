@@ -10,9 +10,9 @@
         "joomla/string": "^2.0"
     },
     "require-dev": {
-        "joomla/coding-standards": "^3.0@dev",
         "joomla/language": "^2.0",
-        "phpunit/phpunit": "^8.5|^9.0"
+        "phpunit/phpunit": "^8.5|^9.0",
+        "squizlabs/php_codesniffer": "~3.7.1"
     },
     "conflict": {
         "joomla/language": "<2.0"
