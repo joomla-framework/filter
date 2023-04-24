@@ -102,6 +102,18 @@ class OutputFilterTest extends TestCase
 	}
 
 	/**
+	 * Tests making strings safe for usage in JS
+	 */
+	public function testStringJSSafe()
+	{
+		$this->assertEquals(
+			'\u0054\u0065\u0073\u0074\u0020\u0073\u0074\u0072\u0069\u006e\u0067\u0020\u0045\u0073\u0070\u0061\u00f1\u006f\u006c\u0020\u0420\u0443\u0441\u0441\u043a\u0438\u0439\u0020\ud55c\uad6d\uc5b4\u0020\u{1f910}',
+			$this->object->stringJSSafe('Test string Español Русский 한국어 🤐'),
+			'Should convert the string to unicode escaped string'
+		);
+	}
+
+	/**
 	 * Tests filtering strings down to ASCII-7 lowercase URL text
 	 */
 	public function testStringUrlSafeWithoutALanguageInstance()
