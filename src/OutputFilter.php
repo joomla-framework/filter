@@ -98,16 +98,12 @@ class OutputFilter
         $chars   = preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
         $newStr = '';
 
-        foreach ($chars as $chr)
-        {
+        foreach ($chars as $chr) {
             $code = str_pad(dechex(StringHelper::ord($chr)), 4, '0', STR_PAD_LEFT);
 
-            if (strlen($code) < 5)
-            {
+            if (strlen($code) < 5) {
                 $newStr .= '\\u' . $code;
-            }
-            else
-            {
+            } else {
                 $newStr .= '\\u{' . $code . '}';
             }
         }
