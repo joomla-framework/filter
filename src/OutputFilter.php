@@ -85,6 +85,37 @@ class OutputFilter
     }
 
     /**
+     * Processes a string and escapes it for use in JavaScript
+     *
+     * @param   string  $string  String to process
+     *
+     * @return  string  Processed text
+     *
+     * @since   3.0
+     */
+    public static function stringJSSafe($string)
+    {
+        $chars   = preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
+        $newStr = '';
+
+        foreach ($chars as $chr)
+        {
+            $code = str_pad(dechex(StringHelper::ord($chr)), 4, '0', STR_PAD_LEFT);
+
+            if (strlen($code) < 5)
+            {
+                $newStr .= '\\u' . $code;
+            }
+            else
+            {
+                $newStr .= '\\u{' . $code . '}';
+            }
+        }
+
+        return $newStr;
+    }
+
+    /**
      * Generates a URL safe version of the specified string with language transliteration.
      *
      * This method processes a string and replaces all accented UTF-8 characters by unaccented
