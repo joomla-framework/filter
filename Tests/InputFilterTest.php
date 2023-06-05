@@ -1430,13 +1430,13 @@ class InputFilterTest extends TestCase
                 '<img src="&lt;img src=x&quot;/onerror=alert(1)//&gt;" />',
                 'Test empty alt attribute',
             ],
-            'infinte_loop_a' => [
+            'infinite_loop_a' => [
                 'string',
                 '<img src="x" height = "zzz" />',
                 '<img src="x" height="zzz" />',
                 'Test empty alt attribute',
             ],
-            'infinte_loop_b' => [
+            'infinite_loop_b' => [
                 'string',
                 '<img src = "xxx" height = "zzz" />',
                 '<img src="xxx" height="zzz" />',
