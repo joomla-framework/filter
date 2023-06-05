@@ -22,6 +22,8 @@ class FilterTestObject
 
 	public $string3;
 
+	public $array1;
+
 	/**
 	 * Sets up a dummy object for the output filter to be tested against
 	 */
