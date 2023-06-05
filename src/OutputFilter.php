@@ -40,7 +40,7 @@ class OutputFilter
 	 *
 	 * @since   1.0
 	 */
-	public static function objectHtmlSafe(&$mixed, $quoteStyle = \ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML401, $excludeKeys = '')
+	public static function objectHtmlSafe(&$mixed, $quoteStyle = \ENT_QUOTES, $excludeKeys = '')
 	{
 		if (\is_null($quoteStyle))
 		{
