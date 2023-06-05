@@ -44,7 +44,7 @@ class OutputFilter
 	{
 		if (\is_null($quoteStyle))
 		{
-			$quoteStyle = \ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML401;
+			$quoteStyle = \ENT_QUOTES;
 		}
 
 		if (\is_object($mixed))
