@@ -43,6 +43,10 @@ class OutputFilter
      */
     public static function objectHtmlSafe(&$mixed, $quoteStyle = \ENT_QUOTES, $excludeKeys = '')
     {
+        if (\is_null($quoteStyle)) {
+            $quoteStyle = \ENT_QUOTES;
+        }
+
         if (\is_object($mixed)) {
             foreach (get_object_vars($mixed) as $k => $v) {
                 if (\is_array($v) || \is_object($v) || $v == null || substr($k, 1, 1) == '_') {
