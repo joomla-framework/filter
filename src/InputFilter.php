@@ -514,16 +514,7 @@ class InputFilter
 					{
 						$preTag .= ' ' . $attrSet[$i];
 					}
-
-					// Reformat single tags to XHTML
-					if (StringHelper::strpos($fromTagOpen, '</' . $tagName))
-					{
-						$preTag .= '>';
-					}
-					else
-					{
-						$preTag .= ' />';
-					}
+					$preTag .= ' />';
 				}
 				else
 				{
