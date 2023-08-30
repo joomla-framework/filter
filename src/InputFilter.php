@@ -514,7 +514,7 @@ class InputFilter
 					{
 						$preTag .= ' ' . $attrSet[$i];
 					}
-					
+
 					$preTag .= ' />';
 				}
 				else
