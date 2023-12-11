@@ -1277,7 +1277,7 @@ class InputFilterTest extends TestCase
 			),
 			'Malformed Nested tags'                                         => array(
 				'',
-				'<em><strongFred</strong></em>',
+			'<em><strongFred</strong></em>',
 				'strongFred',
 				'From specific cases'
 			),
@@ -1286,6 +1286,18 @@ class InputFilterTest extends TestCase
 				'<em><strongمحمد</strong></em>',
 				'strongمحمد',
 				'From specific utf-8 multibyte cases'
+			),
+			'Malformed Tag with RIGHT DOUBLE QUOTATION MARK' => array(
+				'',
+				'style="background:url()’”><img src=x onerror=alert(1) x=<a href="test">test</a>',
+				'style="background:url()’”>img src=x onerror=alert(1) x=test',
+				'From specific utf-8 multibyte cases',
+			),
+			'UTF8offset' => array(
+				'',
+				"\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\"><img src=x onerror=alert(1)>",
+				"\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\"><img />",
+				'From specific utf-8 multibyte cases',
 			),
 			'Unquoted Attribute Without Space'                              => array(
 				'',
