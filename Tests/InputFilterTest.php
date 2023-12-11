@@ -809,6 +809,18 @@ class InputFilterTest extends TestCase
 				'strongمحمد',
 				'From specific utf-8 multibyte cases',
 			],
+			'Malformed Tag with RIGHT DOUBLE QUOTATION MARK' => [
+				'',
+				'style="background:url()’”><img src=x onerror=alert(1) x=<a href="test">test</a>',
+				'style="background:url()’”>img src=x onerror=alert(1) x=test',
+				'From specific utf-8 multibyte cases',
+			],
+			'UTF8offset' => [
+				'',
+				"\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\"><img src=x onerror=alert(1)>",
+				"\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\">",
+				'From specific utf-8 multibyte cases',
+			],
 			'Unquoted Attribute Without Space'                              => [
 				'',
 				'<img height=300>',
