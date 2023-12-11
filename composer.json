@@ -6,8 +6,7 @@
     "homepage": "https://github.com/joomla-framework/filter",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "^8.1.0",
-        "joomla/string": "^3.0"
+        "php": "^8.1.0"
     },
     "require-dev": {
         "joomla/language": "^3.0",
