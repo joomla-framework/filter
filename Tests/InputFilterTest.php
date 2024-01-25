@@ -1277,7 +1277,7 @@ class InputFilterTest extends TestCase
 			),
 			'Malformed Nested tags'                                         => array(
 				'',
-			'<em><strongFred</strong></em>',
+				'<em><strongFred</strong></em>',
 				'strongFred',
 				'From specific cases'
 			),
