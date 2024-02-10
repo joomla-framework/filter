@@ -589,6 +589,12 @@ class InputFilterTest extends TestCase
 				array('nonbreaking nonbreaking', 'multi　multi'),
 				'From generic cases'
 			),
+			'trim_04'                                                       => array(
+				'trim',
+				array('Saccà', 'Saccà'),
+				array('Saccà', 'Saccà'),
+				'CMS issue 6803'
+			),
 			'string_01'                                                     => array(
 				'string',
 				'123.567',
