@@ -4,7 +4,7 @@
     "description": "Joomla Filter Package",
     "keywords": ["joomla", "framework", "filter"],
     "homepage": "https://github.com/joomla-framework/filter",
- "GPL-2.0-or-later",
+   "license": "GPL-2.0-or-later",
     "require": {
         "php": "^7.2.5|~8.0.0|~8.1.0",
         "joomla/string": "^2.0"
