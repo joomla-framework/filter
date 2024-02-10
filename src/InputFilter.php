@@ -8,8 +8,6 @@
 
 namespace Joomla\Filter;
 
-use Joomla\String\StringHelper;
-
 /**
  * InputFilter is a class for filtering input from any data source
  *
