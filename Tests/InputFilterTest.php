@@ -589,6 +589,12 @@ class InputFilterTest extends TestCase
 				array('nonbreaking nonbreaking', 'multi　multi'),
 				'From generic cases'
 			),
+			'trim_04'                                                       => array(
+				'trim',
+				array('Saccà', 'Saccà'),
+				array('Saccà', 'Saccà'),
+				'CMS issue 6803'
+			),
 			'string_01'                                                     => array(
 				'string',
 				'123.567',
@@ -1286,6 +1292,18 @@ class InputFilterTest extends TestCase
 				'<em><strongمحمد</strong></em>',
 				'strongمحمد',
 				'From specific utf-8 multibyte cases'
+			),
+			'Malformed Tag with RIGHT DOUBLE QUOTATION MARK' => array(
+				'',
+				'style="background:url()’”><img src=x onerror=alert(1) x=<a href="test">test</a>',
+				'style="background:url()’”>img src=x onerror=alert(1) x=test',
+				'From specific utf-8 multibyte cases',
+			),
+			'UTF8offset' => array(
+				'',
+				"\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\"><img src=x onerror=alert(1)>",
+				"\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\"><img />",
+				'From specific utf-8 multibyte cases',
 			),
 			'Unquoted Attribute Without Space'                              => array(
 				'',
