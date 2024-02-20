@@ -561,6 +561,12 @@ class InputFilterTest extends TestCase
                 ['nonbreaking nonbreaking', 'multi　multi'],
                 'From generic cases',
             ],
+            'trim_04' => [
+                'trim',
+                ['Saccà', 'Saccà'],
+                ['Saccà', 'Saccà'],
+                'CMS issue 6803'
+            ],
             'string_01' => [
                 'string',
                 '123.567',
@@ -810,6 +816,18 @@ class InputFilterTest extends TestCase
                 'strongمحمد',
                 'From specific utf-8 multibyte cases',
             ],
+            'Malformed Tag with RIGHT DOUBLE QUOTATION MARK' => [
+                '',
+                'style="background:url()’”><img src=x onerror=alert(1) x=<a href="test">test</a>',
+                'style="background:url()’”>img src=x onerror=alert(1) x=test',
+                'From specific utf-8 multibyte cases',
+            ],
+            'UTF8offset' => [
+                '',
+                "\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\"><img src=x onerror=alert(1)>",
+                "\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\">",
+                'From specific utf-8 multibyte cases',
+            ],
             'Unquoted Attribute Without Space' => [
                 '',
                 '<img height=300>',
@@ -950,6 +968,18 @@ class InputFilterTest extends TestCase
                 '',
                 '<em><strongمحمد</strong></em>',
                 'strongمحمد',
+                'From specific utf-8 multibyte cases',
+            ],
+            'Malformed Tag with RIGHT DOUBLE QUOTATION MARK' => [
+                '',
+                'style="background:url()’”><img src=x onerror=alert(1) x=<a href="test">test</a>',
+                'style="background:url()’”>img src=x onerror=alert(1) x=test',
+                'From specific utf-8 multibyte cases',
+            ],
+            'UTF8offset' => [
+                '',
+                "\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\"><img src=x onerror=alert(1)>",
+                "\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\xf0\"><img />",
                 'From specific utf-8 multibyte cases',
             ],
             'Unquoted Attribute Without Space' => [
