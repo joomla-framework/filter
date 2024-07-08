@@ -262,7 +262,7 @@ class OutputFilter
      */
     public static function stripImages($string)
     {
-        return preg_replace('#(<[/]?img.*>)#U', '', $string);
+        return preg_replace('#(<[/]?img.*>)#Ui', '', $string);
     }
 
     /**
@@ -276,6 +276,6 @@ class OutputFilter
      */
     public static function stripIframes($string)
     {
-        return preg_replace('#(<[/]?iframe.*>)#U', '', $string);
+        return preg_replace('#(<[/]?iframe.*>)#Ui', '', $string);
     }
 }
