@@ -275,7 +275,8 @@ class OutputFilter
 	 */
 	public static function stripImages($string)
 	{
-		while (preg_match('#(<[/]?img.*>)#Ui', $string)) {
+		while (preg_match('#(<[/]?img.*>)#Ui', $string))
+		{
 			$string = preg_replace('#(<[/]?img.*>)#Ui', '', $string);
 		}
 
