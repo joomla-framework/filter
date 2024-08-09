@@ -215,6 +215,18 @@ class OutputFilterTest extends TestCase
 			$this->object->stripImages('Hello <img src="wave.jpg"> I am waving at you.'),
 			'Should remove img tags'
 		);
+
+		$this->assertEquals(
+			'Hello  I am waving at you.',
+			$this->object->stripImages('Hello <IMG src="wave.jpg"> I am waving at you.'),
+			'Should remove uppercase img tags'
+		);
+
+		$this->assertEquals(
+			'Hello  I am waving at you.',
+			$this->object->stripImages('Hello <<img>IMg src="wave.jpg"> I am waving at you.'),
+			'Should remove nested tags'
+		);
 	}
 
 	/**
@@ -228,6 +240,20 @@ class OutputFilterTest extends TestCase
 				'Hello <iframe src="http://player.vimeo.com/video/37576499" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> I am waving at you.'
 			),
 			'Should remove iFrame tags'
+		);
+
+		$this->assertEquals(
+			'Hello  I am waving at you.',
+			$this->object->stripIframes('Hello <IFrame src="http://player.vimeo.com/video/37576499" width="500"' .
+				' height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> I am waving at you.'),
+			'Should remove uppercase iFrame tags'
+		);
+
+		$this->assertEquals(
+			'Hello  I am waving at you.',
+			$this->object->stripIframes('Hello <<iframe>iframe src="http://player.vimeo.com/video/37576499" width="500"' .
+				' height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> I am waving at you.'),
+			'Should remove nested iFrame tags'
 		);
 	}
 }
