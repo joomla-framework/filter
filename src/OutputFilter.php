@@ -293,7 +293,8 @@ class OutputFilter
 	 */
 	public static function stripIframes($string)
 	{
-		while (preg_match('#(<[/]?iframe.*>)#Ui', $string)) {
+		while (preg_match('#(<[/]?iframe.*>)#Ui', $string))
+		{
 			$string = preg_replace('#(<[/]?iframe.*>)#Ui', '', $string);
 		}
 
