@@ -1,4 +1,4 @@
-# The Filter Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/filter/status.svg?ref=refs/heads/3.x-dev)](https://ci.joomla.org/joomla-framework/filter)
+# The Filter Package [![Build Status](https://github.com/joomla-framework/filter/actions/workflows/ci.yml/badge.svg?branch=3.x-dev)](https://github.com/joomla-framework/filter)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/filter/v/stable)](https://packagist.org/packages/joomla/filter)
 [![Total Downloads](https://poser.pugx.org/joomla/filter/downloads)](https://packagist.org/packages/joomla/filter)
