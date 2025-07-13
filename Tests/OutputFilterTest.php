@@ -8,6 +8,7 @@
 namespace Joomla\Filter\Tests;
 
 use Joomla\Filter\OutputFilter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -179,17 +180,19 @@ class OutputFilterTest extends TestCase
     /**
      * dataSet for Clean text
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataSet(): \Generator
+    public static function dataSet(): array
     {
-        yield 'case_1' => [
-            '',
-            '',
-        ];
-        yield 'script_0' => [
-            '<script>alert(\'hi!\');</script>',
-            '',
+        return [
+            'case_1' => [
+                '',
+                '',
+            ],
+            'script_0' => [
+                '<script>alert(\'hi!\');</script>',
+                '',
+            ],
         ];
     }
 
@@ -198,9 +201,8 @@ class OutputFilterTest extends TestCase
      *
      * @param   string  $data    The original output
      * @param   string  $expect  The expected result for this test.
-     *
-     * @dataProvider dataSet
      */
+    #[DataProvider('dataSet')]
     public function testCleanText($data, $expect)
     {
         $this->assertEquals($expect, OutputFilter::cleanText($data));

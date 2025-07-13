@@ -9,6 +9,7 @@ namespace Joomla\Filter\Tests;
 
 use Joomla\Filter\InputFilter;
 use Joomla\Filter\Tests\Stubs\ArbitraryObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +28,7 @@ class InputFilterTest extends TestCase
      *                 the third is the expected result of filtering, and the fourth is
      *                 the failure message identifying the source of the data.
      */
-    public function casesGeneric()
+    public static function casesGeneric(): array
     {
         $input = '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`' .
             'abcdefghijklmnopqrstuvwxyz{|}~â‚¬â€šÆ’â€žâ€¦â€ â€¡Ë†â€°Å â€¹Å’Å½â€˜â€™â€œâ' .
@@ -770,7 +771,7 @@ class InputFilterTest extends TestCase
      *                 the third is the expected result of filtering, and the fourth is
      *                 the failure message identifying the source of the data.
      */
-    public function allowed()
+    public static function allowed(): array
     {
         $casesSpecific = [
             'Kill script' => [
@@ -892,7 +893,7 @@ class InputFilterTest extends TestCase
             ],
         ];
 
-        return array_merge($this->casesGeneric(), $casesSpecific);
+        return array_merge(self::casesGeneric(), $casesSpecific);
     }
 
     /**
@@ -904,9 +905,8 @@ class InputFilterTest extends TestCase
      * @param   string  $caseGroup  The failure message identifying source of test case.
      *
      * @return  void
-     *
-     * @dataProvider allowed
      */
+    #[DataProvider('allowed')]
     public function testCleanByCallingMember($type, $data, $expected, $caseGroup)
     {
         $this->assertSame($expected, (new InputFilter())->clean($data, $type));
@@ -920,7 +920,7 @@ class InputFilterTest extends TestCase
      *                 the third is the expected result of filtering, and the fourth is
      *                 the failure message identifying the source of the data.
      */
-    public function allowImg()
+    public static function allowImg(): array
     {
         $security20110329bString = "<img src='<img src='/onerror=eval" .
             "(atob(/KGZ1bmN0aW9uKCl7dHJ5e3ZhciBkPWRvY3VtZW50LGI9ZC5ib2R5LHM9ZC5jcmVhdGVFbGVtZW50KCdzY3JpcHQnKTtzLnNldEF0dHJpYnV0ZSgnc3J" .
@@ -1069,7 +1069,7 @@ class InputFilterTest extends TestCase
             ],
         ];
 
-        return array_merge($this->casesGeneric(), $casesSpecific);
+        return array_merge(self::casesGeneric(), $casesSpecific);
     }
 
     /**
@@ -1081,9 +1081,8 @@ class InputFilterTest extends TestCase
      * @param   string  $message  The failure message identifying the source of the test case.
      *
      * @return  void
-     *
-     * @dataProvider allowImg
      */
+    #[DataProvider('allowImg')]
     public function testCleanWithImgAllowed($type, $data, $expect, $message)
     {
         $this->assertEquals(
@@ -1101,7 +1100,7 @@ class InputFilterTest extends TestCase
      *                 the third is the expected result of filtering, and the fourth is
      *                 the failure message identifying the source of the data.
      */
-    public function allowClass()
+    public static function allowClass(): array
     {
         $casesSpecific = [
             'Kill script' => [
@@ -1203,7 +1202,7 @@ class InputFilterTest extends TestCase
             ],
         ];
 
-        return array_merge($this->casesGeneric(), $casesSpecific);
+        return array_merge(self::casesGeneric(), $casesSpecific);
     }
 
     /**
@@ -1215,9 +1214,8 @@ class InputFilterTest extends TestCase
      * @param   string  $message  The failure message identifying the source of the test case.
      *
      * @return  void
-     *
-     * @dataProvider allowClass
      */
+    #[DataProvider('allowClass')]
     public function testCleanWithClassAllowed($type, $data, $expect, $message)
     {
         $this->assertEquals(
@@ -1235,7 +1233,7 @@ class InputFilterTest extends TestCase
      *                 the third is the expected result of filtering, and the fourth is
      *                 the failure message identifying the source of the data.
      */
-    public function allowClassImg()
+    public static function allowClassImg(): array
     {
         $casesSpecific = [
             'Kill script' => [
@@ -1344,7 +1342,7 @@ class InputFilterTest extends TestCase
             ],
         ];
 
-        return array_merge($this->casesGeneric(), $casesSpecific);
+        return array_merge(self::casesGeneric(), $casesSpecific);
     }
 
     /**
@@ -1356,9 +1354,8 @@ class InputFilterTest extends TestCase
      * @param   string  $message  The failure message identifying the source of the test case.
      *
      * @return  void
-     *
-     * @dataProvider allowClassImg
      */
+    #[DataProvider('allowClassImg')]
     public function testCleanWithImgAndClassAllowed($type, $data, $expect, $message)
     {
         $this->assertEquals(
@@ -1376,7 +1373,7 @@ class InputFilterTest extends TestCase
      *                 the third is the expected result of filtering, and the fourth is
      *                 the failure message identifying the source of the data.
      */
-    public function blocked()
+    public static function blocked(): array
     {
         $quotesInText1 = '<p class="my_class">This is a = "test" ' .
             '<a href="http://mysite.com" img="my_image">link test</a>. This is some more text.</p>';
@@ -1576,7 +1573,7 @@ class InputFilterTest extends TestCase
             ],
         ];
 
-        return array_merge($this->casesGeneric(), $casesSpecific);
+        return array_merge(self::casesGeneric(), $casesSpecific);
     }
 
     /**
@@ -1588,9 +1585,8 @@ class InputFilterTest extends TestCase
      * @param   string  $message  The failure message identifying the source of the test case.
      *
      * @return  void
-     *
-     * @dataProvider blocked
      */
+    #[DataProvider('blocked')]
     public function testCleanWithDefaultBlockedProperties($type, $data, $expect, $message)
     {
         $this->assertEquals(
@@ -1608,7 +1604,7 @@ class InputFilterTest extends TestCase
      *                 the third is the expected result of filtering, and the fourth is
      *                 the failure message identifying the source of the data.
      */
-    public function blockedImg()
+    public static function blockedImg(): array
     {
         $security20110328String = "<img src='<img src='/onerror=" .
             "eval(atob(/KGZ1bmN0aW9uKCl7dHJ5e3ZhciBkPWRvY3VtZW50LGI9ZC5ib2R5LHM9ZC5jcmVhdGVFbGV" .
@@ -1673,7 +1669,7 @@ class InputFilterTest extends TestCase
             ],
         ];
 
-        return array_merge($this->casesGeneric(), $casesSpecific);
+        return array_merge(self::casesGeneric(), $casesSpecific);
     }
 
     /**
@@ -1685,9 +1681,8 @@ class InputFilterTest extends TestCase
      * @param   string  $message  The failure message identifying the source of the test case.
      *
      * @return  void
-     *
-     * @dataProvider blockedImg
      */
+    #[DataProvider('blockedImg')]
     public function testCleanWithImgBlocked($type, $data, $expect, $message)
     {
         $this->assertEquals(
@@ -1705,7 +1700,7 @@ class InputFilterTest extends TestCase
      *                 the third is the expected result of filtering, and the fourth is
      *                 the failure message identifying the source of the data.
      */
-    public function blockedClass()
+    public static function blockedClass(): array
     {
         $casesSpecific = [
             'tracker9725' => [
@@ -1895,7 +1890,7 @@ class InputFilterTest extends TestCase
             ],
         ];
 
-        return array_merge($this->casesGeneric(), $casesSpecific);
+        return array_merge(self::casesGeneric(), $casesSpecific);
     }
 
     /**
@@ -1907,9 +1902,8 @@ class InputFilterTest extends TestCase
      * @param   string  $message  The failure message identifying the source of the test case.
      *
      * @return  void
-     *
-     * @dataProvider blockedClass
      */
+    #[DataProvider('blockedClass')]
     public function testCleanWithClassAttributeBlocked($type, $data, $expect, $message)
     {
         $this->assertEquals(
