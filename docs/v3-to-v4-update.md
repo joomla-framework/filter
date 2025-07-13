@@ -5,3 +5,7 @@ The following changes were made to the Filter package between v3 and v4.
 ### Minimum supported PHP version raised
 
 All Framework packages now require PHP 8.3 or newer.
+
+### Removed `InputFilter::decode()`
+
+The internal method `InputFilter::deccode()` was removed. Use `html_entity_decode($source, \ENT_QUOTES, 'UTF-8');` directly.
