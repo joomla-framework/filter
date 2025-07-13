@@ -10,6 +10,7 @@
 namespace Joomla\Filter;
 
 use Joomla\Language\Language;
+use Joomla\Language\LanguageFactory;
 use Joomla\Language\Transliterate;
 use Joomla\String\StringHelper;
 
@@ -143,7 +144,7 @@ class OutputFilter
             if (empty($language) || $language === '*' || self::$language->getLanguage() === $language) {
                 $str = self::$language->transliterate($str);
             } else {
-                $str = (new Language(self::$language->getBasePath(), $language, self::$language->getDebug()))->transliterate($str);
+                $str = (new LanguageFactory)->getLanguage(self::$language->getBasePath(), $language, self::$language->getDebug())->transliterate($str);
             }
         } else {
             // Fallback behavior based on the Language package's en-GB LocaliseInterface implementation
@@ -216,13 +217,13 @@ class OutputFilter
     /**
      * Cleans text of all formatting and scripting code.
      *
-     * @param   string  $text  Text to clean
+     * @param   ?string  $text  Text to clean
      *
      * @return  string  Cleaned text.
      *
      * @since   1.0
      */
-    public static function cleanText(&$text)
+    public static function cleanText($text)
     {
         $text = preg_replace("'<script[^>]*>.*?</script>'si", '', $text);
         $text = preg_replace('/<a\s+.*?href="([^"]+)"[^>]*>([^<]+)<\/a>/is', '\2 (\1)', $text);
