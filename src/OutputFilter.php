@@ -217,7 +217,7 @@ class OutputFilter
     /**
      * Cleans text of all formatting and scripting code.
      *
-     * @param   string  $text  Text to clean
+     * @param   ?string  $text  Text to clean
      *
      * @return  string  Cleaned text.
      *

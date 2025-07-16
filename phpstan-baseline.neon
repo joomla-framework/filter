@@ -17,3 +17,9 @@ parameters:
 			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/OutputFilter.php
+
+		-
+			message: '#^Method Joomla\\Filter\\OutputFilter\:\:cleanText\(\) never assigns null to &\$text so it can be removed from the by\-ref type\.$#'
+			identifier: parameterByRef.unusedType
+			count: 1
+			path: src/OutputFilter.php
