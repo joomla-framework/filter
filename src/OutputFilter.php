@@ -144,7 +144,7 @@ class OutputFilter
             if (empty($language) || $language === '*' || self::$language->getLanguage() === $language) {
                 $str = self::$language->transliterate($str);
             } else {
-                $str = (new LanguageFactory)->getLanguage(self::$language->getBasePath(), $language, self::$language->getDebug())->transliterate($str);
+                $str = (new LanguageFactory())->getLanguage(self::$language->getBasePath(), $language, self::$language->getDebug())->transliterate($str);
             }
         } else {
             // Fallback behavior based on the Language package's en-GB LocaliseInterface implementation
