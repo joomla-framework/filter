@@ -223,7 +223,7 @@ class OutputFilter
      *
      * @since   1.0
      */
-    public static function cleanText($text)
+    public static function cleanText(&$text)
     {
         $text = preg_replace("'<script[^>]*>.*?</script>'si", '', $text);
         $text = preg_replace('/<a\s+.*?href="([^"]+)"[^>]*>([^<]+)<\/a>/is', '\2 (\1)', $text);
