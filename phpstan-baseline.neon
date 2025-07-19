@@ -1,19 +1,24 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
+			message: """
+				#^Call to deprecated method decode\\(\\) of class Joomla\\\\Filter\\\\InputFilter\\:
+				This method will be removed once support for PHP 5\\.3 is discontinued\\.$#
+			"""
 			count: 1
 			path: src/InputFilter.php
 
 		-
-			message: '#^Call to function is_null\(\) with int will always evaluate to false\.$#'
-			identifier: function.impossibleType
+			message: "#^Call to function is_null\\(\\) with int will always evaluate to false\\.$#"
 			count: 1
 			path: src/OutputFilter.php
 
 		-
-			message: '#^Call to function is_object\(\) with object will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
+			message: "#^Parameter \\#1 \\$parserRegistry of class Joomla\\\\Language\\\\Language constructor expects Joomla\\\\Language\\\\ParserRegistry, string given\\.$#"
+			count: 1
+			path: src/OutputFilter.php
+
+		-
+			message: "#^Parameter \\#3 \\$lang of class Joomla\\\\Language\\\\Language constructor expects string, bool given\\.$#"
 			count: 1
 			path: src/OutputFilter.php
