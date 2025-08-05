@@ -664,6 +664,24 @@ class InputFilterTest extends TestCase
                 '<img />',
                 'From generic cases',
             ],
+            'Kill script with tab' => [
+                '',
+                "<img src=\"java\tscript:alert();\" />",
+                '<img />',
+                'From generic cases',
+            ],
+            'Kill script with encoded tab' => [
+                '',
+                "<img src=\"java&#x09;script:alert();\" />",
+                '<img />',
+                'From generic cases',
+            ],
+            'Kill script with space' => [
+                '',
+                '<img src="java script:alert();" />',
+                '<img />',
+                'From generic cases',
+            ],
             'Nested tags' => [
                 '',
                 '<em><strong>Fred</strong></em>',
@@ -777,6 +795,24 @@ class InputFilterTest extends TestCase
             'Kill script' => [
                 '',
                 '<img src="javascript:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with tab' => [
+                '',
+                "<img src=\"java\tscript:alert();\" />",
+                '',
+                'From specific cases',
+            ],
+            'Kill script with encoded tab' => [
+                '',
+                "<img src=\"java&#x09;script:alert();\" />",
+                '',
+                'From specific cases',
+            ],
+            'Kill script with space' => [
+                '',
+                '<img src="java script:alert();" />',
                 '',
                 'From specific cases',
             ],
@@ -932,6 +968,24 @@ class InputFilterTest extends TestCase
                 '<img src="javascript:alert();" />',
                 '<img />',
                 'From specific cases',
+            ],
+            'Kill script with tab' => [
+                '',
+                "<img src=\"java\tscript:alert();\" />",
+                '<img />',
+                'From generic cases',
+            ],
+            'Kill script with encoded tab' => [
+                '',
+                "<img src=\"java&#x09;script:alert();\" />",
+                '<img />',
+                'From generic cases',
+            ],
+            'Kill script with space' => [
+                '',
+                '<img src="java script:alert();" />',
+                '<img />',
+                'From generic cases',
             ],
             'Nested tags' => [
                 '',
@@ -1106,6 +1160,24 @@ class InputFilterTest extends TestCase
             'Kill script' => [
                 '',
                 '<img src="javascript:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with tab' => [
+                '',
+                "<img src=\"java\tscript:alert();\" />",
+                '',
+                'From specific cases',
+            ],
+            'Kill script with encoded tab' => [
+                '',
+                "<img src=\"java&#x09;script:alert();\" />",
+                '',
+                'From specific cases',
+            ],
+            'Kill script with space' => [
+                '',
+                '<img src="java script:alert();" />',
                 '',
                 'From specific cases',
             ],
@@ -1615,6 +1687,24 @@ class InputFilterTest extends TestCase
             'Kill script' => [
                 '',
                 '<img src="javascript:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with tab' => [
+                '',
+                "<img src=\"java\tscript:alert();\" />",
+                '',
+                'From specific cases',
+            ],
+            'Kill script with encoded tab' => [
+                '',
+                "<img src=\"java&#x09;script:alert();\" />",
+                '',
+                'From specific cases',
+            ],
+            'Kill script with space' => [
+                '',
+                '<img src="java script:alert();" />',
                 '',
                 'From specific cases',
             ],
