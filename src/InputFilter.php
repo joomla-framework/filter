@@ -605,6 +605,11 @@ class InputFilter
                 continue;
             }
 
+            // Strip html data URIs
+            if (stripos($attrSubSet[1], 'data:text/html') === 0) {
+                continue;
+            }
+
             // Is our attribute in the user input array?
             $attrFound = \in_array(strtolower($attrSubSet[0]), $this->attrArray);
 
