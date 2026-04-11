@@ -664,6 +664,12 @@ class InputFilterTest extends TestCase
                 '<img />',
                 'From generic cases',
             ],
+            'Kill html data uris' => [
+                '',
+                '<a href="data:text/html,<script>alert(1)</script>">Data link</a>',
+                '<a>Data link</a>',
+                'From generic cases',
+            ],
             'Kill script with tab' => [
                 '',
                 "<img src=\"java\tscript:alert();\" />",
@@ -796,6 +802,12 @@ class InputFilterTest extends TestCase
                 '',
                 '<img src="javascript:alert();" />',
                 '',
+                'From specific cases',
+            ],
+            'Kill html data uris' => [
+                '',
+                '<a href="data:text/html,<script>alert(1)</script>">Data link</a>',
+                'Data link',
                 'From specific cases',
             ],
             'Kill script with tab' => [
@@ -967,6 +979,12 @@ class InputFilterTest extends TestCase
                 '',
                 '<img src="javascript:alert();" />',
                 '<img />',
+                'From specific cases',
+            ],
+            'Kill html data uris' => [
+                '',
+                '<a href="data:text/html,<script>alert(1)</script>">Data link</a>',
+                'Data link',
                 'From specific cases',
             ],
             'Kill script with tab' => [
@@ -1163,6 +1181,12 @@ class InputFilterTest extends TestCase
                 '',
                 'From specific cases',
             ],
+            'Kill html data uris' => [
+                '',
+                '<a href="data:text/html,<script>alert(1)</script>">Data link</a>',
+                'Data link',
+                'From specific cases',
+            ],
             'Kill script with tab' => [
                 '',
                 "<img src=\"java\tscript:alert();\" />",
@@ -1312,6 +1336,12 @@ class InputFilterTest extends TestCase
                 '',
                 '<img src="javascript:alert();" />',
                 '<img />',
+                'From specific cases',
+            ],
+            'Kill html data uris' => [
+                '',
+                '<a href="data:text/html,<script>alert(1)</script>">Data link</a>',
+                'Data link',
                 'From specific cases',
             ],
             'Nested tags' => [
