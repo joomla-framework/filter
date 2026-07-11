@@ -18,11 +18,9 @@ use PHPUnit\Framework\TestCase;
 class FilterTestObject
 {
     public $string1;
-
     public $string2;
-
     public $string3;
-
+    public $_string4;   
     public $array1;
 
     /**
@@ -33,6 +31,7 @@ class FilterTestObject
         $this->string1 = "<script>alert();</script>";
         $this->string2 = "This is a test.";
         $this->string3 = "<script>alert(3);</script>";
+        $this->_string4 = "<script>alert();</script>";
         $this->array1  = [1, 2, 3];
     }
 }
@@ -79,6 +78,7 @@ class OutputFilterTest extends TestCase
         $this->assertEquals('&lt;script&gt;alert();&lt;/script&gt;', $this->safeObject->string1, "Script tag should be defused");
         $this->assertEquals('This is a test.', $this->safeObject->string2, "Plain text should pass");
         $this->assertEquals('<script>alert(3);</script>', $this->safeObject->string3, "This Script tag should be passed");
+        $this->assertEquals('<script>alert();</script>', $this->safeObject->_string4, "Property which begins with underscore should pass.");
     }
 
     /**
@@ -90,6 +90,7 @@ class OutputFilterTest extends TestCase
         $this->assertEquals('<script>alert();</script>', $this->safeObject->string1, "Script tag should pass array test");
         $this->assertEquals('This is a test.', $this->safeObject->string2, "Plain text should pass array test");
         $this->assertEquals('<script>alert(3);</script>', $this->safeObject->string3, "This Script tag should pass array test");
+        $this->assertEquals('<script>alert();</script>', $this->safeObject->_string4, "Property which begins with underscore should pass array test.");
     }
 
     /**

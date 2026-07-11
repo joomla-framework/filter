@@ -49,7 +49,7 @@ class OutputFilter
 
         if (\is_object($mixed)) {
             foreach (get_object_vars($mixed) as $k => $v) {
-                if (\is_array($v) || \is_object($v) || $v == null || substr($k, 1, 1) == '_') {
+                if (\is_array($v) || \is_object($v) || $v == null || substr($k, 0, 1) == '_') {
                     continue;
                 }
 
