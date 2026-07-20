@@ -287,4 +287,29 @@ class OutputFilter
 
         return $string;
     }
+
+    /**
+     * Escapes potential characters that start a formula in a CSV value to prevent injection attacks.
+     *
+     * A value beginning with `=`, `+`, `-` or `@` is evaluated as a formula by spreadsheet
+     * applications when the file is opened, so a leading space is prepended to keep it inert.
+     *
+     * @param   mixed  $value  The CSV field value.
+     *
+     * @return  mixed  The value, prefixed with a space when it starts with a formula character.
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public static function escapeCsvFormula($value)
+    {
+        if ($value === '') {
+            return $value;
+        }
+
+        if (\in_array($value[0], ['=', '+', '-', '@'], true)) {
+            return ' ' . $value;
+        }
+
+        return $value;
+    }
 }

@@ -261,4 +261,36 @@ class OutputFilterTest extends TestCase
             'Should remove nested iFrame tags'
         );
     }
+
+    /**
+     * Data provider for testEscapeCsvFormula.
+     *
+     * @return  array
+     */
+    public function dataEscapeCsvFormula()
+    {
+        return [
+            'empty string'      => ['', ''],
+            'plain text'        => ['Banner name', 'Banner name'],
+            'equals sign'       => ['=1+1', ' =1+1'],
+            'plus sign'         => ['+1', ' +1'],
+            'minus sign'        => ['-1', ' -1'],
+            'at sign'           => ['@SUM(A1)', ' @SUM(A1)'],
+            'hyperlink formula' => ['=HYPERLINK("http://example.com","x")', ' =HYPERLINK("http://example.com","x")'],
+            'inner equals'      => ['a=1', 'a=1'],
+        ];
+    }
+
+    /**
+     * Tests escaping of CSV formula characters.
+     *
+     * @param   string  $value     The value to escape.
+     * @param   string  $expected  The expected result.
+     *
+     * @dataProvider  dataEscapeCsvFormula
+     */
+    public function testEscapeCsvFormula($value, $expected)
+    {
+        $this->assertEquals($expected, $this->object->escapeCsvFormula($value));
+    }
 }
