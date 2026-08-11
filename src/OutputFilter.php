@@ -294,9 +294,9 @@ class OutputFilter
      * A value beginning with `=`, `+`, `-` or `@` is evaluated as a formula by spreadsheet
      * applications when the file is opened, so a leading space is prepended to keep it inert.
      *
-     * @param   mixed  $value  The CSV field value.
+     * @param   string  $value  The CSV field value.
      *
-     * @return  mixed  The value, prefixed with a space when it starts with a formula character.
+     * @return  string  The value, prefixed with a space when it starts with a formula character.
      *
      * @since   __DEPLOY_VERSION__
      */
