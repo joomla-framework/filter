@@ -300,7 +300,7 @@ class OutputFilter
      *
      * @since   __DEPLOY_VERSION__
      */
-    public static function escapeCsvFormula($value)
+    public static function escapeCsvFormula(string $value): string
     {
         if ($value === '') {
             return $value;
