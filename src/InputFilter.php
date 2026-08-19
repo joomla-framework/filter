@@ -148,6 +148,7 @@ class InputFilter
      */
     private $blockedChars = [
         '&tab;',
+        '&newline;',
         '&space;',
         '&colon;',
         '&column;',
