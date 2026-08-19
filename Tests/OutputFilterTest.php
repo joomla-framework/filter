@@ -267,7 +267,7 @@ class OutputFilterTest extends TestCase
      *
      * @return  array
      */
-    public function dataEscapeCsvFormula()
+    public static function dataEscapeCsvFormula(): array
     {
         return [
             'empty string'      => ['', ''],
@@ -286,9 +286,8 @@ class OutputFilterTest extends TestCase
      *
      * @param   string  $value     The value to escape.
      * @param   string  $expected  The expected result.
-     *
-     * @dataProvider  dataEscapeCsvFormula
      */
+    #[DataProvider('dataEscapeCsvFormula')]
     public function testEscapeCsvFormula($value, $expected)
     {
         $this->assertEquals($expected, $this->object->escapeCsvFormula($value));
