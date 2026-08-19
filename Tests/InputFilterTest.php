@@ -687,6 +687,12 @@ class InputFilterTest extends TestCase
                 '<img />',
                 'From generic cases',
             ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
+                '<img />',
+                'From generic cases',
+            ],
             'Nested tags' => [
                 '',
                 '<em><strong>Fred</strong></em>',
@@ -824,6 +830,12 @@ class InputFilterTest extends TestCase
             'Kill script with space' => [
                 '',
                 '<img src="java script:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
                 '',
                 'From specific cases',
             ],
@@ -1002,6 +1014,12 @@ class InputFilterTest extends TestCase
             'Kill script with space' => [
                 '',
                 '<img src="java script:alert();" />',
+                '<img />',
+                'From generic cases',
+            ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
                 '<img />',
                 'From generic cases',
             ],
@@ -1203,6 +1221,12 @@ class InputFilterTest extends TestCase
             'Kill script with space' => [
                 '',
                 '<img src="java script:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
                 '',
                 'From specific cases',
             ],
@@ -1739,6 +1763,12 @@ class InputFilterTest extends TestCase
             'Kill script with space' => [
                 '',
                 '<img src="java script:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
                 '',
                 'From specific cases',
             ],
