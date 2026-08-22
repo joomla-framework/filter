@@ -2176,6 +2176,103 @@ class InputFilterTest extends TestCase
     }
 
     /**
+     * Data provider for attribute values that browsers reconstruct into a `javascript:` URL.
+     *
+     * @return  array
+     */
+    public static function dangerousAttributeValues(): array
+    {
+        return [
+            'plain javascript scheme'              => ['javascript:alert(1)'],
+            'literal tab'                          => ["java\tscript:alert(1)"],
+            'literal newline'                      => ["java\nscript:alert(1)"],
+            'decimal LF, terminated'               => ['java&#10;script:alert(1)'],
+            'decimal LF, unterminated'             => ['java&#10script:alert(1)'],
+            'decimal LF, zero padded'              => ['java&#000010;script:alert(1)'],
+            'hex LF, terminated'                   => ['java&#xA;script:alert(1)'],
+            'hex LF, unterminated'                 => ['java&#x0Ascript:alert(1)'],
+            'decimal CR, unterminated'             => ['java&#13script:alert(1)'],
+            'decimal tab, unterminated'            => ['java&#09script:alert(1)'],
+            'HTML5 named entity &NewLine;'         => ['java&NewLine;script:alert(1)'],
+            'HTML5 named entity &Tab;'             => ['java&Tab;script:alert(1)'],
+            'HTML5 named entity, mixed case value' => ['JaVa&NewLine;ScRiPt:alert(1)'],
+            'vbscript with &NewLine;'              => ['vb&NewLine;script:alert(1)'],
+            'livescript with decimal LF'           => ['live&#10;script:alert(1)'],
+        ];
+    }
+
+    /**
+     * Values that browsers decode back into a dangerous scheme must be reported by checkAttribute().
+     *
+     * @param   string  $value  The attribute value to check.
+     *
+     * @return  void
+     */
+    #[DataProvider('dangerousAttributeValues')]
+    public function testCheckAttributeDetectsDecodedSchemes($value)
+    {
+        $this->assertTrue(
+            InputFilter::checkAttribute(['href', $value]),
+            'checkAttribute() must flag a value a browser decodes into a dangerous scheme'
+        );
+    }
+
+    /**
+     * Data provider for attribute values that must not be treated as dangerous.
+     *
+     * @return  array
+     */
+    public static function harmlessAttributeValues(): array
+    {
+        return [
+            'absolute url with entity'  => ['https://example.com/a?b=1&amp;c=2'],
+            'absolute url with raw amp' => ['https://example.com/a?b=1&c=2'],
+            'relative path'             => ['/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf'],
+            'parent path'               => ['../index.html'],
+            'anchor'                    => ['#anchor'],
+            'mailto'                    => ['mailto:someone@example.com'],
+            'tel'                       => ['tel:+4912345678'],
+            'base64 image data uri'     => ['data:image/png;base64,iVBORw0KGgo='],
+            'multibyte text'            => ['Grüße &amp; Küsse'],
+            'astral plane numeric ref'  => ['java&#x1F600;script-emoji.png'],
+            'word javascript in text'   => ['read-more-about-javascript.html'],
+        ];
+    }
+
+    /**
+     * Harmless values must not be flagged by checkAttribute().
+     *
+     * @param   string  $value  The attribute value to check.
+     *
+     * @return  void
+     */
+    #[DataProvider('harmlessAttributeValues')]
+    public function testCheckAttributeAllowsHarmlessValues($value)
+    {
+        $this->assertFalse(
+            InputFilter::checkAttribute(['href', $value]),
+            'checkAttribute() must not flag a harmless attribute value'
+        );
+    }
+
+    /**
+     * The `expression` check must stay limited to the style attribute.
+     *
+     * @return  void
+     */
+    public function testCheckAttributeOnlyFlagsExpressionOnStyleAttribute()
+    {
+        $this->assertTrue(
+            InputFilter::checkAttribute(['style', 'width:expression(alert(1))']),
+            'A CSS expression in a style attribute must be flagged'
+        );
+
+        $this->assertFalse(
+            InputFilter::checkAttribute(['title', 'a mathematical expression']),
+            'The word expression outside of a style attribute must not be flagged'
+        );
+    }
+    /**
      * Execute a test case with clean() using custom class blocked filter settings (strips bad tags).
      *
      * @param   string  $type     The type of input
