@@ -693,6 +693,25 @@ class InputFilterTest extends TestCase
                 '<img />',
                 'From generic cases',
             ],
+            'Kill script with numeric line feed &#10;' => [
+                'string',
+                '<a href="java&#10;script:alert(1)">click</a>',
+                'click',
+                'From XSS bypass issues - numeric LF',
+            ],
+            'Kill script with hex line feed &#xA;' => [
+                'string',
+                '<a href="java&#xA;script:alert(1)">click</a>',
+                'click',
+                'From XSS bypass issues - hex LF',
+            ],
+            'Kill script with NewLine entity' => [
+                'string',
+                '<a href="java&NewLine;script:alert(1)">click</a>',
+                'click',
+                'From XSS bypass issues - &NewLine;',
+            ],
+
             'Nested tags' => [
                 '',
                 '<em><strong>Fred</strong></em>',
@@ -1574,6 +1593,24 @@ class InputFilterTest extends TestCase
             'This is <span class="myclass" font="myfont"> some more</span> text.</p>';
 
         $casesSpecific = [
+            'Kill script with numeric line feed &#10;' => [
+                'string',
+                '<a href="java&#10;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - numeric LF',
+            ],
+            'Kill script with hex line feed &#xA;' => [
+                'string',
+                '<a href="java&#xA;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - hex LF',
+            ],
+            'Kill script with NewLine entity' => [
+                'string',
+                '<a href="java&NewLine;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - &NewLine;',
+            ],
             'security_tracker_24802_a' => [
                 '',
                 '<img src="<img src=x"/onerror=alert(1)//">',
@@ -1802,6 +1839,24 @@ class InputFilterTest extends TestCase
             "/.source))//'/> ";
 
         $casesSpecific = [
+            'Kill script with numeric line feed &#10;' => [
+                'string',
+                '<a href="java&#10;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - numeric LF',
+            ],
+            'Kill script with hex line feed &#xA;' => [
+                'string',
+                '<a href="java&#xA;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - hex LF',
+            ],
+            'Kill script with NewLine entity' => [
+                'string',
+                '<a href="java&NewLine;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - &NewLine;',
+            ],
             'Kill script' => [
                 '',
                 '<img src="javascript:alert();" />',
@@ -1918,6 +1973,24 @@ class InputFilterTest extends TestCase
     public function blockedClass()
     {
         $casesSpecific = [
+            'Kill script with numeric line feed &#10;' => [
+                'string',
+                '<a href="java&#10;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - numeric LF',
+            ],
+            'Kill script with hex line feed &#xA;' => [
+                'string',
+                '<a href="java&#xA;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - hex LF',
+            ],
+            'Kill script with NewLine entity' => [
+                'string',
+                '<a href="java&NewLine;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - &NewLine;',
+            ],
             'tracker9725' => [
                 // Test for recursion with single tags
                 'string',
