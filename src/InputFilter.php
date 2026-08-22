@@ -272,30 +272,48 @@ class InputFilter
     {
         $attrSubSet[0] = strtolower($attrSubSet[0]);
 
-        // Decode HTML entities BEFORE lowercasing to preserve case-sensitive entities like &NewLine;
-        // ENT_HTML5 is required to decode HTML5-specific entities that browsers support
-        $decoded = html_entity_decode($attrSubSet[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        /*
+         * Decode the value the same way a browser would before looking for a dangerous scheme.
+         *
+         * This has to happen BEFORE lowercasing: PHP's entity tables are case sensitive, so
+         * lowercasing first would turn the HTML5 entity `&NewLine;` into the unknown `&newline;`
+         * and it would survive decoding untouched.
+         */
+        $decoded = html_entity_decode($attrSubSet[1], \ENT_QUOTES | \ENT_HTML5, 'UTF-8');
 
-        // Also decode numeric character references that might be in decimal or hex format
-        // This handles cases like &#10; &#xA; etc. that browsers will decode
+        /*
+         * html_entity_decode() only resolves numeric character references that are properly
+         * terminated with a semicolon. Browsers are more forgiving and also consume unterminated
+         * references such as `java&#10script:`, so resolve those here as well.
+         */
         $decoded = preg_replace_callback(
-            '/&#(?:x[a-f0-9]+|[0-9]+);/i',
+            '/&#(x[0-9a-f]+|[0-9]+);?/i',
             static function ($matches) {
-                $char = substr($matches[0], 1, -1);
-                if (str_starts_with($char, 'x') || str_starts_with($char, 'X')) {
-                    $char = hexdec(substr($char, 1));
+                $reference = $matches[1];
+
+                if ($reference[0] === 'x' || $reference[0] === 'X') {
+                    $codepoint = (int) hexdec(substr($reference, 1));
                 } else {
-                    $char = (int) $char;
+                    $codepoint = (int) $reference;
                 }
 
-                return \chr($char);
+                // Ignore anything that is not a scalar Unicode value and keep the raw match instead.
+                // Surrogates (U+D800 - U+DFFF) are excluded as they are not encodable on their own.
+                if ($codepoint > 0x10FFFF || ($codepoint >= 0xD800 && $codepoint <= 0xDFFF)) {
+                    return $matches[0];
+                }
+
+                // mb_chr() is used over chr() so codepoints above U+00FF are not truncated
+                return mb_chr($codepoint, 'UTF-8');
             },
             $decoded
         );
 
-        // Now lowercase and remove common XSS-evasion characters including control characters
+        // Now that everything is decoded, normalise the value for the checks below
         $attrSubSet[1] = strtolower($decoded);
-        $attrSubSet[1] = str_replace(["\t", "\n", "\r", " ", "\0"], "", $attrSubSet[1]);
+
+        // Remove common XSS-evasion characters
+        $attrSubSet[1] = str_replace(["\t", "\n", "\r", " ", "\0", "\v", "\f"], '', $attrSubSet[1]);
 
         return (strpos($attrSubSet[1], 'expression') !== false && $attrSubSet[0] === 'style')
             || preg_match('/(?:(?:java|vb|live)script|behaviour|mocha)(?::|&colon;|&column;)/', $attrSubSet[1]) !== 0;
