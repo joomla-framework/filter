@@ -382,13 +382,13 @@ class InputFilter
             }
 
             /*
-             * Exclude all "non-regular" tagnames
-             * OR no tagname
+             * No tagname
+             * OR exclude all "non-regular" tagnames
              * OR remove if xssauto is on and tag is blocked
              */
             if (
-                (!preg_match('/^[a-z][a-z0-9]*$/i', $tagName))
-                || (!$tagName)
+                (!$tagName)
+                || (!preg_match('/^[a-z][a-z0-9]*$/i', $tagName))
                 || ((\in_array(strtolower($tagName), $this->blockedTags)) && $this->xssAuto)
             ) {
                 $postTag      = substr($postTag, ($tagLength + 2));
