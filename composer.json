@@ -11,7 +11,7 @@
     },
     "require-dev": {
         "joomla/language": "^4.0",
-        "phpunit/phpunit": "^12.2.7",
+        "phpunit/phpunit": "^12.5 || ^13.0",
         "squizlabs/php_codesniffer": "^4.0",
         "phpstan/phpstan": "^2.1.17",
         "phpstan/phpstan-deprecation-rules": "^2.0.3"
