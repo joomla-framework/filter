@@ -2048,4 +2048,17 @@ class InputFilterTest extends TestCase
 
         $this->assertEquals($expected, $filter->clean($object));
     }
+
+    /**
+     * A tab inside the scheme must not slip a data:text/html URI past the attribute filter,
+     * as browsers strip tab/newline characters when parsing a URL.
+     */
+    public function testCleanStripsTabbedHtmlDataUri()
+    {
+        $filter = new InputFilter(['a'], ['href']);
+
+        $input = "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>";
+
+        $this->assertSame('<a>Data link</a>', $filter->clean($input, 'html'));
+    }
 }
