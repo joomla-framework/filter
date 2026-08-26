@@ -906,6 +906,12 @@ class InputFilter
      */
     private function cleanPath($source)
     {
+        // Reject any parent-directory (`..`) segment. The patterns below otherwise let a
+        // single `..` through on Linux-style paths (e.g. images/../config.php).
+        if (preg_match('#(?:^|[\\\\/])\.\.(?:[\\\\/]|$)#', $source)) {
+            return '';
+        }
+
         $linuxPattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/]+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
 
         if (preg_match($linuxPattern, $source)) {

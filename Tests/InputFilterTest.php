@@ -508,6 +508,30 @@ class InputFilterTest extends TestCase
                 'C:\Documents\Newsletters\tmp',
                 'From generic cases',
             ],
+            'path with parent traversal segment' => [
+                'path',
+                'uploads/../config.php',
+                '',
+                'From generic cases',
+            ],
+            'path with leading parent traversal' => [
+                'path',
+                '../secret',
+                '',
+                'From generic cases',
+            ],
+            'path with trailing parent traversal' => [
+                'path',
+                'uploads/..',
+                '',
+                'From generic cases',
+            ],
+            'filename containing dots is kept' => [
+                'path',
+                'archive/backup..2018/file.txt',
+                'archive/backup..2018/file.txt',
+                'From generic cases',
+            ],
             'user_01' => [
                 'username',
                 '&<f>r%e\'d',
