@@ -230,6 +230,12 @@ class OutputFilterTest extends TestCase
             $this->object->stripImages('Hello <<img>img src="wave.jpg"> I am waving at you.'),
             'Should remove nested img tags'
         );
+
+        $this->assertEquals(
+            'Hello  I am waving at you.',
+            $this->object->stripImages("Hello <img\nsrc=\"wave.jpg\" onerror=\"alert(1)\"> I am waving at you."),
+            'Should remove img tags containing newlines'
+        );
     }
 
     /**
@@ -259,6 +265,12 @@ class OutputFilterTest extends TestCase
                 'Hello <<iframe>iframe src="http://player.vimeo.com/video/37576499" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframeiframe> I am waving at you.'
             ),
             'Should remove nested iFrame tags'
+        );
+
+        $this->assertEquals(
+            'Hello  I am waving at you.',
+            $this->object->stripIframes("Hello <iframe\nsrc=\"http://player.vimeo.com/video/37576499\"></iframe> I am waving at you."),
+            'Should remove iFrame tags containing newlines'
         );
     }
 

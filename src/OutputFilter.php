@@ -263,8 +263,8 @@ class OutputFilter
      */
     public static function stripImages($string)
     {
-        while (preg_match('#(<[/]?img.*>)#Ui', $string)) {
-            $string = preg_replace('#(<[/]?img.*>)#Ui', '', $string);
+        while (preg_match('#(<[/]?img.*>)#Uis', $string)) {
+            $string = preg_replace('#(<[/]?img.*>)#Uis', '', $string);
         }
 
         return $string;
@@ -281,8 +281,8 @@ class OutputFilter
      */
     public static function stripIframes($string)
     {
-        while (preg_match('#(<[/]?iframe.*>)#Ui', $string)) {
-            $string = preg_replace('#(<[/]?iframe.*>)#Ui', '', $string);
+        while (preg_match('#(<[/]?iframe.*>)#Uis', $string)) {
+            $string = preg_replace('#(<[/]?iframe.*>)#Uis', '', $string);
         }
 
         return $string;
