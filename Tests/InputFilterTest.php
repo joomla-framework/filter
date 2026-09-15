@@ -688,6 +688,12 @@ class InputFilterTest extends TestCase
                 '<img />',
                 'From generic cases',
             ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
+                '<img />',
+                'From generic cases',
+            ],
             'Nested tags' => [
                 '',
                 '<em><strong>Fred</strong></em>',
@@ -760,6 +766,18 @@ class InputFilterTest extends TestCase
                 '<img height="300" />',
                 'From generic cases',
             ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\"></span>",
+                "<span title=\"foobar\"></span>",
+                'From generic cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "<a>Data link</a>",
+                'From generic cases',
+            ],
             'Bad Attribute Name' => [
                 '',
                 '<br 3bb />',
@@ -825,6 +843,12 @@ class InputFilterTest extends TestCase
             'Kill script with space' => [
                 '',
                 '<img src="java script:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
                 '',
                 'From specific cases',
             ],
@@ -912,6 +936,18 @@ class InputFilterTest extends TestCase
                 '<img height="300" ismap />',
                 '',
                 'From specific cases',
+            ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\">Foo</span>",
+                "Foo",
+                'From specific cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "Data link",
+                'From generic cases',
             ],
             'Bad Attribute Name' => [
                 '',
@@ -1005,6 +1041,12 @@ class InputFilterTest extends TestCase
                 '<img />',
                 'From generic cases',
             ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
+                '<img />',
+                'From generic cases',
+            ],
             'Nested tags' => [
                 '',
                 '<em><strong>Fred</strong></em>',
@@ -1089,6 +1131,18 @@ class InputFilterTest extends TestCase
                 '<img height="300" ismap />',
                 '<img />',
                 'From specific cases',
+            ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\">Foo</span>",
+                "Foo",
+                'From specific cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "Data link",
+                'From generic cases',
             ],
             'Bad Attribute Name' => [
                 '',
@@ -1205,6 +1259,12 @@ class InputFilterTest extends TestCase
                 '',
                 'From specific cases',
             ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
+                '',
+                'From specific cases',
+            ],
             'Nested tags' => [
                 '',
                 '<em><strong>Fred</strong></em>',
@@ -1276,6 +1336,18 @@ class InputFilterTest extends TestCase
                 '<img height="300" ismap />',
                 '',
                 'From specific cases',
+            ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\">Foo</span>",
+                "Foo",
+                'From specific cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "Data link",
+                'From generic cases',
             ],
             'Bad Attribute Name' => [
                 '',
@@ -1415,6 +1487,18 @@ class InputFilterTest extends TestCase
                 '<img ismap class />',
                 '<img />',
                 'From specific cases',
+            ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\">Foo</span>",
+                "Foo",
+                'From specific cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "Data link",
+                'From generic cases',
             ],
             'Bad Attribute Name' => [
                 '',
@@ -1735,6 +1819,12 @@ class InputFilterTest extends TestCase
             'Kill script with space' => [
                 '',
                 '<img src="java script:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
                 '',
                 'From specific cases',
             ],
