@@ -688,6 +688,30 @@ class InputFilterTest extends TestCase
                 '<img />',
                 'From generic cases',
             ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
+                '<img />',
+                'From generic cases',
+            ],
+            'Kill script with numeric line feed &#10;' => [
+                'string',
+                '<a href="java&#10;script:alert(1)">click</a>',
+                'click',
+                'From XSS bypass issues - numeric LF',
+            ],
+            'Kill script with hex line feed &#xA;' => [
+                'string',
+                '<a href="java&#xA;script:alert(1)">click</a>',
+                'click',
+                'From XSS bypass issues - hex LF',
+            ],
+            'Kill script with NewLine entity' => [
+                'string',
+                '<a href="java&NewLine;script:alert(1)">click</a>',
+                'click',
+                'From XSS bypass issues - &NewLine;',
+            ],
             'Nested tags' => [
                 '',
                 '<em><strong>Fred</strong></em>',
@@ -760,6 +784,18 @@ class InputFilterTest extends TestCase
                 '<img height="300" />',
                 'From generic cases',
             ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\"></span>",
+                "<span title=\"foobar\"></span>",
+                'From generic cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "<a>Data link</a>",
+                'From generic cases',
+            ],
             'Bad Attribute Name' => [
                 '',
                 '<br 3bb />',
@@ -825,6 +861,12 @@ class InputFilterTest extends TestCase
             'Kill script with space' => [
                 '',
                 '<img src="java script:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
                 '',
                 'From specific cases',
             ],
@@ -912,6 +954,18 @@ class InputFilterTest extends TestCase
                 '<img height="300" ismap />',
                 '',
                 'From specific cases',
+            ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\">Foo</span>",
+                "Foo",
+                'From specific cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "Data link",
+                'From generic cases',
             ],
             'Bad Attribute Name' => [
                 '',
@@ -1005,6 +1059,12 @@ class InputFilterTest extends TestCase
                 '<img />',
                 'From generic cases',
             ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
+                '<img />',
+                'From generic cases',
+            ],
             'Nested tags' => [
                 '',
                 '<em><strong>Fred</strong></em>',
@@ -1089,6 +1149,18 @@ class InputFilterTest extends TestCase
                 '<img height="300" ismap />',
                 '<img />',
                 'From specific cases',
+            ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\">Foo</span>",
+                "Foo",
+                'From specific cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "Data link",
+                'From generic cases',
             ],
             'Bad Attribute Name' => [
                 '',
@@ -1205,6 +1277,12 @@ class InputFilterTest extends TestCase
                 '',
                 'From specific cases',
             ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
+                '',
+                'From specific cases',
+            ],
             'Nested tags' => [
                 '',
                 '<em><strong>Fred</strong></em>',
@@ -1276,6 +1354,18 @@ class InputFilterTest extends TestCase
                 '<img height="300" ismap />',
                 '',
                 'From specific cases',
+            ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\">Foo</span>",
+                "Foo",
+                'From specific cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "Data link",
+                'From generic cases',
             ],
             'Bad Attribute Name' => [
                 '',
@@ -1416,6 +1506,18 @@ class InputFilterTest extends TestCase
                 '<img />',
                 'From specific cases',
             ],
+            'Attribute with newline' => [
+                '',
+                "<span title=\"foo\nbar\">Foo</span>",
+                "Foo",
+                'From specific cases',
+            ],
+            'Attribute with tab in html data uri' => [
+                '',
+                "<a href=\"data:text/\thtml;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\">Data link</a>",
+                "Data link",
+                'From generic cases',
+            ],
             'Bad Attribute Name' => [
                 '',
                 '<br 300 />',
@@ -1487,6 +1589,24 @@ class InputFilterTest extends TestCase
             'This is <span class="myclass" font="myfont"> some more</span> text.</p>';
 
         $casesSpecific = [
+            'Kill script with numeric line feed &#10;' => [
+                'string',
+                '<a href="java&#10;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - numeric LF',
+            ],
+            'Kill script with hex line feed &#xA;' => [
+                'string',
+                '<a href="java&#xA;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - hex LF',
+            ],
+            'Kill script with NewLine entity' => [
+                'string',
+                '<a href="java&NewLine;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - &NewLine;',
+            ],
             'security_tracker_24802_a' => [
                 '',
                 '<img src="<img src=x"/onerror=alert(1)//">',
@@ -1714,6 +1834,24 @@ class InputFilterTest extends TestCase
             "/.source))//'/> ";
 
         $casesSpecific = [
+            'Kill script with numeric line feed &#10;' => [
+                'string',
+                '<a href="java&#10;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - numeric LF',
+            ],
+            'Kill script with hex line feed &#xA;' => [
+                'string',
+                '<a href="java&#xA;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - hex LF',
+            ],
+            'Kill script with NewLine entity' => [
+                'string',
+                '<a href="java&NewLine;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - &NewLine;',
+            ],
             'Kill script' => [
                 '',
                 '<img src="javascript:alert();" />',
@@ -1735,6 +1873,12 @@ class InputFilterTest extends TestCase
             'Kill script with space' => [
                 '',
                 '<img src="java script:alert();" />',
+                '',
+                'From specific cases',
+            ],
+            'Kill script with newline entity' => [
+                '',
+                '<img src="java&NewLine;script:alert();" />',
                 '',
                 'From specific cases',
             ],
@@ -1823,6 +1967,24 @@ class InputFilterTest extends TestCase
     public static function blockedClass(): array
     {
         $casesSpecific = [
+            'Kill script with numeric line feed &#10;' => [
+                'string',
+                '<a href="java&#10;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - numeric LF',
+            ],
+            'Kill script with hex line feed &#xA;' => [
+                'string',
+                '<a href="java&#xA;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - hex LF',
+            ],
+            'Kill script with NewLine entity' => [
+                'string',
+                '<a href="java&NewLine;script:alert(1)">click</a>',
+                '<a>click</a>',
+                'From XSS bypass issues - &NewLine;',
+            ],
             'tracker9725' => [
                 // Test for recursion with single tags
                 'string',
@@ -2013,6 +2175,103 @@ class InputFilterTest extends TestCase
         return array_merge(self::casesGeneric(), $casesSpecific);
     }
 
+    /**
+     * Data provider for attribute values that browsers reconstruct into a `javascript:` URL.
+     *
+     * @return  array
+     */
+    public static function dangerousAttributeValues(): array
+    {
+        return [
+            'plain javascript scheme'              => ['javascript:alert(1)'],
+            'literal tab'                          => ["java\tscript:alert(1)"],
+            'literal newline'                      => ["java\nscript:alert(1)"],
+            'decimal LF, terminated'               => ['java&#10;script:alert(1)'],
+            'decimal LF, unterminated'             => ['java&#10script:alert(1)'],
+            'decimal LF, zero padded'              => ['java&#000010;script:alert(1)'],
+            'hex LF, terminated'                   => ['java&#xA;script:alert(1)'],
+            'hex LF, unterminated'                 => ['java&#x0Ascript:alert(1)'],
+            'decimal CR, unterminated'             => ['java&#13script:alert(1)'],
+            'decimal tab, unterminated'            => ['java&#09script:alert(1)'],
+            'HTML5 named entity &NewLine;'         => ['java&NewLine;script:alert(1)'],
+            'HTML5 named entity &Tab;'             => ['java&Tab;script:alert(1)'],
+            'HTML5 named entity, mixed case value' => ['JaVa&NewLine;ScRiPt:alert(1)'],
+            'vbscript with &NewLine;'              => ['vb&NewLine;script:alert(1)'],
+            'livescript with decimal LF'           => ['live&#10;script:alert(1)'],
+        ];
+    }
+
+    /**
+     * Values that browsers decode back into a dangerous scheme must be reported by checkAttribute().
+     *
+     * @param   string  $value  The attribute value to check.
+     *
+     * @return  void
+     */
+    #[DataProvider('dangerousAttributeValues')]
+    public function testCheckAttributeDetectsDecodedSchemes($value)
+    {
+        $this->assertTrue(
+            InputFilter::checkAttribute(['href', $value]),
+            'checkAttribute() must flag a value a browser decodes into a dangerous scheme'
+        );
+    }
+
+    /**
+     * Data provider for attribute values that must not be treated as dangerous.
+     *
+     * @return  array
+     */
+    public static function harmlessAttributeValues(): array
+    {
+        return [
+            'absolute url with entity'  => ['https://example.com/a?b=1&amp;c=2'],
+            'absolute url with raw amp' => ['https://example.com/a?b=1&c=2'],
+            'relative path'             => ['/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf'],
+            'parent path'               => ['../index.html'],
+            'anchor'                    => ['#anchor'],
+            'mailto'                    => ['mailto:someone@example.com'],
+            'tel'                       => ['tel:+4912345678'],
+            'base64 image data uri'     => ['data:image/png;base64,iVBORw0KGgo='],
+            'multibyte text'            => ['Grüße &amp; Küsse'],
+            'astral plane numeric ref'  => ['java&#x1F600;script-emoji.png'],
+            'word javascript in text'   => ['read-more-about-javascript.html'],
+        ];
+    }
+
+    /**
+     * Harmless values must not be flagged by checkAttribute().
+     *
+     * @param   string  $value  The attribute value to check.
+     *
+     * @return  void
+     */
+    #[DataProvider('harmlessAttributeValues')]
+    public function testCheckAttributeAllowsHarmlessValues($value)
+    {
+        $this->assertFalse(
+            InputFilter::checkAttribute(['href', $value]),
+            'checkAttribute() must not flag a harmless attribute value'
+        );
+    }
+
+    /**
+     * The `expression` check must stay limited to the style attribute.
+     *
+     * @return  void
+     */
+    public function testCheckAttributeOnlyFlagsExpressionOnStyleAttribute()
+    {
+        $this->assertTrue(
+            InputFilter::checkAttribute(['style', 'width:expression(alert(1))']),
+            'A CSS expression in a style attribute must be flagged'
+        );
+
+        $this->assertFalse(
+            InputFilter::checkAttribute(['title', 'a mathematical expression']),
+            'The word expression outside of a style attribute must not be flagged'
+        );
+    }
     /**
      * Execute a test case with clean() using custom class blocked filter settings (strips bad tags).
      *

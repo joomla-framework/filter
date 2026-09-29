@@ -148,6 +148,7 @@ class InputFilter
      */
     private $blockedChars = [
         '&tab;',
+        '&newline;',
         '&space;',
         '&colon;',
         '&column;',
@@ -270,10 +271,49 @@ class InputFilter
     public static function checkAttribute($attrSubSet)
     {
         $attrSubSet[0] = strtolower($attrSubSet[0]);
-        $attrSubSet[1] = html_entity_decode(strtolower($attrSubSet[1]), ENT_QUOTES | ENT_HTML401, 'UTF-8');
+
+        /*
+         * Decode the value the same way a browser would before looking for a dangerous scheme.
+         *
+         * This has to happen BEFORE lowercasing: PHP's entity tables are case sensitive, so
+         * lowercasing first would turn the HTML5 entity `&NewLine;` into the unknown `&newline;`
+         * and it would survive decoding untouched.
+         */
+        $decoded = html_entity_decode($attrSubSet[1], \ENT_QUOTES | \ENT_HTML5, 'UTF-8');
+
+        /*
+         * html_entity_decode() only resolves numeric character references that are properly
+         * terminated with a semicolon. Browsers are more forgiving and also consume unterminated
+         * references such as `java&#10script:`, so resolve those here as well.
+         */
+        $decoded = preg_replace_callback(
+            '/&#(x[0-9a-f]+|[0-9]+);?/i',
+            static function ($matches) {
+                $reference = $matches[1];
+
+                if ($reference[0] === 'x' || $reference[0] === 'X') {
+                    $codepoint = (int) hexdec(substr($reference, 1));
+                } else {
+                    $codepoint = (int) $reference;
+                }
+
+                // Ignore anything that is not a scalar Unicode value and keep the raw match instead.
+                // Surrogates (U+D800 - U+DFFF) are excluded as they are not encodable on their own.
+                if ($codepoint > 0x10FFFF || ($codepoint >= 0xD800 && $codepoint <= 0xDFFF)) {
+                    return $matches[0];
+                }
+
+                // mb_chr() is used over chr() so codepoints above U+00FF are not truncated
+                return mb_chr($codepoint, 'UTF-8');
+            },
+            $decoded
+        );
+
+        // Now that everything is decoded, normalise the value for the checks below
+        $attrSubSet[1] = strtolower($decoded);
 
         // Remove common XSS-evasion characters
-        $attrSubSet[1] = str_replace(["\t", "\n", "\r", " ", "\0"], "", $attrSubSet[1]);
+        $attrSubSet[1] = str_replace(["\t", "\n", "\r", " ", "\0", "\v", "\f"], '', $attrSubSet[1]);
 
         return (strpos($attrSubSet[1], 'expression') !== false && $attrSubSet[0] === 'style')
             || preg_match('/(?:(?:java|vb|live)script|behaviour|mocha)(?::|&colon;|&column;)/', $attrSubSet[1]) !== 0;
@@ -586,8 +626,8 @@ class InputFilter
             // Strips unicode, hex, etc
             $attrSubSet[1] = str_replace('&#', '', $attrSubSet[1]);
 
-            // Strip normal newline within attr value
-            $attrSubSet[1] = preg_replace('/[\n\r]/', '', $attrSubSet[1]);
+            // Strip tab and newline within attr value (browsers drop these when parsing a URL)
+            $attrSubSet[1] = preg_replace('/[\t\n\r]/', '', $attrSubSet[1]);
 
             // Strip double quotes
             $attrSubSet[1] = str_replace('"', '', $attrSubSet[1]);
