@@ -2213,8 +2213,9 @@ class InputFilterTest extends TestCase
      * @param   string  $value  The attribute value to check.
      *
      * @return  void
+     *
+     * @dataProvider dangerousAttributeValues
      */
-    #[DataProvider('dangerousAttributeValues')]
     public function testCheckAttributeDetectsDecodedSchemes($value)
     {
         $this->assertTrue(
@@ -2251,8 +2252,9 @@ class InputFilterTest extends TestCase
      * @param   string  $value  The attribute value to check.
      *
      * @return  void
+     *
+     * @dataProvider harmlessAttributeValues
      */
-    #[DataProvider('harmlessAttributeValues')]
     public function testCheckAttributeAllowsHarmlessValues($value)
     {
         $this->assertFalse(
