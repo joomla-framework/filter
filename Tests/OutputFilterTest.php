@@ -263,6 +263,35 @@ class OutputFilterTest extends TestCase
     }
 
     /**
+     * Tests converting strings to URL unicoded slugs.
+     */
+    public function testStringUrlUnicodeSlug()
+    {
+        $this->assertEquals(
+            'what-if-i-do-not-get_this-right',
+            $this->object->stringUrlUnicodeSlug('What-if I do.not get_this right?'),
+            'Should be URL unicoded'
+        );
+
+        $this->assertEquals(
+            'test-test',
+            $this->object->stringUrlUnicodeSlug("test\u{00A0}test"),
+            'Should replace non-breaking spaces with hyphens'
+        );
+
+        $this->assertEquals(
+            'test',
+            $this->object->stringUrlUnicodeSlug("\u{00A0}test\u{00A0}"),
+            'Should remove leading and trailing non-breaking spaces'
+        );
+        $this->assertEquals(
+            'test-nbsp-test',
+            $this->object->stringUrlUnicodeSlug('test&nbsp;test'),
+            'Should handle literal &nbsp; text'
+        );
+    }
+
+    /**
      * Data provider for testEscapeCsvFormula.
      *
      * @return  array
