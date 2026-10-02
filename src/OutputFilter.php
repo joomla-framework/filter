@@ -191,6 +191,9 @@ class OutputFilter
         // Delete all '?'
         $str = str_replace('?', '', $str);
 
+        // Replace Unicode whitespace with a normal space
+        $str = preg_replace('/[\s\p{Z}]+/u', ' ', $str);
+
         // Trim white spaces at beginning and end of alias and make lowercase
         $str = trim(StringHelper::strtolower($str));
 
