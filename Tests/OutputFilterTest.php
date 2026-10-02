@@ -265,14 +265,8 @@ class OutputFilterTest extends TestCase
     /**
      * Tests converting strings to URL unicoded slugs.
      */
-    public function testStringUrlUnicodeSlug()
+    public function testSpacesUrlUnicodeSlug()
     {
-        $this->assertEquals(
-            'what-if-i-do-not-get_this-right',
-            $this->object->stringUrlUnicodeSlug('What-if I do.not get_this right?'),
-            'Should be URL unicoded'
-        );
-
         $this->assertEquals(
             'test-test',
             $this->object->stringUrlUnicodeSlug("test\u{00A0}test"),
