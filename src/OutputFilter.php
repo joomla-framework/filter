@@ -195,7 +195,7 @@ class OutputFilter
         $str = trim(StringHelper::strtolower($str));
 
         // Remove any duplicate whitespace and replace whitespaces by hyphens
-        $str = preg_replace('#\x20+#', '-', $str);
+        $str = preg_replace('#[\s\p{Z}]+#u', '-', $str);
 
         return $str;
     }
