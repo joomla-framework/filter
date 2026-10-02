@@ -191,11 +191,14 @@ class OutputFilter
         // Delete all '?'
         $str = str_replace('?', '', $str);
 
+        // Replace Unicode whitespace with a normal space
+        $str = preg_replace('/[\s\p{Z}]+/u', ' ', $str);
+
         // Trim white spaces at beginning and end of alias and make lowercase
         $str = trim(StringHelper::strtolower($str));
 
         // Remove any duplicate whitespace and replace whitespaces by hyphens
-        $str = preg_replace('#[\s\p{Z}]+#u', '-', $str);
+        $str = preg_replace('#\x20+#', '-', $str);
 
         return $str;
     }

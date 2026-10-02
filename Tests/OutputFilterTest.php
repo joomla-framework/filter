@@ -278,10 +278,11 @@ class OutputFilterTest extends TestCase
             $this->object->stringUrlUnicodeSlug("\u{00A0}test\u{00A0}"),
             'Should remove leading and trailing non-breaking spaces'
         );
+
         $this->assertEquals(
             'test-nbsp-test',
             $this->object->stringUrlUnicodeSlug('test&nbsp;test'),
-            'Should handle literal &nbsp; text'
+            'Should handle literal html entities'
         );
     }
 
