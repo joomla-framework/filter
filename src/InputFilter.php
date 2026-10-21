@@ -645,8 +645,21 @@ class InputFilter
                 continue;
             }
 
-            // Strip html data URIs
-            if (stripos($attrSubSet[1], 'data:text/html') === 0) {
+            /*
+             * Strip data: URIs that can execute script when the value is used as a
+             * navigation or document source (href, object data, etc.). This covers
+             * HTML, XHTML, XML and SVG documents - an SVG or XHTML data: URI runs
+             * script the same way text/html does, so limiting the check to
+             * `data:text/html` is not sufficient.
+             *
+             * Browsers ignore ASCII whitespace and control characters before the
+             * scheme and inside the value (e.g. `<a href=" data:text/html,...">` or
+             * `data: text/html`), so normalise the value the same way before testing.
+             * Passive data: URIs such as data:image/png are intentionally left alone.
+             */
+            $dataUri = preg_replace('/[\x00-\x20]+/', '', $attrSubSet[1]);
+
+            if (preg_match('#^data:(?:text/html|application/xhtml\+xml|(?:application|text)/xml|image/svg\+xml)#i', (string) $dataUri)) {
                 continue;
             }
 

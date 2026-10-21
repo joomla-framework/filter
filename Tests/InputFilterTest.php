@@ -2307,4 +2307,67 @@ class InputFilterTest extends TestCase
 
         $this->assertEquals($expected, $filter->clean($object));
     }
+
+    /**
+     * Data provider for script-capable data: URIs that must be stripped from URL attributes.
+     *
+     * Each case is a URL attribute value a browser would resolve to a document that can run
+     * script (HTML, XHTML, XML or SVG). The filter must remove the attribute, leaving only
+     * `<a>Link</a>`. Browsers ignore ASCII whitespace/control characters before the scheme
+     * and inside the value, so the obfuscated variants must be caught as well.
+     *
+     * @return  array
+     */
+    public static function scriptCapableDataUris(): array
+    {
+        return [
+            'svg base64'              => ['data:image/svg+xml;base64,PHN2Zy8+'],
+            'svg plain'               => ['data:image/svg+xml,x'],
+            'xhtml base64'            => ['data:application/xhtml+xml;base64,PHh4Lz4='],
+            'xml'                     => ['data:text/xml,x'],
+            'application xml'         => ['data:application/xml,x'],
+            'html control'            => ['data:text/html,x'],
+            'html leading space'      => [' data:text/html,x'],
+            'html whitespace in mime' => ['data: text/html,x'],
+            'svg uppercase'           => ['DATA:IMAGE/SVG+XML;BASE64,PHN2Zy8+'],
+        ];
+    }
+
+    /**
+     * Script-capable data: URIs must be stripped from allowed URL attributes.
+     *
+     * Regression test completing the data:text/html fix for non-text/html, script-capable
+     * data: URIs (SVG, XHTML, XML) and for whitespace-obfuscated values that previously
+     * slipped past the exact-prefix check.
+     *
+     * @param   string  $value  The dangerous attribute value.
+     *
+     * @return  void
+     */
+    #[DataProvider('scriptCapableDataUris')]
+    public function testCleanStripsScriptCapableDataUris($value)
+    {
+        $this->assertSame(
+            '<a>Link</a>',
+            (new InputFilter(['a'], ['href'], 0, 0))->clean('<a href="' . $value . '">Link</a>', 'html'),
+            'A script-capable data: URI must be stripped from a URL attribute'
+        );
+    }
+
+    /**
+     * Passive data: URIs (e.g. data:image/png) must be preserved so the fix does not
+     * over-block legitimate inline images.
+     *
+     * @return  void
+     */
+    public function testCleanKeepsPassiveImageDataUri()
+    {
+        $value = 'data:image/png;base64,iVBORw0KGgo=';
+
+        $this->assertSame(
+            '<a href="' . $value . '">Link</a>',
+            (new InputFilter(['a'], ['href'], 0, 0))->clean('<a href="' . $value . '">Link</a>', 'html'),
+            'A passive image data: URI must not be stripped'
+        );
+    }
 }
