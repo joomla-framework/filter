@@ -781,7 +781,7 @@ class InputFilterTest extends TestCase
             'Attribute without =' => [
                 '',
                 '<img height="300" ismap />',
-                '<img height="300" />',
+                '<img height="300" ismap="" />',
                 'From generic cases',
             ],
             'Attribute with newline' => [
@@ -1503,7 +1503,7 @@ class InputFilterTest extends TestCase
             'Attribute without =' => [
                 '',
                 '<img ismap class />',
-                '<img />',
+                '<img class="" />',
                 'From specific cases',
             ],
             'Attribute with newline' => [
@@ -1535,7 +1535,7 @@ class InputFilterTest extends TestCase
                 // Test for recursion with single tags
                 'string',
                 '<img class />',
-                '<img />',
+                '<img class="" />',
                 'From specific cases',
             ],
             'Attribute with dash' => [
@@ -1646,31 +1646,31 @@ class InputFilterTest extends TestCase
             'disabled_no_equals_a' => [
                 'string',
                 '<img disabled src="my_source" />',
-                '<img src="my_source" />',
+                '<img src="my_source" disabled="" />',
                 'Test empty alt attribute',
             ],
             'disabled_no_equals_b' => [
                 'string',
                 '<img alt="" disabled src="aaa" />',
-                '<img alt="" src="aaa" />',
+                '<img alt="" src="aaa" disabled="" />',
                 'Test empty alt attribute',
             ],
             'disabled_no_equals_c' => [
                 'string',
                 '<img disabled />',
-                '<img />',
+                '<img disabled="" />',
                 'Test empty alt attribute',
             ],
             'disabled_no_equals_d' => [
                 'string',
                 '<img height="300" disabled />',
-                '<img height="300" />',
+                '<img height="300" disabled="" />',
                 'Test empty alt attribute',
             ],
             'disabled_no_equals_e' => [
                 'string',
                 '<img height disabled />',
-                '<img />',
+                '<img height="" disabled="" />',
                 'Test empty alt attribute',
             ],
             'test_nested' => [
@@ -1778,7 +1778,7 @@ class InputFilterTest extends TestCase
             'forward_slash' => [
                 '',
                 '<textarea autofocus /onfocus=alert(1)>',
-                '<textarea />',
+                '<textarea autofocus="" />',
                 'Test for detection of leading forward slashes in attributes',
             ],
             'tracker25558f' => [
@@ -2290,6 +2290,69 @@ class InputFilterTest extends TestCase
             (new InputFilter([], ['class'], 1, 1))->clean($data, $type),
             $message
         );
+    }
+
+    /**
+     * Data provider for attributes without a value.
+     *
+     * @return  \Generator
+     */
+    public static function valuelessAttributes(): \Generator
+    {
+        yield 'single' => ['<input checked>', '<input checked="" />'];
+        yield 'after a value' => ['<input type="checkbox" checked>', '<input type="checkbox" checked="" />'];
+        yield 'before a value' => ['<input checked type="checkbox">', '<input type="checkbox" checked="" />'];
+        yield 'several' => ['<input checked disabled>', '<input checked="" disabled="" />'];
+        yield 'before a slash' => ['<input checked />', '<input checked="" />'];
+        yield 'details' => ['<details open>x</details>', '<details open="">x</details>'];
+        yield 'not allowed' => ['<input required checked>', '<input checked="" />'];
+        yield 'event handler' => ['<input onclick checked>', '<input checked="" />'];
+    }
+
+    /**
+     * Allowed attributes without a value are kept with an empty value.
+     *
+     * @param   string  $data    The input
+     * @param   string  $expect  The expected result
+     *
+     * @return  void
+     */
+    #[DataProvider('valuelessAttributes')]
+    public function testCleanKeepsAllowedAttributesWithoutValue($data, $expect)
+    {
+        $filter = new InputFilter(['input', 'details'], ['checked', 'disabled', 'type', 'open', 'onclick'], 0, 0, 1);
+
+        $this->assertSame($expect, $filter->clean($data, 'html'));
+    }
+
+    /**
+     * Data provider for invalid attribute names.
+     *
+     * @return  \Generator
+     */
+    public static function invalidAttributeNames(): \Generator
+    {
+        yield 'digits only' => ['<b 123="x">x</b>', '<b>x</b>'];
+        yield 'leading digit' => ['<b 3bb="x">x</b>', '<b>x</b>'];
+        yield 'leading hyphen' => ['<b -x="x">x</b>', '<b>x</b>'];
+        yield 'hyphens only' => ['<b --="x">x</b>', '<b>x</b>'];
+        yield 'valid data attribute' => ['<b data-id="x">x</b>', '<b data-id="x">x</b>'];
+    }
+
+    /**
+     * Attribute names must start with a letter and contain only letters, digits and hyphens.
+     *
+     * @param   string  $data    The input
+     * @param   string  $expect  The expected result
+     *
+     * @return  void
+     */
+    #[DataProvider('invalidAttributeNames')]
+    public function testCleanRemovesInvalidAttributeNames($data, $expect)
+    {
+        $filter = new InputFilter([], [], 1, 1);
+
+        $this->assertSame($expect, $filter->clean($data, 'html'));
     }
 
     /**
