@@ -2272,6 +2272,56 @@ class InputFilterTest extends TestCase
             'The word expression outside of a style attribute must not be flagged'
         );
     }
+
+    /**
+     * Data provider for stripCssExpressions().
+     *
+     * @return  \Generator
+     */
+    public static function cssExpressions(): \Generator
+    {
+        yield 'at the start' => [':expression(alert(1))', '(alert(1))'];
+        yield 'upper case' => ['width:EXPRESSION(alert(1))', 'width(alert(1))'];
+        yield 'rebuilt by a single pass' => ['x:expression(1) y:expr:expressionession(alert(1))', 'x(1) y(alert(1))'];
+        yield 'without parenthesis' => ['a:expression', 'a:expression'];
+        yield 'harmless' => ['color:red', 'color:red'];
+    }
+
+    /**
+     * stripCssExpressions() removes every :expression, including one at position 0 and ones a single pass would rebuild.
+     *
+     * @param   string  $value   The attribute value
+     * @param   string  $expect  The expected result
+     *
+     * @return  void
+     */
+    #[DataProvider('cssExpressions')]
+    public function testStripCssExpressions($value, $expect)
+    {
+        $filter = new class () extends InputFilter {
+            public function strip($source)
+            {
+                return $this->stripCssExpressions($source);
+            }
+        };
+
+        $this->assertSame($expect, $filter->strip($value));
+    }
+
+    /**
+     * The IE behavior property is blocked in both spellings.
+     *
+     * @return  void
+     */
+    public function testCheckAttributeFlagsBehaviorProperty()
+    {
+        $this->assertTrue(InputFilter::checkAttribute(['style', 'behavior:url(x.htc)']));
+        $this->assertTrue(InputFilter::checkAttribute(['style', 'behaviour:url(x.htc)']));
+        $this->assertSame(
+            '<span>x</span>',
+            (new InputFilter(['span'], ['style']))->clean('<span style="behavior:url(x.htc)">x</span>', 'html')
+        );
+    }
     /**
      * Execute a test case with clean() using custom class blocked filter settings (strips bad tags).
      *
