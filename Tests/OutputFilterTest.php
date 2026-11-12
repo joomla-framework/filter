@@ -123,10 +123,19 @@ class OutputFilterTest extends TestCase
     public function testStringUrlSafeWithoutALanguageInstance()
     {
         $this->assertEquals(
-            '1234567890--qwertyuiop-qwertyuiop-asdfghjkl-asdfghjkl-zxcvbnm-zxcvbnm',
+            '1234567890-qwertyuiop-qwertyuiop-asdfghjkl-asdfghjkl-zxcvbnm-zxcvbnm',
             $this->object->stringUrlSafe('`1234567890-=~!@#$%^&*()_+	qwertyuiop[]\QWERTYUIOP{}|asdfghjkl;\'ASDFGHJKL:"zxcvbnm,./ZXCVBNM<>?'),
             'Should clean keyboard string down to ASCII-7'
         );
+    }
+
+    /**
+     * Tests that hyphens surrounded by spaces collapse into one hyphen without a Language instance
+     */
+    public function testStringUrlSafeWithoutALanguageInstanceCollapsesHyphens()
+    {
+        $this->assertSame('ae-b', $this->object->stringUrlSafe('ä - b'));
+        $this->assertSame('a-b-c', $this->object->stringUrlSafe('a - b--c'));
     }
 
     /**
