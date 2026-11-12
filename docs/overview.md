@@ -106,9 +106,19 @@ if ($id === 0 || (string) $id !== $input->get('id', '', 'raw')) {
 }
 ```
 
-The same applies to `path`: it accepts absolute paths (`/etc/passwd` passes) and returns `''` for
-anything containing a space or a non-ASCII character, so it neither confines a path to a directory
-nor round-trips ordinary filenames.
+The same applies to `path`. It checks every segment between `/` or `\` separators on its own:
+
+* A segment may contain ASCII letters, digits, `_`, `-`, `.`, `@`, `~` and spaces, so hidden files
+  and folders (`.htaccess`, `/var/www/site.example/._tmp`) and folders such as `joomla projects`
+  are accepted.
+* `.` and `..` segments (and segments made of dots and spaces only) are rejected, as are control
+  characters, non-ASCII characters, `:` outside a leading Windows drive letter, and paths starting
+  with a backslash (UNC paths). A rejected path becomes `''`.
+* Repeated `/` are collapsed. A path with a drive letter (`C:\…` or `C:/…`) is returned with `\` as
+  its only separator.
+
+It still accepts absolute paths (`/etc/passwd` passes), so it does not confine a path to a
+directory; check the resolved path against your base directory when that matters.
 
 ## `OutputFilter`
 

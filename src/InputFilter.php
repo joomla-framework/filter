@@ -946,19 +946,36 @@ class InputFilter
      */
     private function cleanPath($source)
     {
-        $linuxPattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/]+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-
-        if (preg_match($linuxPattern, $source)) {
-            return preg_replace('~/+~', '/', $source);
+        // Control characters are never part of a valid path
+        if ($source === '' || preg_match('/[\x00-\x1F\x7F]/', $source)) {
+            return '';
         }
 
-        $windowsPattern = '/^([A-Za-z]:(\\\\|\/))?[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*((\\\\|\/)+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
+        // A Windows path may start with a drive letter followed by a separator, e.g. C:\ or c:/
+        $hasDrive = (bool) preg_match('/^[A-Za-z]:[\\\\\/]/', $source);
 
-        if (preg_match($windowsPattern, $source)) {
+        // Without a drive letter, a path must not start with a backslash (no UNC paths)
+        if (!$hasDrive && $source[0] === '\\') {
+            return '';
+        }
+
+        // Validate every segment on its own
+        foreach (preg_split('/[\\\\\/]+/', $hasDrive ? substr($source, 2) : $source, -1, \PREG_SPLIT_NO_EMPTY) as $segment) {
+            // Reject '.' and '..' as well as segments made of dots and spaces only, which Windows reduces to them
+            if (preg_match('/^[. ]+$/', $segment)) {
+                return '';
+            }
+
+            if (!preg_match('/^[A-Za-z0-9_.@~ -]+$/', $segment)) {
+                return '';
+            }
+        }
+
+        if ($hasDrive) {
             return preg_replace('~(\\\\|\/)+~', '\\', $source);
         }
 
-        return '';
+        return preg_replace('~/+~', '/', $source);
     }
 
     /**
