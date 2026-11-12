@@ -65,6 +65,11 @@ The `$tagsMethod` and `$attrMethod` constants invert the meaning:
 The default — empty lists with both methods set to allow — strips every tag, which is the safe
 default.
 
+Attribute names must start with a letter and may contain only letters, digits and hyphens
+(`data-id` passes, `3bb` does not). Attributes without a value — `checked`, `disabled`,
+`open` — are filtered like any other attribute and kept with an empty value when allowed:
+`<input type="checkbox" checked>` becomes `<input type="checkbox" checked="" />`.
+
 The fifth constructor argument, `$xssAuto`, defaults to `1` and enables the built-in blocklists for
 tags such as `script`, `iframe`, `object` and `style`, and for `on*` event handler attributes.
 Do not turn it off.
@@ -78,8 +83,6 @@ sanitiser bypasses live, and this implementation has known ones:
 * **URL schemes are not checked beyond a few names.** `javascript:`, `vbscript:`, `livescript:`
   and `mocha:` are blocked; `data:` is **not**. If `a`/`href` or `img`/`src` is on your allowlist,
   `<a href="data:text/html;base64,…">` gets through.
-* Attributes without a value — `checked`, `disabled`, `required` — are always dropped, even when
-  explicitly allowed.
 
 For untrusted HTML from users, prefer a parser-based sanitiser such as
 [`ezyang/htmlpurifier`](https://github.com/ezyang/htmlpurifier) or

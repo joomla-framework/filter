@@ -478,7 +478,15 @@ class InputFilter
 
                     // If there is an ending, use this, if not, do not worry.
                     if ($attribEnd > 0) {
+                        $skipped   = substr($fromSpace, 0, $attribEnd + 1);
                         $fromSpace = substr($fromSpace, $attribEnd + 1);
+
+                        // Unless an unquoted value follows, the skipped words are attributes without a value (e.g. checked)
+                        if (!preg_match('/^\s*=/', $fromSpace)) {
+                            foreach (preg_split('/\s+/', $skipped, -1, \PREG_SPLIT_NO_EMPTY) as $name) {
+                                $attrSet[] = $name;
+                            }
+                        }
                     }
                 }
 
@@ -584,6 +592,12 @@ class InputFilter
             $attrSubSet0   = explode(' ', trim($attrSubSet[0]));
             $attrSubSet[0] = array_pop($attrSubSet0);
 
+            // The words before it are attributes without a value (e.g. checked), filter them on their own
+            if ($attrSubSet0) {
+                array_splice($attrSet, $i + 1, 0, $attrSubSet0);
+                $count = \count($attrSet);
+            }
+
             $attrSubSet[0] = strtolower($attrSubSet[0]);
             $quoteStyle    = \ENT_QUOTES | \ENT_HTML401;
 
@@ -603,17 +617,19 @@ class InputFilter
             // Remove all "non-regular" attribute names
             // AND blocked attributes
             if (
-                (!preg_match('/[a-z]*$/i', $attrSubSet[0]))
+                (!preg_match('/^[a-z][a-z0-9-]*$/i', $attrSubSet[0]))
                 || ($this->xssAuto && ((\in_array(strtolower($attrSubSet[0]), $this->blockedAttributes))
                 || substr($attrSubSet[0], 0, 2) == 'on'))
             ) {
                 continue;
             }
 
-            // XSS attribute value filtering
+            // An attribute without a value (e.g. checked) is kept with an empty value if it is allowed
             if (!isset($attrSubSet[1])) {
-                continue;
+                $attrSubSet[1] = '';
             }
+
+            // XSS attribute value filtering
 
             // Remove blocked chars from the attribute value
             foreach ($this->blockedChars as $blockedChar) {
