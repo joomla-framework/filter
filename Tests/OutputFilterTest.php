@@ -106,6 +106,27 @@ class OutputFilterTest extends TestCase
     }
 
     /**
+     * Tests that unterminated href attributes with many ampersands do not exhaust the PCRE backtrack limit.
+     */
+    public function testLinkXhtmlSafeWithUnterminatedHref()
+    {
+        $input = '<a href="' . str_repeat('&', 30) . ' x';
+
+        $this->assertSame($input, $this->object->linkXhtmlSafe($input));
+    }
+
+    /**
+     * Tests that several links and existing &amp; entities are handled.
+     */
+    public function testLinkXhtmlSafeWithSeveralLinks()
+    {
+        $this->assertSame(
+            '<a href="a?b=1&amp;c=2&amp;d=3">x & y</a><A HREF="q&amp;r">z</A><a href="">e</a>',
+            $this->object->linkXhtmlSafe('<a href="a?b=1&c=2&amp;d=3">x & y</a><A HREF="q&r">z</A><a href="">e</a>')
+        );
+    }
+
+    /**
      * Tests making strings safe for usage in JS
      */
     public function testStringJSSafe()

@@ -136,6 +136,9 @@ OutputFilter::stringUrlSafe($title, 'de-DE');
 
 That setter stores the language **statically**, so it affects every later call in the process.
 
+`linkXhtmlSafe()` only touches double-quoted `href` values (`href="…"`). If the regular expression
+engine fails on unusual input, the input is returned unchanged rather than `null`.
+
 ### What `OutputFilter` does not give you
 
 There is no general-purpose escaping method for a string. `objectHtmlSafe()` handles objects, and

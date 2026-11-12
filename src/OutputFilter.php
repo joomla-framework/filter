@@ -78,15 +78,16 @@ class OutputFilter
      */
     public static function linkXhtmlSafe($input)
     {
-        $regex = 'href="([^"]*(&(amp;){0})[^"]*)*?"';
-
-        return preg_replace_callback(
-            "#$regex#i",
+        $result = preg_replace_callback(
+            '#href="[^"]*"#i',
             function ($m) {
                 return preg_replace('#&(?!amp;)#', '&amp;', $m[0]);
             },
             $input
         );
+
+        // Do not lose the content if PCRE fails
+        return $result ?? $input;
     }
 
     /**
