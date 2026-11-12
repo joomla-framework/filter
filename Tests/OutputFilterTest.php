@@ -278,6 +278,9 @@ class OutputFilterTest extends TestCase
             'at sign'           => ['@SUM(A1)', ' @SUM(A1)'],
             'hyperlink formula' => ['=HYPERLINK("http://example.com","x")', ' =HYPERLINK("http://example.com","x")'],
             'inner equals'      => ['a=1', 'a=1'],
+            'tab'               => ["\t=1+1", " \t=1+1"],
+            'carriage return'   => ["\r=1+1", " \r=1+1"],
+            'inner tab'         => ["a\tb", "a\tb"],
         ];
     }
 
