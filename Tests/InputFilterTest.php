@@ -2256,6 +2256,36 @@ class InputFilterTest extends TestCase
     }
 
     /**
+     * clean() filters a copy of an object and leaves the original unchanged.
+     *
+     * @return  void
+     */
+    public function testCleanObjectReturnsAFilteredCopy()
+    {
+        $object = new ArbitraryObject('<b>x</b>', '<b>y</b>', '<b>z</b>');
+
+        $result = (new InputFilter())->clean($object);
+
+        $this->assertNotSame($object, $result);
+        $this->assertSame('x', $result->publicVar);
+        $this->assertSame('<b>x</b>', $object->publicVar);
+    }
+
+    /**
+     * The attribute names id and name are not in the list of blocked tags.
+     *
+     * @return  void
+     */
+    public function testIdAndNameAreNotBlockedTags()
+    {
+        $filter = new InputFilter([], [], InputFilter::ONLY_BLOCK_DEFINED_TAGS, InputFilter::ONLY_BLOCK_DEFINED_ATTRIBUTES);
+
+        $this->assertNotContains('id', $filter->blockedTags);
+        $this->assertNotContains('name', $filter->blockedTags);
+        $this->assertSame('<p id="a" name="b">x</p>', $filter->clean('<p id="a" name="b">x</p>', 'html'));
+    }
+
+    /**
      * The `expression` check must stay limited to the style attribute.
      *
      * @return  void

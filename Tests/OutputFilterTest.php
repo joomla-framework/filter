@@ -209,6 +209,17 @@ class OutputFilterTest extends TestCase
     }
 
     /**
+     * cleanText() returns the cleaned text and leaves the passed variable unchanged.
+     */
+    public function testCleanTextDoesNotChangeTheArgument()
+    {
+        $text = '<b>bold</b>';
+
+        $this->assertSame('bold', OutputFilter::cleanText($text));
+        $this->assertSame('<b>bold</b>', $text);
+    }
+
+    /**
      * Tests stripping images.
      */
     public function testStripImages()

@@ -35,7 +35,7 @@ $filter->clean($value, 'raw');       // returned unchanged
 ```
 
 An unknown type falls through to the `string` behaviour. Arrays are filtered element-wise;
-objects are filtered **in place** and returned, so the caller's object is modified.
+objects are copied (`clone`), and the filtered copy is returned; the caller's object is left unchanged.
 
 ### Filtering HTML
 
@@ -115,13 +115,13 @@ nor round-trips ordinary filenames.
 ```php
 use Joomla\Filter\OutputFilter;
 
-OutputFilter::objectHtmlSafe($object);              // htmlspecialchars every scalar property, by reference
+OutputFilter::objectHtmlSafe($object);              // htmlspecialchars every scalar property of the object
 OutputFilter::stringUrlSafe('Ein schöner Titel');   // 'ein-schoner-titel'
 OutputFilter::stringUrlUnicodeSlug('Ein Titel');    // keeps unicode characters
 OutputFilter::stringJSSafe($string);                // \uXXXX-escapes every character
 OutputFilter::ampReplace($html);                    // bare & to &amp;amp;
 OutputFilter::linkXhtmlSafe($html);                 // & inside href to &amp;amp;
-OutputFilter::cleanText($text);                     // strip markup, then escape
+$clean = OutputFilter::cleanText($text);            // strip markup, then escape; returns the result
 OutputFilter::stripImages($html);
 OutputFilter::stripIframes($html);
 ```

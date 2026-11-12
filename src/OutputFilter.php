@@ -34,15 +34,15 @@ class OutputFilter
      *
      * Object parameters that are non-string, array, object or start with underscore will be converted
      *
-     * @param   object   $mixed        An object to be parsed
-     * @param   integer  $quoteStyle   The optional quote style for the htmlspecialchars function
-     * @param   mixed    $excludeKeys  An optional string single field name or array of field names not to be parsed (eg, for a textarea)
+     * @param   object           $mixed        An object to be parsed
+     * @param   ?integer         $quoteStyle   The optional quote style for the htmlspecialchars function
+     * @param   string|string[]  $excludeKeys  An optional string single field name or array of field names not to be parsed (eg, for a textarea)
      *
      * @return  void
      *
      * @since   1.0
      */
-    public static function objectHtmlSafe(&$mixed, $quoteStyle = \ENT_QUOTES, $excludeKeys = '')
+    public static function objectHtmlSafe(object $mixed, ?int $quoteStyle = \ENT_QUOTES, string|array $excludeKeys = ''): void
     {
         if (\is_null($quoteStyle)) {
             $quoteStyle = \ENT_QUOTES;
@@ -76,7 +76,7 @@ class OutputFilter
      *
      * @since   1.0
      */
-    public static function linkXhtmlSafe($input)
+    public static function linkXhtmlSafe(string $input): string
     {
         $regex = 'href="([^"]*(&(amp;){0})[^"]*)*?"';
 
@@ -98,7 +98,7 @@ class OutputFilter
      *
      * @since   3.0
      */
-    public static function stringJSSafe($string)
+    public static function stringJSSafe(string $string): string
     {
         $chars   = preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
         $newStr = '';
@@ -129,7 +129,7 @@ class OutputFilter
      *
      * @since   1.0
      */
-    public static function stringUrlSafe($string, $language = '')
+    public static function stringUrlSafe(string $string, string $language = ''): string
     {
         // Remove any '-' from the string since they will be used as concatenaters
         $str = str_replace('-', ' ', $string);
@@ -175,7 +175,7 @@ class OutputFilter
      *
      * @since   1.0
      */
-    public static function stringUrlUnicodeSlug($string)
+    public static function stringUrlUnicodeSlug(string $string): string
     {
         // Replace double byte whitespaces by single byte (East Asian languages)
         $str = preg_replace('/\xE3\x80\x80/', ' ', $string);
@@ -209,7 +209,7 @@ class OutputFilter
      *
      * @since   1.0
      */
-    public static function ampReplace($text)
+    public static function ampReplace(string $text): string
     {
         return preg_replace('/(?<!&)&(?!&|#|[\w]+;)/', '&amp;', $text);
     }
@@ -223,8 +223,11 @@ class OutputFilter
      *
      * @since   1.0
      */
-    public static function cleanText(&$text)
+    public static function cleanText(?string $text): string
     {
+        // Treat null as an empty string, preg_replace() no longer accepts it
+        $text = $text ?? '';
+
         $text = preg_replace("'<script[^>]*>.*?</script>'si", '', $text);
         $text = preg_replace('/<a\s+.*?href="([^"]+)"[^>]*>([^<]+)<\/a>/is', '\2 (\1)', $text);
         $text = preg_replace('/<!--.+?-->/', '', $text);
@@ -261,7 +264,7 @@ class OutputFilter
      *
      * @since   1.0
      */
-    public static function stripImages($string)
+    public static function stripImages(string $string): string
     {
         while (preg_match('#(<[/]?img.*>)#Ui', $string)) {
             $string = preg_replace('#(<[/]?img.*>)#Ui', '', $string);
@@ -279,7 +282,7 @@ class OutputFilter
      *
      * @since   1.0
      */
-    public static function stripIframes($string)
+    public static function stripIframes(string $string): string
     {
         while (preg_match('#(<[/]?iframe.*>)#Ui', $string)) {
             $string = preg_replace('#(<[/]?iframe.*>)#Ui', '', $string);
