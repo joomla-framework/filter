@@ -316,7 +316,7 @@ class InputFilter
         $attrSubSet[1] = str_replace(["\t", "\n", "\r", " ", "\0", "\v", "\f"], '', $attrSubSet[1]);
 
         return (strpos($attrSubSet[1], 'expression') !== false && $attrSubSet[0] === 'style')
-            || preg_match('/(?:(?:java|vb|live)script|behaviour|mocha)(?::|&colon;|&column;)/', $attrSubSet[1]) !== 0;
+            || preg_match('/(?:(?:java|vb|live)script|behaviou?r|mocha)(?::|&colon;|&column;)/', $attrSubSet[1]) !== 0;
     }
 
     /**
@@ -743,16 +743,21 @@ class InputFilter
         $test = preg_replace('#\/\*.*\*\/#U', '', $source);
 
         // Test for :expression
-        if (!stripos($test, ':expression')) {
+        if (stripos($test, ':expression') === false) {
             // Not found, so we are done
             return $source;
         }
 
         // At this point, we have stripped out the comments and have found :expression
         // Test stripped string for :expression followed by a '('
-        if (preg_match_all('#:expression\s*\(#', $test, $matches)) {
-            // If found, remove :expression
-            return str_ireplace(':expression', '', $test);
+        if (preg_match('#:expression\s*\(#i', $test)) {
+            // If found, remove :expression until none is left, so removing it cannot build a new one
+            do {
+                $previous = $test;
+                $test     = str_ireplace(':expression', '', $test);
+            } while ($test !== $previous);
+
+            return $test;
         }
 
         return $source;
