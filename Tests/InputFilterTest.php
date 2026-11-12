@@ -1706,7 +1706,7 @@ class InputFilterTest extends TestCase
             'hanging_quote' => [
                 'string',
                 "<img src=\' />",
-                '<img src="" />',
+                '<img src="\\\'" />',
                 'From specific cases',
             ],
             'hanging_quote2' => [
@@ -2306,5 +2306,78 @@ class InputFilterTest extends TestCase
         $filter = new InputFilter();
 
         $this->assertEquals($expected, $filter->clean($object));
+    }
+
+    /**
+     * Data provider for data: URIs in attribute values.
+     *
+     * @return  \Generator
+     */
+    public static function dataUriAttributeValues(): \Generator
+    {
+        yield 'text/html with a leading space' => ['<a href=" data:text/html,<b>x</b>">x</a>', '<a>x</a>'];
+        yield 'text/html with an encoded scheme' => ['<a href="&#100;ata:text/html,x">x</a>', '<a>x</a>'];
+        yield 'text/html in a title attribute' => ['<span title="data:text/html,x">x</span>', '<span>x</span>'];
+        yield 'svg in a link' => ['<a href="data:image/svg+xml;base64,PHN2Zz4=">x</a>', '<a>x</a>'];
+        yield 'xhtml in a link' => ['<a href="data:application/xhtml+xml,x">x</a>', '<a>x</a>'];
+        yield 'upper case svg in an image' => ['<img src="DATA:IMAGE/SVG+XML,x" />', '<img />'];
+        yield 'png in an image' => ['<img src="data:image/png;base64,iVBORw0KGgo=" />', '<img src="data:image/png;base64,iVBORw0KGgo=" />'];
+        yield 'jpeg in a link' => ['<a href="data:image/jpeg,x">x</a>', '<a href="data:image/jpeg,x">x</a>'];
+        yield 'text starting with data: in a title' => ['<span title="data: our numbers">x</span>', '<span title="data: our numbers">x</span>'];
+    }
+
+    /**
+     * data: URIs are checked on the decoded value; only the allowed media types survive in URL attributes.
+     *
+     * @param   string  $data    The input
+     * @param   string  $expect  The expected result
+     *
+     * @return  void
+     */
+    #[DataProvider('dataUriAttributeValues')]
+    public function testCleanDataUriAttributeValues($data, $expect)
+    {
+        $filter = new InputFilter(['a', 'img', 'span'], ['href', 'src', 'title']);
+
+        $this->assertSame($expect, $filter->clean($data, 'html'));
+    }
+
+    /**
+     * The allowed data: URI media types can be configured.
+     *
+     * @return  void
+     */
+    public function testCleanDataUriWithConfiguredTypes()
+    {
+        $filter                      = new InputFilter(['img'], ['src']);
+        $filter->allowedDataUriTypes = ['image/svg+xml'];
+
+        $this->assertSame('<img src="data:image/svg+xml,x" />', $filter->clean('<img src="data:image/svg+xml,x" />', 'html'));
+        $this->assertSame('<img />', $filter->clean('<img src="data:image/png,x" />', 'html'));
+    }
+
+    /**
+     * Numeric character references and backslashes in harmless attribute values are kept.
+     *
+     * @return  void
+     */
+    public function testCleanKeepsEntitiesAndBackslashesInAttributeValues()
+    {
+        $filter = new InputFilter(['span'], ['title', 'style']);
+
+        $this->assertSame(
+            '<span title="a\b &#169; &#8211;">x</span>',
+            $filter->clean('<span title="a\b &#169; &#8211;">x</span>', 'html')
+        );
+        $this->assertSame(
+            '<span title="C:\Users">x</span>',
+            $filter->clean('<span title="C:\Users">x</span>', 'html')
+        );
+
+        // Backslashes still start CSS escapes in style values, so they are removed there
+        $this->assertSame(
+            '<span style="65xpression(alert(1))">x</span>',
+            $filter->clean('<span style="\65xpression(alert(1))">x</span>', 'html')
+        );
     }
 }

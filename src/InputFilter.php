@@ -141,6 +141,49 @@ class InputFilter
     ];
 
     /**
+     * The media types allowed in `data:` URIs in URL attributes such as `href` and `src`.
+     *
+     * @var    string[]
+     * @since  __DEPLOY_VERSION__
+     */
+    public $allowedDataUriTypes = [
+        'image/gif',
+        'image/jpeg',
+        'image/png',
+        'image/webp',
+    ];
+
+    /**
+     * The attributes whose value is a URL, as their names read after symbols are removed.
+     *
+     * @var    string[]
+     * @since  __DEPLOY_VERSION__
+     */
+    private const URL_ATTRIBUTES = [
+        'action',
+        'archive',
+        'background',
+        'cite',
+        'classid',
+        'codebase',
+        'data',
+        'dynsrc',
+        'formaction',
+        'href',
+        'icon',
+        'longdesc',
+        'lowsrc',
+        'manifest',
+        'ping',
+        'poster',
+        'profile',
+        'src',
+        'srcset',
+        'usemap',
+        'xlinkhref',
+    ];
+
+    /**
      * A special list of blocked characters.
      *
      * @var    string[]
@@ -260,18 +303,16 @@ class InputFilter
     }
 
     /**
-     * Function to determine if contents of an attribute are safe
+     * Decode an attribute value the way a browser does, including unterminated numeric character references
      *
-     * @param   array  $attrSubSet  A 2 element array for attribute's name, value
+     * @param   string  $value  The attribute value
      *
-     * @return  boolean  True if bad code is detected
+     * @return  string  The decoded value
      *
-     * @since   1.0
+     * @since   __DEPLOY_VERSION__
      */
-    public static function checkAttribute($attrSubSet)
+    private static function decodeAttributeValue(string $value): string
     {
-        $attrSubSet[0] = strtolower($attrSubSet[0]);
-
         /*
          * Decode the value the same way a browser would before looking for a dangerous scheme.
          *
@@ -279,7 +320,7 @@ class InputFilter
          * lowercasing first would turn the HTML5 entity `&NewLine;` into the unknown `&newline;`
          * and it would survive decoding untouched.
          */
-        $decoded = html_entity_decode($attrSubSet[1], \ENT_QUOTES | \ENT_HTML5, 'UTF-8');
+        $decoded = html_entity_decode($value, \ENT_QUOTES | \ENT_HTML5, 'UTF-8');
 
         /*
          * html_entity_decode() only resolves numeric character references that are properly
@@ -309,6 +350,24 @@ class InputFilter
             $decoded
         );
 
+        return $decoded;
+    }
+
+    /**
+     * Function to determine if contents of an attribute are safe
+     *
+     * @param   array  $attrSubSet  A 2 element array for attribute's name, value
+     *
+     * @return  boolean  True if bad code is detected
+     *
+     * @since   1.0
+     */
+    public static function checkAttribute($attrSubSet)
+    {
+        $attrSubSet[0] = strtolower($attrSubSet[0]);
+
+        $decoded = self::decodeAttributeValue($attrSubSet[1]);
+
         // Now that everything is decoded, normalise the value for the checks below
         $attrSubSet[1] = strtolower($decoded);
 
@@ -317,6 +376,42 @@ class InputFilter
 
         return (strpos($attrSubSet[1], 'expression') !== false && $attrSubSet[0] === 'style')
             || preg_match('/(?:(?:java|vb|live)script|behaviour|mocha)(?::|&colon;|&column;)/', $attrSubSet[1]) !== 0;
+    }
+
+    /**
+     * Check whether an attribute value is a `data:` URI that has to be removed
+     *
+     * `data:text/html` is removed from every attribute. In URL attributes, every `data:` URI whose media type is not
+     * in the `$allowedDataUriTypes` list is removed.
+     *
+     * @param   string  $name   The attribute name, lowercased
+     * @param   string  $value  The attribute value
+     *
+     * @return  boolean  True if the value has to be removed
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    private function isBlockedDataUri(string $name, string $value): bool
+    {
+        // Check the value as the browser reads it: decoded, and without whitespace and control characters
+        $value = preg_replace('/[\x00-\x20]+/', '', strtolower(self::decodeAttributeValue($value)));
+
+        if (strpos($value, 'data:') !== 0) {
+            return false;
+        }
+
+        if (strpos($value, 'data:text/html') === 0) {
+            return true;
+        }
+
+        if (!\in_array($name, self::URL_ATTRIBUTES, true)) {
+            return false;
+        }
+
+        // The media type ends at the first ';' or ','
+        $type = substr($value, 5, strcspn($value, ';,', 5));
+
+        return !\in_array($type, array_map('strtolower', $this->allowedDataUriTypes), true);
     }
 
     /**
@@ -623,9 +718,6 @@ class InputFilter
             // Trim leading and trailing spaces
             $attrSubSet[1] = trim($attrSubSet[1]);
 
-            // Strips unicode, hex, etc
-            $attrSubSet[1] = str_replace('&#', '', $attrSubSet[1]);
-
             // Strip tab and newline within attr value (browsers drop these when parsing a URL)
             $attrSubSet[1] = preg_replace('/[\t\n\r]/', '', $attrSubSet[1]);
 
@@ -637,16 +729,18 @@ class InputFilter
                 $attrSubSet[1] = substr($attrSubSet[1], 1, (\strlen($attrSubSet[1]) - 2));
             }
 
-            // Strip slashes
-            $attrSubSet[1] = stripslashes($attrSubSet[1]);
+            // Strip backslashes from style values, where they start CSS escapes
+            if ($attrSubSet[0] === 'style') {
+                $attrSubSet[1] = stripslashes($attrSubSet[1]);
+            }
 
             // Autostrip script tags
             if (static::checkAttribute($attrSubSet)) {
                 continue;
             }
 
-            // Strip html data URIs
-            if (stripos($attrSubSet[1], 'data:text/html') === 0) {
+            // Strip HTML data URIs, and data URIs of types that are not allowed in URL attributes
+            if ($this->isBlockedDataUri($attrSubSet[0], $attrSubSet[1])) {
                 continue;
             }
 

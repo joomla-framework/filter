@@ -76,8 +76,19 @@ different assumptions about the document than the browser that will render it. T
 sanitiser bypasses live, and this implementation has known ones:
 
 * **URL schemes are not checked beyond a few names.** `javascript:`, `vbscript:`, `livescript:`
-  and `mocha:` are blocked; `data:` is **not**. If `a`/`href` or `img`/`src` is on your allowlist,
-  `<a href="data:text/html;base64,…">` gets through.
+  and `mocha:` are blocked. `data:` URIs are checked on the decoded value (entities resolved,
+  whitespace removed): `data:text/html` is removed from every attribute, and in URL attributes
+  (`href`, `src`, `action`, `poster`, …) only the media types in the public `$allowedDataUriTypes`
+  property survive — by default `image/gif`, `image/jpeg`, `image/png` and `image/webp`:
+
+  ```php
+  $filter = new InputFilter(['img'], ['src']);
+  $filter->allowedDataUriTypes[] = 'image/svg+xml';
+  ```
+
+  Other schemes, such as `https:` to any host, are not restricted.
+* Attribute values are otherwise kept as written: numeric character references (`&#169;`) and
+  backslashes survive. Only in `style` values are backslashes removed, as they start CSS escapes.
 * Attributes without a value — `checked`, `disabled`, `required` — are always dropped, even when
   explicitly allowed.
 
