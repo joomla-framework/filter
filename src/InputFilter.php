@@ -799,7 +799,14 @@ class InputFilter
 
         preg_match($pattern, $source, $matches);
 
-        return isset($matches[0]) ? abs((int) $matches[0]) : 0;
+        if (!isset($matches[0])) {
+            return 0;
+        }
+
+        $value = (int) $matches[0];
+
+        // abs(PHP_INT_MIN) does not fit into an integer and would return a float
+        return $value === \PHP_INT_MIN ? \PHP_INT_MAX : abs($value);
     }
 
     /**
