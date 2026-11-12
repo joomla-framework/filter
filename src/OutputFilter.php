@@ -148,7 +148,7 @@ class OutputFilter
             }
         } else {
             // Fallback behavior based on the Language package's en-GB LocaliseInterface implementation
-            $str = StringHelper::strtolower((new Transliterate())->utf8_latin_to_ascii($string));
+            $str = StringHelper::strtolower((new Transliterate())->utf8_latin_to_ascii($str));
         }
 
         // Trim white spaces at beginning and end of alias and make lowercase

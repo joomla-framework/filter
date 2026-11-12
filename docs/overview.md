@@ -126,6 +126,9 @@ OutputFilter::stripImages($html);
 OutputFilter::stripIframes($html);
 ```
 
+`stringUrlSafe()` treats hyphens in the input like spaces and collapses runs of spaces and other
+characters into one hyphen: `stringUrlSafe('Ä - b')` gives `'ae-b'`.
+
 `stringUrlSafe()` transliterates. Without a `Language` instance it uses the built-in en-GB
 transliteration; give it one for language-specific rules:
 
