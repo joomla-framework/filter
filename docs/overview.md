@@ -124,6 +124,7 @@ OutputFilter::linkXhtmlSafe($html);                 // & inside href to &amp;amp
 OutputFilter::cleanText($text);                     // strip markup, then escape
 OutputFilter::stripImages($html);
 OutputFilter::stripIframes($html);
+OutputFilter::escapeCsvFormula($value);             // ' =1+1' for a CSV cell starting with = + - @ tab or CR
 ```
 
 `stringUrlSafe()` transliterates. Without a `Language` instance it uses the built-in en-GB
