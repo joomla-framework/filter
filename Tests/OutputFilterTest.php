@@ -142,6 +142,15 @@ class OutputFilterTest extends TestCase
     }
 
     /**
+     * Tests that commas are removed from URL unicoded slugs.
+     */
+    public function testStringUrlUnicodeSlugRemovesCommas()
+    {
+        $this->assertSame('a-b', $this->object->stringUrlUnicodeSlug('a, b'));
+        $this->assertSame('über-straße', $this->object->stringUrlUnicodeSlug('Über,Straße'));
+    }
+
+    /**
      * Tests replacing single ampersands with the entity, but leaving double ampersands and ampsersand-octothorpe combinations intact.
      */
     public function testAmpReplace()
