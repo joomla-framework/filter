@@ -225,6 +225,9 @@ class OutputFilter
      */
     public static function cleanText(&$text)
     {
+        // Treat null as an empty string, preg_replace() no longer accepts it
+        $text = $text ?? '';
+
         $text = preg_replace("'<script[^>]*>.*?</script>'si", '', $text);
         $text = preg_replace('/<a\s+.*?href="([^"]+)"[^>]*>([^<]+)<\/a>/is', '\2 (\1)', $text);
         $text = preg_replace('/<!--.+?-->/', '', $text);
@@ -233,7 +236,7 @@ class OutputFilter
         $text = preg_replace('/&amp;/', ' ', $text);
         $text = preg_replace('/&quot;/', ' ', $text);
         $text = strip_tags($text);
-        $text = htmlspecialchars($text, \ENT_COMPAT, 'UTF-8');
+        $text = htmlspecialchars($text, \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
 
         return $text;
     }

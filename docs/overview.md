@@ -146,8 +146,11 @@ PHP directly:
 echo htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 ```
 
-Note also that `cleanText()` escapes with `ENT_COMPAT`, which leaves single quotes untouched — its
-output is not safe inside a single-quoted attribute. And `stripImages()`/`stripIframes()` match
+`cleanText()` escapes its result with `ENT_QUOTES | ENT_SUBSTITUTE`, so single quotes become
+`&#039;` and invalid UTF-8 is replaced with U+FFFD; `null` is treated as an empty string. It
+changes the variable passed to it (by reference) and returns the result.
+
+Note also that `stripImages()`/`stripIframes()` match
 without the `s` modifier, so a tag containing a newline is not removed; treat them as cosmetic, not
 as a security control.
 

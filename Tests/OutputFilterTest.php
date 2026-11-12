@@ -193,6 +193,18 @@ class OutputFilterTest extends TestCase
                 '<script>alert(\'hi!\');</script>',
                 '',
             ],
+            'null' => [
+                null,
+                '',
+            ],
+            'single quote' => [
+                'It\'s <b>"quoted"</b>',
+                'It&#039;s &quot;quoted&quot;',
+            ],
+            'invalid UTF-8' => [
+                "a\xFFb",
+                "a\u{FFFD}b",
+            ],
         ];
     }
 
