@@ -148,6 +148,12 @@ class InputFilterTest extends TestCase
                 [1, 123, 123],
                 'From generic cases',
             ],
+            'uint_5' => [
+                'uint',
+                (string) \PHP_INT_MIN,
+                \PHP_INT_MAX,
+                'From generic cases',
+            ],
             'float_01' => [
                 'float',
                 $input,

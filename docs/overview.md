@@ -19,7 +19,7 @@ use Joomla\Filter\InputFilter;
 $filter = new InputFilter();
 
 $filter->clean($value, 'int');       // first integer found, or 0
-$filter->clean($value, 'uint');      // as above, absolute
+$filter->clean($value, 'uint');      // as above, absolute (always an int; PHP_INT_MIN gives PHP_INT_MAX)
 $filter->clean($value, 'float');     // first float found, or 0.0
 $filter->clean($value, 'bool');      // (bool) cast
 $filter->clean($value, 'word');      // A-Z and underscore only
