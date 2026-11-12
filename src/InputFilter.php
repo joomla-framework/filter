@@ -59,7 +59,7 @@ class InputFilter
      * @var    array
      * @since  1.0
      */
-    public $tagsArray;
+    public array $tagsArray;
 
     /**
      * The array of permitted tag attributes.
@@ -67,7 +67,7 @@ class InputFilter
      * @var    array
      * @since  1.0
      */
-    public $attrArray;
+    public array $attrArray;
 
     /**
      * The method for sanitising tags
@@ -75,7 +75,7 @@ class InputFilter
      * @var    integer
      * @since  1.0
      */
-    public $tagsMethod;
+    public int $tagsMethod;
 
     /**
      * The method for sanitising attributes
@@ -83,7 +83,7 @@ class InputFilter
      * @var    integer
      * @since  1.0
      */
-    public $attrMethod;
+    public int $attrMethod;
 
     /**
      * A flag for XSS checks. Only auto clean essentials = 0, Allow clean blocked tags/attr = 1
@@ -91,7 +91,7 @@ class InputFilter
      * @var    integer
      * @since  1.0
      */
-    public $xssAuto;
+    public int $xssAuto;
 
     /**
      * The list the blocked tags for the instance.
@@ -99,7 +99,7 @@ class InputFilter
      * @var    string[]
      * @since  1.0
      */
-    public $blockedTags = [
+    public array $blockedTags = [
         'applet',
         'body',
         'bgsound',
@@ -111,13 +111,11 @@ class InputFilter
         'frameset',
         'head',
         'html',
-        'id',
         'iframe',
         'ilayer',
         'layer',
         'link',
         'meta',
-        'name',
         'object',
         'script',
         'style',
@@ -131,7 +129,7 @@ class InputFilter
      * @var    string[]
      * @since  1.0
      */
-    public $blockedAttributes = [
+    public array $blockedAttributes = [
         'action',
         'background',
         'codebase',
@@ -146,7 +144,7 @@ class InputFilter
      * @var    string[]
      * @since  1.3.3
      */
-    private $blockedChars = [
+    private array $blockedChars = [
         '&tab;',
         '&newline;',
         '&space;',
@@ -168,13 +166,13 @@ class InputFilter
     public function __construct(
         array $tagsArray = [],
         array $attrArray = [],
-        $tagsMethod = self::ONLY_ALLOW_DEFINED_TAGS,
-        $attrMethod = self::ONLY_ALLOW_DEFINED_ATTRIBUTES,
-        $xssAuto = 1
+        int $tagsMethod = self::ONLY_ALLOW_DEFINED_TAGS,
+        int $attrMethod = self::ONLY_ALLOW_DEFINED_ATTRIBUTES,
+        int $xssAuto = 1
     ) {
         // Make sure user defined arrays are in lowercase
-        $tagsArray = array_map('strtolower', (array) $tagsArray);
-        $attrArray = array_map('strtolower', (array) $attrArray);
+        $tagsArray = array_map('strtolower', $tagsArray);
+        $attrArray = array_map('strtolower', $attrArray);
 
         // Assign member variables
         $this->tagsArray  = $tagsArray;
@@ -213,7 +211,7 @@ class InputFilter
      *
      * @since   1.0
      */
-    public function clean($source, $type = 'string')
+    public function clean(mixed $source, string $type = 'string'): mixed
     {
         $type = ucfirst(strtolower($type));
 
@@ -236,6 +234,9 @@ class InputFilter
         }
 
         if (\is_object($source)) {
+            // Filter a copy, the caller's object is left unchanged
+            $source = clone $source;
+
             foreach (get_object_vars($source) as $key => $value) {
                 $source->$key = $this->clean($value, $type);
             }
@@ -268,7 +269,7 @@ class InputFilter
      *
      * @since   1.0
      */
-    public static function checkAttribute($attrSubSet)
+    public static function checkAttribute(array $attrSubSet): bool
     {
         $attrSubSet[0] = strtolower($attrSubSet[0]);
 
@@ -328,7 +329,7 @@ class InputFilter
      *
      * @since   1.0
      */
-    protected function remove($source)
+    protected function remove(string $source): string
     {
         // Iteration provides nested tag protection
         do {
@@ -348,7 +349,7 @@ class InputFilter
      *
      * @since   1.0
      */
-    protected function cleanTags($source)
+    protected function cleanTags(string $source): string
     {
         // First, pre-process this for illegal characters inside attribute values
         $source = $this->escapeAttributeValues($source);
@@ -564,7 +565,7 @@ class InputFilter
      *
      * @since   1.0
      */
-    protected function cleanAttributes(array $attrSet)
+    protected function cleanAttributes(array $attrSet): array
     {
         $newSet = [];
 
@@ -681,7 +682,7 @@ class InputFilter
      *
      * @since   1.0
      */
-    protected function escapeAttributeValues($source)
+    protected function escapeAttributeValues(string $source): string
     {
         $alreadyFiltered = '';
         $remainder       = $source;
@@ -737,7 +738,7 @@ class InputFilter
      *
      * @since   1.0
      */
-    protected function stripCssExpressions($source)
+    protected function stripCssExpressions(string $source): string
     {
         // Strip any comments out (in the form of /*...*/)
         $test = preg_replace('#\/\*.*\*\/#U', '', $source);
@@ -765,7 +766,7 @@ class InputFilter
      *
      * @return  integer  The filtered value
      */
-    private function cleanInt($source)
+    private function cleanInt(string $source): int
     {
         $pattern = '/[-+]?[0-9]+/';
 
@@ -781,7 +782,7 @@ class InputFilter
      *
      * @return  integer  The filtered value
      */
-    private function cleanInteger($source)
+    private function cleanInteger(string $source): int
     {
         return $this->cleanInt($source);
     }
@@ -793,7 +794,7 @@ class InputFilter
      *
      * @return  integer  The filtered value
      */
-    private function cleanUint($source)
+    private function cleanUint(string $source): int
     {
         $pattern = '/[-+]?[0-9]+/';
 
@@ -809,7 +810,7 @@ class InputFilter
      *
      * @return  float  The filtered value
      */
-    private function cleanFloat($source)
+    private function cleanFloat(string $source): float
     {
         $pattern = '/[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?/';
 
@@ -825,7 +826,7 @@ class InputFilter
      *
      * @return  float  The filtered value
      */
-    private function cleanDouble($source)
+    private function cleanDouble(string $source): float
     {
         return $this->cleanFloat($source);
     }
@@ -837,7 +838,7 @@ class InputFilter
      *
      * @return  boolean  The filtered value
      */
-    private function cleanBool($source)
+    private function cleanBool(string $source): bool
     {
         return (bool) $source;
     }
@@ -849,7 +850,7 @@ class InputFilter
      *
      * @return  boolean  The filtered value
      */
-    private function cleanBoolean($source)
+    private function cleanBoolean(string $source): bool
     {
         return $this->cleanBool($source);
     }
@@ -861,7 +862,7 @@ class InputFilter
      *
      * @return  string  The filtered string
      */
-    private function cleanWord($source)
+    private function cleanWord(string $source): string
     {
         $pattern = '/[^A-Z_]/i';
 
@@ -875,7 +876,7 @@ class InputFilter
      *
      * @return  string  The filtered string
      */
-    private function cleanAlnum($source)
+    private function cleanAlnum(string $source): string
     {
         $pattern = '/[^A-Z0-9]/i';
 
@@ -889,7 +890,7 @@ class InputFilter
      *
      * @return  string  The filtered string
      */
-    private function cleanCmd($source)
+    private function cleanCmd(string $source): string
     {
         $pattern = '/[^A-Z0-9_\.-]/i';
 
@@ -906,7 +907,7 @@ class InputFilter
      *
      * @return  string  The filtered string
      */
-    private function cleanBase64($source)
+    private function cleanBase64(string $source): string
     {
         $pattern = '/[^A-Z0-9\/+=]/i';
 
@@ -920,7 +921,7 @@ class InputFilter
      *
      * @return  string  The filtered string
      */
-    private function cleanString($source)
+    private function cleanString(string $source): string
     {
         return $this->remove(html_entity_decode($source, \ENT_QUOTES, 'UTF-8'));
     }
@@ -932,7 +933,7 @@ class InputFilter
      *
      * @return  string  The filtered string
      */
-    private function cleanHtml($source)
+    private function cleanHtml(string $source): string
     {
         return $this->remove($source);
     }
@@ -944,7 +945,7 @@ class InputFilter
      *
      * @return  string  The filtered string
      */
-    private function cleanPath($source)
+    private function cleanPath(string $source): string
     {
         $linuxPattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/]+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
 
@@ -968,7 +969,7 @@ class InputFilter
      *
      * @return  string  The filtered string
      */
-    private function cleanTrim($source)
+    private function cleanTrim(string $source): string
     {
         $result = trim($source);
         $result = StringHelper::trim($result, \chr(0xE3) . \chr(0x80) . \chr(0x80));
@@ -984,7 +985,7 @@ class InputFilter
      *
      * @return  string  The filtered string
      */
-    private function cleanUsername($source)
+    private function cleanUsername(string $source): string
     {
         $pattern = '/[\x00-\x1F\x7F<>"\'%&]/';
 
