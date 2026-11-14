@@ -20,6 +20,23 @@ use PHPUnit\Framework\TestCase;
 class InputFilterTest extends TestCase
 {
     /**
+     * Number of repetitions of the payload snippet for the small sample of the complexity tests.
+     */
+    private const BASE_REPETITIONS = 20000;
+
+    /**
+     * The factor the input is grown by for the second sample.
+     */
+    private const GROWTH_FACTOR = 4;
+
+    /**
+     * The maximum runtime factor allowed when the input grows by GROWTH_FACTOR.
+     *
+     * Linear behaviour means a factor of about 4, quadratic behaviour a factor of about 16.
+     */
+    private const MAX_RUNTIME_FACTOR = 8.0;
+
+    /**
      * Produces the array of test cases common to all test runs.
      *
      * @return  array  Two dimensional array of test cases. Each row consists of three values
@@ -2315,5 +2332,109 @@ class InputFilterTest extends TestCase
         $filter = new InputFilter();
 
         $this->assertEquals($expected, $filter->clean($object));
+    }
+
+    /**
+     * Payloads which triggered quadratic behaviour in cleanTags() and escapeAttributeValues().
+     *
+     * The complexity tests compare the runtime for an input with the runtime for an input four
+     * times as large. A linear implementation needs roughly four times as long, a quadratic one
+     * roughly sixteen times, so the limit in between detects a regression independent of the
+     * speed of the machine.
+     *
+     * @return  array<string, array{0: string, 1: string}>
+     */
+    public static function dosPayloadProvider(): array
+    {
+        return [
+            // Unterminated tag opens, the payload from the original report
+            'unterminated tag opens (string)'  => ['<a x', 'string'],
+            'unterminated tag opens (html)'    => ['<a x', 'html'],
+
+            // Mal-formed tags: a second '<' before the first '>'
+            'malformed tags'                   => ['a<b<c>', 'html'],
+            'malformed tags without close'     => ['a<b<a x="1">', 'html'],
+
+            // Nested tag opens
+            'nested tag opens'                 => ['<a <b>', 'html'],
+
+            // Well formed markup, hitting the closing tag lookup
+            'plain tags'                       => ['<a>', 'html'],
+            'closing tags'                     => ['</a>', 'html'],
+
+            // Attribute parsing inside a tag
+            'attributes without values'        => ['<a x x x x>', 'html'],
+            'attributes with values'           => ['<a x="1" y z/ w=2>', 'html'],
+
+            // escapeAttributeValues()
+            'quoted attribute values'          => ['<a x="1">', 'html'],
+            'unterminated attribute values'    => ['<a x="1', 'html'],
+
+            // Blocked tags
+            'blocked tags'                     => ['<script x', 'string'],
+        ];
+    }
+
+    /**
+     * @param   string  $snippet  The payload snippet which is repeated
+     * @param   string  $type     The filter type to run the payload through
+     *
+     * @dataProvider  dosPayloadProvider
+     */
+    public function testFilteringScalesLinearly(string $snippet, string $type): void
+    {
+        $small = str_repeat($snippet, self::BASE_REPETITIONS);
+        $large = str_repeat($snippet, self::BASE_REPETITIONS * self::GROWTH_FACTOR);
+
+        $smallRuntime = $this->runtime($small, $type);
+        $largeRuntime = $this->runtime($large, $type);
+
+        // Guard against a division by (almost) zero on very fast machines
+        $smallRuntime = max($smallRuntime, 0.005);
+
+        $factor = $largeRuntime / $smallRuntime;
+
+        $this->assertLessThan(
+            self::MAX_RUNTIME_FACTOR,
+            $factor,
+            sprintf(
+                'Filtering %d KB took %.3fs and %d KB took %.3fs (factor %.1f), which indicates '
+                . 'the filter is no longer linear in the length of its input.',
+                \strlen($small) / 1024,
+                $smallRuntime,
+                \strlen($large) / 1024,
+                $largeRuntime,
+                $factor
+            )
+        );
+    }
+
+    /**
+     * A one megabyte payload of unterminated tag opens, as an unauthenticated request could send
+     * it to any field filtered as a string, must be filtered in well under a second.
+     */
+    public function testLargeMalformedPayloadIsFilteredQuickly(): void
+    {
+        $source = str_repeat('<a x', 256 * 1024);
+
+        $this->assertLessThan(2.0, $this->runtime($source, 'string'));
+    }
+
+    /**
+     * Measure how long filtering the given source takes.
+     *
+     * @param   string  $source  The string to filter
+     * @param   string  $type    The filter type
+     *
+     * @return  float  The runtime in seconds
+     */
+    private function runtime(string $source, string $type): float
+    {
+        $filter = new InputFilter(['a', 'b'], ['href', 'x', 'y', 'z', 'w']);
+
+        $start = microtime(true);
+        $filter->clean($source, $type);
+
+        return microtime(true) - $start;
     }
 }
