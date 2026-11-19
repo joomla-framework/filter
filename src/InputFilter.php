@@ -657,7 +657,7 @@ class InputFilter
      *
      * @return  void
      *
-     * @since   __DEPLOY_VERSION__
+     * @since   3.0.8
      */
     private function repairCaches(array &$caches, $source, $start, $end)
     {
@@ -705,7 +705,7 @@ class InputFilter
      *
      * @return  integer|boolean  The position relative to `$start` or false if not found
      *
-     * @since   __DEPLOY_VERSION__
+     * @since   3.0.8
      */
     private function findCached($haystack, $needle, $start, array &$cache)
     {
@@ -737,7 +737,7 @@ class InputFilter
      *
      * @return  integer|boolean  The position relative to `$start` or false if not found
      *
-     * @since   __DEPLOY_VERSION__
+     * @since   3.0.8
      */
     private function findFrom($haystack, $needle, $start)
     {
