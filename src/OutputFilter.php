@@ -298,7 +298,7 @@ class OutputFilter
      *
      * @return  string  The value, prefixed with a space when it starts with a formula character.
      *
-     * @since   __DEPLOY_VERSION__
+     * @since   4.1.0
      */
     public static function escapeCsvFormula(string $value): string
     {
