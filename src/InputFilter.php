@@ -353,61 +353,112 @@ class InputFilter
         // First, pre-process this for illegal characters inside attribute values
         $source = $this->escapeAttributeValues($source);
 
-        // In the beginning we don't really have a tag, so everything is postTag
-        $preTag       = null;
-        $postTag      = $source;
-        $currentSpace = false;
+        /*
+         * The source is walked with an offset instead of repeatedly creating substrings of the
+         * remainder. Doing the latter makes the whole method quadratic in the length of the
+         * input, which allows a denial of service with a moderately sized payload of malformed
+         * tags (e.g. "<a x<a x<a x...").
+         */
+        $sourceLength = \strlen($source);
+        $offset       = 0;
 
-        // Setting to null to deal with undefined variables
-        $attr = '';
+        // In the beginning we don't really have a tag, so everything is postTag
+        $preTag = null;
+
+        /*
+         * Caches for the forward scans below. Since the offsets only ever move forward, the
+         * position of the next occurrence can be remembered instead of re-scanning the whole
+         * remainder of the source on every iteration.
+         */
+        $ltCache    = [];
+        $gtCache    = [];
+        $closeCache = [];
 
         // Is there a tag? If so it will certainly start with a '<'.
-        $tagOpenStart = strpos($source, '<');
+        $tagOpenStart = $this->findCached($source, '<', 0, $ltCache);
 
         while ($tagOpenStart !== false) {
             // Get some information about the tag we are processing
-            $preTag .= substr($postTag, 0, $tagOpenStart);
-            $postTag     = substr($postTag, $tagOpenStart);
-            $fromTagOpen = substr($postTag, 1);
-            $tagOpenEnd  = strpos($fromTagOpen, '>');
+            $preTag .= substr($source, $offset, $tagOpenStart);
+            $offset += $tagOpenStart;
+
+            // Everything from here on is relative to the tag opening at $offset
+            $tagOpenEnd = $this->findCached($source, '>', $offset + 1, $gtCache);
 
             // Check for mal-formed tag where we have a second '<' before the first '>'
-            $nextOpenTag = (strlen($postTag) > $tagOpenStart) ? strpos($postTag, '<', $tagOpenStart + 1) : false;
+            $nextOpenTag = (($sourceLength - $offset) > $tagOpenStart)
+                ? $this->findFrom($source, '<', $offset + $tagOpenStart + 1)
+                : false;
+
+            if ($nextOpenTag !== false) {
+                $nextOpenTag += $tagOpenStart + 1;
+            }
 
             if (($nextOpenTag !== false) && ($nextOpenTag < $tagOpenEnd)) {
-                // At this point we have a mal-formed tag -- remove the offending open
-                $postTag      = substr($postTag, 0, $tagOpenStart) . substr($postTag, $tagOpenStart + 1);
-                $tagOpenStart = strpos($postTag, '<');
+                /*
+                 * At this point we have a mal-formed tag -- remove the offending open.
+                 * The character at $tagOpenStart is dropped by shifting the (short) prefix in
+                 * front of it one byte to the right, which keeps this branch cheap.
+                 */
+                if ($tagOpenStart > 0) {
+                    for ($i = $offset + $tagOpenStart; $i > $offset; $i--) {
+                        $source[$i] = $source[$i - 1];
+                    }
+
+                    /*
+                     * The '>' cache stays valid as the moved bytes cannot contain a '>' (the first
+                     * one is located behind the nested open), the closing tag caches may be
+                     * invalidated by the moved bytes and are repaired.
+                     */
+                    $this->repairCaches($closeCache, $source, $offset, $offset + $tagOpenStart);
+
+                    $offset++;
+
+                    // The opening '<' of this tag now sits at the new offset
+                    $ltCache      = ['from' => $offset, 'pos' => $offset];
+                    $tagOpenStart = 0;
+
+                    continue;
+                }
+
+                $offset++;
+                $tagOpenStart = $this->findCached($source, '<', $offset, $ltCache);
 
                 continue;
             }
 
             // Let's catch any non-terminated tags and skip over them
             if ($tagOpenEnd === false) {
-                $postTag      = substr($postTag, $tagOpenStart + 1);
-                $tagOpenStart = strpos($postTag, '<');
+                $offset       = min($sourceLength, $offset + $tagOpenStart + 1);
+                $tagOpenStart = $this->findCached($source, '<', $offset, $ltCache);
 
                 continue;
             }
 
             // Do we have a nested tag?
-            $tagOpenNested = strpos($fromTagOpen, '<');
+            $tagOpenNested = $this->findCached($source, '<', $offset + 1, $ltCache);
 
             if (($tagOpenNested !== false) && ($tagOpenNested < $tagOpenEnd)) {
-                $preTag .= substr($postTag, 1, $tagOpenNested);
-                $postTag      = substr($postTag, ($tagOpenNested + 1));
-                $tagOpenStart = strpos($postTag, '<');
+                $preTag .= substr($source, $offset + 1, $tagOpenNested);
+                $offset += $tagOpenNested + 1;
+                $tagOpenStart = $this->findCached($source, '<', $offset, $ltCache);
 
                 continue;
             }
 
             // Let's get some information about our tag and setup attribute pairs
-            $tagOpenNested = (strpos($fromTagOpen, '<') + $tagOpenStart + 1);
-            $currentTag    = substr($fromTagOpen, 0, $tagOpenEnd);
+            $currentTag    = substr($source, $offset + 1, $tagOpenEnd);
             $tagLength     = strlen($currentTag);
-            $tagLeft       = $currentTag;
+            $tagLeftOffset = 0;
             $attrSet       = [];
-            $currentSpace  = strpos($tagLeft, ' ');
+            $currentSpace  = $this->findFrom($currentTag, ' ', 0);
+
+            // Scan caches for the attribute loop below, see the caches for the source above
+            $eqCache    = [];
+            $spaceCache = [];
+            $quoteCache = [];
+            $slashCache = [];
+            $pregCache  = null;
 
             // Are we an open tag or a close tag?
             if (substr($currentTag, 0, 1) === '/') {
@@ -431,8 +482,8 @@ class InputFilter
                 || (!$tagName)
                 || ((\in_array(strtolower($tagName), $this->blockedTags)) && $this->xssAuto)
             ) {
-                $postTag      = substr($postTag, ($tagLength + 2));
-                $tagOpenStart = strpos($postTag, '<');
+                $offset       = min($sourceLength, $offset + $tagLength + 2);
+                $tagOpenStart = $this->findCached($source, '<', $offset, $ltCache);
 
                 // Strip tag
                 continue;
@@ -443,76 +494,104 @@ class InputFilter
              * case attributes have spaces in the values.
              */
             while ($currentSpace !== false) {
-                $attr        = '';
-                $fromSpace   = substr($tagLeft, ($currentSpace + 1));
-                $nextEqual   = strpos($fromSpace, '=');
-                $nextSpace   = strpos($fromSpace, ' ');
-                $openQuotes  = strpos($fromSpace, '"');
-                $closeQuotes = strpos(substr($fromSpace, ($openQuotes + 1)), '"') + $openQuotes + 1;
+                $attr = '';
 
-                $startAtt         = '';
-                $startAttPosition = 0;
+                // Offset of the former "$fromSpace" within the current tag
+                $fromSpace = $tagLeftOffset + $currentSpace + 1;
 
-                // Find position of equal and open quotes ignoring
-                if (preg_match('#\s*=\s*\"#', $fromSpace, $matches, \PREG_OFFSET_CAPTURE)) {
-                    $stringBeforeAttr = substr($fromSpace, 0, $matches[0][1]);
-                    $startAttPosition = strlen($stringBeforeAttr);
-                    $startAtt         = $matches[0][0];
-                    $closeQuotePos    = strpos(
-                        substr($fromSpace, ($startAttPosition + strlen($startAtt))),
-                        '"'
-                    );
-                    $closeQuotes = $closeQuotePos + $startAttPosition + strlen($startAtt);
-                    $nextEqual   = $startAttPosition + strpos($startAtt, '=');
-                    $openQuotes  = $startAttPosition + strpos($startAtt, '"');
-                    $nextSpace   = strpos(substr($fromSpace, $closeQuotes), ' ') + $closeQuotes;
+                $nextEqual  = $this->findCached($currentTag, '=', $fromSpace, $eqCache);
+                $nextSpace  = $this->findCached($currentTag, ' ', $fromSpace, $spaceCache);
+                $openQuotes = $this->findCached($currentTag, '"', $fromSpace, $quoteCache);
+                $closeQuotes = (int) $this->findCached($currentTag, '"', $fromSpace + (int) $openQuotes + 1, $quoteCache)
+                    + (int) $openQuotes + 1;
+
+                /*
+                 * Find position of equal and open quotes ignoring. The position of the first match
+                 * is cached as well; as $fromSpace only moves forward a cached match which starts
+                 * at or after $fromSpace is by definition still the first one.
+                 */
+                if (
+                    $pregCache === null
+                    || $pregCache['from'] > $fromSpace
+                    || ($pregCache['pos'] !== false && $pregCache['pos'] < $fromSpace)
+                ) {
+                    if (
+                        $fromSpace <= $tagLength
+                        && preg_match('#\s*=\s*\"#', $currentTag, $matches, \PREG_OFFSET_CAPTURE, $fromSpace)
+                    ) {
+                        $pregCache = ['from' => $fromSpace, 'pos' => $matches[0][1], 'text' => $matches[0][0]];
+                    } else {
+                        $pregCache = ['from' => $fromSpace, 'pos' => false, 'text' => ''];
+                    }
                 }
 
+                if ($pregCache['pos'] !== false) {
+                    $startAttPosition = $pregCache['pos'] - $fromSpace;
+                    $startAtt         = $pregCache['text'];
+                    $closeQuotePos    = $this->findCached(
+                        $currentTag,
+                        '"',
+                        $fromSpace + $startAttPosition + strlen($startAtt),
+                        $quoteCache
+                    );
+                    $closeQuotes = (int) $closeQuotePos + $startAttPosition + strlen($startAtt);
+                    $nextEqual   = $startAttPosition + strpos($startAtt, '=');
+                    $openQuotes  = $startAttPosition + strpos($startAtt, '"');
+                    $nextSpace   = (int) $this->findCached($currentTag, ' ', $fromSpace + $closeQuotes, $spaceCache)
+                        + $closeQuotes;
+                }
+
+                $isSlashOnly = ($tagLength - $fromSpace === 1) && $currentTag[$fromSpace] === '/';
+
                 // Do we have an attribute to process? [check for equal sign]
-                if ($fromSpace !== '/' && (($nextEqual && $nextSpace && $nextSpace < $nextEqual) || !$nextEqual)) {
+                if (!$isSlashOnly && (($nextEqual && $nextSpace && $nextSpace < $nextEqual) || !$nextEqual)) {
                     if (!$nextEqual) {
-                        $attribEnd = strpos($fromSpace, '/') - 1;
+                        $attribEnd = (int) $this->findCached($currentTag, '/', $fromSpace, $slashCache) - 1;
                     } else {
                         $attribEnd = $nextSpace - 1;
                     }
 
                     // If there is an ending, use this, if not, do not worry.
                     if ($attribEnd > 0) {
-                        $fromSpace = substr($fromSpace, $attribEnd + 1);
+                        $fromSpace   = min($tagLength, $fromSpace + $attribEnd + 1);
+                        $isSlashOnly = ($tagLength - $fromSpace === 1) && $currentTag[$fromSpace] === '/';
                     }
                 }
 
-                if (strpos($fromSpace, '=') !== false) {
+                if ($this->findCached($currentTag, '=', $fromSpace, $eqCache) !== false) {
                     /*
                      * If the attribute value is wrapped in quotes we need to grab the substring from the closing quote,
                      * otherwise grab until the next space.
                      */
                     if (
                         ($openQuotes !== false)
-                        && (strpos(substr($fromSpace, ($openQuotes + 1)), '"') !== false)
+                        && (
+                            $this->findCached($currentTag, '"', min($tagLength, $fromSpace + $openQuotes + 1), $quoteCache)
+                            !== false
+                        )
                     ) {
-                        $attr = substr($fromSpace, 0, ($closeQuotes + 1));
+                        $attr = substr($currentTag, $fromSpace, ($closeQuotes + 1));
                     } else {
-                        $attr = substr($fromSpace, 0, $nextSpace);
+                        $attr = substr($currentTag, $fromSpace, $nextSpace);
                     }
                 } else {
                     // No more equal signs so add any extra text in the tag into the attribute array [eg. checked]
-                    if ($fromSpace !== '/') {
-                        $attr = substr($fromSpace, 0, $nextSpace);
+                    if (!$isSlashOnly) {
+                        $attr = substr($currentTag, $fromSpace, $nextSpace);
                     }
                 }
 
                 // Last Attribute Pair
-                if (!$attr && $fromSpace !== '/') {
-                    $attr = $fromSpace;
+                if (!$attr && !$isSlashOnly) {
+                    $attr = substr($currentTag, $fromSpace);
                 }
 
                 // Add attribute pair to the attribute array
                 $attrSet[] = $attr;
 
                 // Move search point and continue iteration
-                $tagLeft      = substr($fromSpace, strlen($attr));
-                $currentSpace = strpos($tagLeft, ' ');
+                $tagLeftOffset = min($tagLength, $fromSpace + strlen($attr));
+                $currentSpace  = $this->findCached($currentTag, ' ', $tagLeftOffset, $spaceCache);
             }
 
             // Is our tag in the user input array?
@@ -531,7 +610,13 @@ class InputFilter
                     }
 
                     // Reformat single tags to XHTML
-                    if (strpos($fromTagOpen, '</' . $tagName)) {
+                    if (!isset($closeCache[$tagName])) {
+                        $closeCache[$tagName] = [];
+                    }
+
+                    $closeTagPosition = $this->findCached($source, '</' . $tagName, $offset + 1, $closeCache[$tagName]);
+
+                    if ($closeTagPosition !== false && $closeTagPosition !== 0) {
                         $preTag .= '>';
                     } else {
                         $preTag .= ' />';
@@ -543,16 +628,126 @@ class InputFilter
             }
 
             // Find next tag's start and continue iteration
-            $postTag      = substr($postTag, ($tagLength + 2));
-            $tagOpenStart = strpos($postTag, '<');
+            $offset       = min($sourceLength, $offset + $tagLength + 2);
+            $tagOpenStart = $this->findCached($source, '<', $offset, $ltCache);
         }
 
         // Append any code after the end of tags and return
+        $postTag = substr($source, $offset);
+
         if ($postTag !== '<') {
             $preTag .= $postTag;
         }
 
         return $preTag;
+    }
+
+    /**
+     * Repair the closing tag search caches after bytes of the source have been moved.
+     *
+     * The malformed tag handling in cleanTags() drops a single character by moving the bytes in
+     * front of it one position to the right. Cached positions behind the moved bytes stay valid,
+     * but the moved bytes themselves may create a new, earlier occurrence, so the (small) changed
+     * window is re-checked.
+     *
+     * @param   array   $caches  The caches, keyed by tag name, passed by reference
+     * @param   string  $source  The source after the bytes have been moved
+     * @param   integer $start   The index of the first changed byte
+     * @param   integer $end     The index of the last changed byte
+     *
+     * @return  void
+     *
+     * @since   3.0.8
+     */
+    private function repairCaches(array &$caches, $source, $start, $end)
+    {
+        foreach ($caches as $tagName => $cache) {
+            if (!isset($cache['from'])) {
+                continue;
+            }
+
+            $needle       = '</' . $tagName;
+            $needleLength = \strlen($needle);
+
+            // An occurrence in front of the changed bytes is recomputed by findCached() anyway
+            if ($cache['pos'] !== false && $cache['pos'] <= $end) {
+                unset($caches[$tagName]);
+
+                continue;
+            }
+
+            $windowStart = max($cache['from'], $start - $needleLength + 1, 0);
+            $window      = substr($source, $windowStart, ($end - $windowStart) + $needleLength);
+            $hit         = strpos($window, $needle);
+
+            if ($hit !== false) {
+                $hit += $windowStart;
+
+                if ($cache['pos'] === false || $hit < $cache['pos']) {
+                    $caches[$tagName]['pos'] = $hit;
+                }
+            }
+        }
+    }
+
+    /**
+     * Find the first occurrence of a needle at or after the given offset, remembering the result.
+     *
+     * The scans in cleanTags() only ever move forward, so a remembered position which lies at or
+     * behind the requested offset is by definition still the first occurrence. Without this the
+     * repeated scans for a character which is not present (e.g. the '>' of a never terminated tag)
+     * make cleanTags() quadratic in the length of its input.
+     *
+     * @param   string   $haystack  The string to search in
+     * @param   string   $needle    The string to search for
+     * @param   integer  $start     The offset to start searching at
+     * @param   array    $cache     The cache holding the last search, passed by reference
+     *
+     * @return  integer|boolean  The position relative to `$start` or false if not found
+     *
+     * @since   3.0.8
+     */
+    private function findCached($haystack, $needle, $start, array &$cache)
+    {
+        if (
+            !isset($cache['from'])
+            || $cache['from'] > $start
+            || ($cache['pos'] !== false && $cache['pos'] < $start)
+        ) {
+            $position = $this->findFrom($haystack, $needle, $start);
+
+            $cache = [
+                'from' => $start,
+                'pos'  => $position === false ? false : $position + $start,
+            ];
+        }
+
+        return $cache['pos'] === false ? false : $cache['pos'] - $start;
+    }
+
+    /**
+     * Find the first occurrence of a needle at or after the given offset.
+     *
+     * This is the offset based equivalent of `strpos(substr($haystack, $start), $needle)`, i.e. the
+     * returned position is relative to `$start`, without creating a copy of the haystack.
+     *
+     * @param   string   $haystack  The string to search in
+     * @param   string   $needle    The string to search for
+     * @param   integer  $start     The offset to start searching at
+     *
+     * @return  integer|boolean  The position relative to `$start` or false if not found
+     *
+     * @since   3.0.8
+     */
+    private function findFrom($haystack, $needle, $start)
+    {
+        if ($start >= \strlen($haystack)) {
+            return false;
+        }
+
+        $position = strpos($haystack, $needle, $start);
+
+        return $position === false ? false : $position - $start;
     }
 
     /**
@@ -699,18 +894,25 @@ class InputFilter
     protected function escapeAttributeValues($source)
     {
         $alreadyFiltered = '';
-        $remainder       = $source;
         $badChars        = ['<', '"', '>'];
         $escapedChars    = ['&lt;', '&quot;', '&gt;'];
 
+        /*
+         * As in cleanTags() the source is walked with an offset. Cutting the already processed
+         * part off the remainder copies the rest of the string for every single attribute, which
+         * makes this method quadratic in the length of its input.
+         */
+        $sourceLength = \strlen($source);
+        $offset       = 0;
+
         // Process each portion based on presence of =" and "<space>, "/>, or ">
         // See if there are any more attributes to process
-        while (preg_match('#<[^>]*?=\s*?(\"|\')#s', $remainder, $matches, \PREG_OFFSET_CAPTURE)) {
-            $stringBeforeTag = substr($remainder, 0, $matches[0][1]);
-            $tagPosition     = strlen($stringBeforeTag);
-
+        while (
+            $offset < $sourceLength
+            && preg_match('#<[^>]*?=\s*?(\"|\')#s', $source, $matches, \PREG_OFFSET_CAPTURE, $offset)
+        ) {
             // Get the character length before the attribute value
-            $nextBefore = $tagPosition + strlen($matches[0][0]);
+            $nextBefore = ($matches[0][1] - $offset) + strlen($matches[0][0]);
 
             // Figure out if we have a single or double quote and look for the matching closing quote
             // Closing quote should be "/>, ">, "<space>, or " at the end of the string
@@ -718,29 +920,25 @@ class InputFilter
             $pregMatch = ($quote == '"') ? '#(\"\s*/\s*>|\"\s*>|\"\s+|\"$)#' : "#(\'\s*/\s*>|\'\s*>|\'\s+|\'$)#";
 
             // Get the portion after attribute value
-            $attributeValueRemainder = substr($remainder, $nextBefore);
-
-            if (preg_match($pregMatch, $attributeValueRemainder, $matches, \PREG_OFFSET_CAPTURE)) {
-                $stringBeforeQuote = substr($attributeValueRemainder, 0, $matches[0][1]);
-                $closeQuoteChars   = strlen($stringBeforeQuote);
-                $nextAfter         = $nextBefore + $closeQuoteChars;
+            if (preg_match($pregMatch, $source, $matches, \PREG_OFFSET_CAPTURE, $offset + $nextBefore)) {
+                $nextAfter = $matches[0][1] - $offset;
             } else {
                 // No closing quote
-                $nextAfter = strlen($remainder);
+                $nextAfter = $sourceLength - $offset;
             }
 
             // Get the actual attribute value
-            $attributeValue = substr($remainder, $nextBefore, $nextAfter - $nextBefore);
+            $attributeValue = substr($source, $offset + $nextBefore, $nextAfter - $nextBefore);
 
             // Escape bad chars
             $attributeValue = str_replace($badChars, $escapedChars, $attributeValue);
             $attributeValue = $this->stripCssExpressions($attributeValue);
-            $alreadyFiltered .= substr($remainder, 0, $nextBefore) . $attributeValue . $quote;
-            $remainder = substr($remainder, $nextAfter + 1);
+            $alreadyFiltered .= substr($source, $offset, $nextBefore) . $attributeValue . $quote;
+            $offset = min($sourceLength, $offset + $nextAfter + 1);
         }
 
-        // At this point, we just have to return the $alreadyFiltered and the $remainder
-        return $alreadyFiltered . $remainder;
+        // At this point, we just have to return the $alreadyFiltered and the remainder
+        return $alreadyFiltered . substr($source, $offset);
     }
 
     /**
